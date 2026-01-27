@@ -1,0 +1,656 @@
+/**
+ * Traceability TR Module
+ * Handles Part ID traceability with breakdown analysis for TR parts
+ * Version: 1.5.0 - Based on WA structure with Part ID parsing
+ * Uses shared utilities from traceability-shared.js
+ */
+
+// Configuration
+const CONFIG = {
+    API_URL: '/daihatsu-dashboard/laravel/public/api/traceability-data-consolidated.php?part=TR'
+};
+
+// State management
+let allData = [];
+let filteredData = [];
+let currentPage = 1;
+let pageSize = 9999999; // Default to show all records
+let currentSort = null; // Don't apply default sorting, use API order
+let charts = {
+    lpc: null,
+    trend: null
+};
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initializePage();
+    // Set initial page size based on dropdown value
+    changePageSize();
+    loadTraceabilityData();
+    setupEventListeners();
+});
+
+/**
+ * Initialize page elements
+ */
+function initializePage() {
+    // Set today's date as default
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('filter-date-start').value = today;
+    document.getElementById('filter-date-end').value = today;
+
+    // Initialize charts
+    initializeCharts();
+}
+
+/**
+ * Setup event listeners
+ */
+function setupEventListeners() {
+    // Search input
+    const searchInput = document.getElementById('table-search');
+    searchInput.addEventListener('input', debounce(handleSearch, 300));
+
+    // Table header sorting
+    document.querySelectorAll('.sortable').forEach(th => {
+        th.addEventListener('click', () => handleSort(th.dataset.column));
+    });
+}
+
+/**
+ * Load traceability data from API
+ */
+async function loadTraceabilityData() {
+    const tbody = document.getElementById('traceability-tbody');
+    tbody.innerHTML = '<tr><td colspan="10" class="loading-cell"><div class="loading-spinner"></div><div>Loading traceability data...</div></td></tr>';
+
+    try {
+        const dateStart = document.getElementById('filter-date-start').value;
+        const limitValue = document.getElementById('filter-limit').value;
+        const shift = document.getElementById('filter-shift').value;
+        const cavity = document.getElementById('filter-cavity').value;
+
+        // Convert "all" to a large number for the API
+        const limit = limitValue === 'all' ? 999999 : limitValue;
+
+        const url = new URL(CONFIG.API_URL, window.location.origin);
+        url.searchParams.append('action', 'recent');
+        url.searchParams.append('limit', limit);
+        if (dateStart) {
+            url.searchParams.append('date', dateStart);
+        }
+
+
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (result.status === 'success' && result.data && result.data.length > 0) {
+            // Check if id_part data exists
+            const hasIdPart = result.data.some(record => record.id_part && record.id_part.trim() !== '');
+
+            if (!hasIdPart) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="loading-cell" style="padding: 40px; text-align: center;">
+                            <div style="font-size: 16px; color: #666; margin-bottom: 10px;">
+                                <strong>Part ID Data Not Available</strong>
+                            </div>
+                            <div style="font-size: 14px; color: #999;">
+                                The TR table (tr_loger_cyh_tr) does not contain Part ID (id_part) data yet.<br>
+                                Please ensure the database table has the 'id_part' column populated.
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                allData = [];
+                filteredData = [];
+                return;
+            }
+
+            // Parse all records
+            allData = result.data.map(record => {
+                const parsed = parsePartId(record.id_part);
+                return {
+                    ...record,
+                    ...parsed
+                };
+            });
+
+            // Apply client-side filters (maintains API order)
+            filteredData = applyFilters(allData, shift, cavity);
+
+            // Update pageSize to show all records if "All" is selected
+            const pageSizeValue = document.getElementById('page-size').value;
+            if (pageSizeValue === 'all') {
+                pageSize = filteredData.length;
+            }
+
+            renderTable();
+            updateCharts();
+            updateLastUpdateTime();
+        } else {
+            tbody.innerHTML = '<tr><td colspan="10" class="loading-cell">No data available for the selected filters</td></tr>';
+            allData = [];
+            filteredData = [];
+        }
+    } catch (error) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="10" class="loading-cell" style="padding: 40px; text-align: center;">
+                    <div style="font-size: 16px; color: #e74c3c; margin-bottom: 10px;">
+                        <strong>Error Loading Data</strong>
+                    </div>
+                    <div style="font-size: 14px; color: #999;">
+                        ${error.message || 'Please check your connection and ensure the API is running.'}<br>
+                        <strong>API URL:</strong> ${CONFIG.API_URL}
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+}
+
+/**
+ * Apply client-side filters
+ */
+function applyFilters(data, shift, cavity) {
+    let filtered = [...data];
+
+    // Filter by shift
+    if (shift !== 'all') {
+        // Shift filtering logic would go here based on shift code in part ID
+        // For now, we'll pass through
+    }
+
+    // Filter by cavity
+    if (cavity !== 'all') {
+        filtered = filtered.filter(record => record.cavity === cavity);
+    }
+
+    return filtered;
+}
+
+/**
+ * Render table with current filtered data
+ */
+function renderTable() {
+    const tbody = document.getElementById('traceability-tbody');
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    const pageData = filteredData.slice(start, end);
+
+    if (pageData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="loading-cell">No records found</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = '';
+
+    pageData.forEach((record, index) => {
+        const row = document.createElement('tr');
+
+        // Generate timestamp if not available
+        const timestamp = record.timestamp || '-';
+
+        row.innerHTML = `
+            <td style="text-align: center;">
+                <button class="btn-view" onclick="showDetailModal(${start + index})" title="View Details">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </td>
+            <td class="shot-cell">${record.shot || '-'}</td>
+            <td class="id-part-cell" style="font-family: 'Courier New', monospace; font-weight: 600; color: #667eea;">${record.id_part || '-'}</td>
+            <td class="segment-cell" style="text-align: center; font-family: 'Courier New', monospace; font-weight: 600;">${record.lpc || '-'}</td>
+            <td class="segment-cell" style="text-align: center; font-family: 'Courier New', monospace;">${record.year || '-'}</td>
+            <td class="segment-cell" style="text-align: center; font-family: 'Courier New', monospace;">${record.month || '-'}</td>
+            <td class="segment-cell" style="text-align: center; font-family: 'Courier New', monospace;">${record.date || '-'}</td>
+            <td class="segment-cell" style="text-align: center; font-family: 'Courier New', monospace;">${record.shift || '-'}</td>
+            <td class="segment-cell" style="text-align: center; font-family: 'Courier New', monospace; font-weight: 600; font-size: 14px;">${record.cavity || '-'}</td>
+            <td style="font-size: 11px; white-space: nowrap;">${timestamp}</td>
+        `;
+
+        tbody.appendChild(row);
+    });
+
+    updatePagination();
+    updateRecordCount();
+}
+
+/**
+ * Update pagination controls
+ */
+function updatePagination() {
+    const totalPages = Math.ceil(filteredData.length / pageSize);
+    updatePaginationControls(currentPage, totalPages);
+}
+
+/**
+ * Update record count display
+ */
+function updateRecordCount() {
+    updateRecordCountDisplay(currentPage, pageSize, filteredData.length);
+}
+
+/**
+ * Update last update timestamp
+ */
+function updateLastUpdateTime() {
+    updateLastUpdateTimeDisplay();
+}
+
+/**
+ * Handle page change
+ */
+function changePage(action) {
+    const totalPages = Math.ceil(filteredData.length / pageSize);
+
+    switch(action) {
+        case 'first':
+            currentPage = 1;
+            break;
+        case 'prev':
+            if (currentPage > 1) currentPage--;
+            break;
+        case 'next':
+            if (currentPage < totalPages) currentPage++;
+            break;
+        case 'last':
+            currentPage = totalPages;
+            break;
+    }
+
+    renderTable();
+}
+
+/**
+ * Change page size
+ */
+function changePageSize() {
+    const pageSizeValue = document.getElementById('page-size').value;
+
+    if (pageSizeValue === 'all') {
+        // If data is already loaded, use its length; otherwise use a large number
+        pageSize = filteredData.length > 0 ? filteredData.length : 9999999;
+    } else {
+        pageSize = parseInt(pageSizeValue);
+    }
+
+    currentPage = 1;
+
+    // Only render if we have data
+    if (filteredData.length > 0) {
+        renderTable();
+    }
+}
+
+/**
+ * Handle search
+ */
+function handleSearch(event) {
+    const searchTerm = event.target.value.toLowerCase();
+
+    if (!searchTerm) {
+        filteredData = [...allData];
+    } else {
+        filteredData = allData.filter(record => {
+            return (
+                (record.no_shot && record.no_shot.toString().includes(searchTerm)) ||
+                (record.id_part && record.id_part.toLowerCase().includes(searchTerm)) ||
+                (record.lpc && record.lpc.toLowerCase().includes(searchTerm)) ||
+                (record.cavity && record.cavity.toLowerCase().includes(searchTerm)) ||
+                (record.timestamp && record.timestamp.toLowerCase().includes(searchTerm))
+            );
+        });
+    }
+
+    currentPage = 1;
+    renderTable();
+    updateCharts();
+}
+
+/**
+ * Handle column sorting
+ */
+function handleSort(column) {
+    // Initialize currentSort if null
+    if (!currentSort) {
+        currentSort = { column: column, direction: 'desc' };
+    } else if (currentSort.column === column) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSort.column = column;
+        currentSort.direction = 'desc';
+    }
+
+    filteredData.sort((a, b) => {
+        let aVal = a[column];
+        let bVal = b[column];
+
+        // Convert to numbers if numeric
+        if (!isNaN(aVal) && !isNaN(bVal)) {
+            aVal = parseFloat(aVal);
+            bVal = parseFloat(bVal);
+        }
+
+        if (currentSort.direction === 'asc') {
+            return aVal > bVal ? 1 : -1;
+        } else {
+            return aVal < bVal ? 1 : -1;
+        }
+    });
+
+    renderTable();
+}
+
+/**
+ * Reset filters
+ */
+function resetFilters() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('filter-date-start').value = today;
+    document.getElementById('filter-date-end').value = today;
+    document.getElementById('filter-shift').value = 'all';
+    document.getElementById('filter-cavity').value = 'all';
+    document.getElementById('filter-limit').value = 'all';
+    document.getElementById('table-search').value = '';
+
+    loadTraceabilityData();
+}
+
+/**
+ * Initialize charts
+ */
+function initializeCharts() {
+    // LPC Distribution Chart
+    const lpcCtx = document.getElementById('lpcDistChart');
+    if (lpcCtx) {
+        charts.lpc = new Chart(lpcCtx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Parts Count',
+                    data: [],
+                    backgroundColor: [
+                        '#667eea',
+                        '#764ba2',
+                        '#f093fb',
+                        '#4facfe',
+                        '#43e97b'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Parts: ' + context.parsed.y;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Production Trend Chart
+    const trendCtx = document.getElementById('productionTrendChart');
+    if (trendCtx) {
+        charts.trend = new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Parts Produced',
+                    data: [],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: true }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+}
+
+/**
+ * Update charts with current data
+ */
+function updateCharts() {
+    if (!filteredData.length) return;
+
+    // Update LPC distribution (top 5 most produced LPCs)
+    const lpcCounts = {};
+    filteredData.forEach(r => {
+        if (r.lpc) {
+            lpcCounts[r.lpc] = (lpcCounts[r.lpc] || 0) + 1;
+        }
+    });
+
+    // Sort by count and get top 5
+    const sortedLPCs = Object.entries(lpcCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+
+    const lpcLabels = sortedLPCs.map(([lpc]) => lpc);
+    const lpcData = sortedLPCs.map(([, count]) => count);
+
+    if (charts.lpc) {
+        charts.lpc.data.labels = lpcLabels;
+        charts.lpc.data.datasets[0].data = lpcData;
+        charts.lpc.update();
+    }
+
+    // Update production trend (last 50 parts in batches of 10)
+    const last50 = filteredData.slice(-50);
+    const trendLabels = [];
+    const trendData = [];
+
+    for (let i = 0; i < last50.length; i += 10) {
+        const batch = last50.slice(i, i + 10);
+        trendLabels.push(`${i + 1}-${i + batch.length}`);
+        trendData.push(batch.length);
+    }
+
+    if (charts.trend) {
+        charts.trend.data.labels = trendLabels;
+        charts.trend.data.datasets[0].data = trendData;
+        charts.trend.update();
+    }
+}
+
+/**
+ * Export to CSV
+ */
+function exportToCSV() {
+    const headers = ['Shot #', 'Part ID', 'LPC', 'Year', 'Month', 'Date', 'Shift', 'Cavity', 'Timestamp'];
+
+    const rows = filteredData.map(record => [
+        record.no_shot || '',
+        record.id_part || '',
+        record.lpc || '',
+        record.year || '',
+        record.month || '',
+        record.date || '',
+        record.shift || '',
+        record.cavity || '',
+        record.timestamp || ''
+    ]);
+
+    const csvContent = [headers, ...rows]
+        .map(row => row.map(cell => `"${cell}"`).join(','))
+        .join('\n');
+
+    downloadFile(csvContent, 'traceability-tr.csv', 'text/csv');
+}
+
+/**
+ * Export to Excel (CSV format compatible)
+ */
+function exportToExcel() {
+    exportToCSV(); // For now, using CSV format
+}
+
+/**
+ * Print report
+ */
+function printReport() {
+    window.print();
+}
+
+/**
+ * Download file helper
+ */
+function downloadFile(content, filename, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
+/**
+ * Debounce utility
+ */
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+/**
+ * Show detail modal
+ */
+function showDetailModal(index) {
+    const record = filteredData[index];
+
+    if (!record) {
+        return;
+    }
+
+    // Update modal title with Part ID
+    document.getElementById('modal-title').textContent =
+        `154 ST-09 MAIN LINE POS 1 (TR LINE) - ${record.id_part || 'N/A'}`;
+
+    // Populate part details
+    document.getElementById('detail-id-part').textContent = record.id_part || '-';
+    document.getElementById('detail-shot').textContent = record.shot || '-';
+    document.getElementById('detail-lpc').textContent = record.lpc || '-';
+    document.getElementById('detail-shift').textContent = record.shift || '-';
+
+    // Set judge badge (for now, default to OK - this should come from API)
+    const judgeElement = document.getElementById('detail-judge');
+    judgeElement.textContent = 'OK';
+    judgeElement.className = 'judge-badge judge-ok';
+
+    // Handle part diagram image
+    const partDiagram = document.getElementById('part-diagram');
+    const imagePlaceholder = document.getElementById('image-placeholder');
+
+    // Check if image exists, otherwise show placeholder
+    partDiagram.onerror = function() {
+        partDiagram.style.display = 'none';
+        imagePlaceholder.classList.remove('hidden');
+    };
+
+    partDiagram.onload = function() {
+        partDiagram.classList.add('loaded');
+        imagePlaceholder.classList.add('hidden');
+    };
+
+    // Reset image state
+    partDiagram.classList.remove('loaded');
+    imagePlaceholder.classList.remove('hidden');
+
+    // Generate sample process data (in production, this should come from API)
+    const processData = [
+        { name: 'FINISHING 1', judge: 'OK' },
+        { name: 'T6', judge: 'OK' },
+        { name: 'FINISHING 2', judge: 'OK' }
+    ];
+
+    // Populate process table
+    const processTableBody = document.getElementById('process-table-body');
+    processTableBody.innerHTML = '';
+
+    processData.forEach(process => {
+        const row = document.createElement('tr');
+        const judgeClass = process.judge === 'OK' ? 'judge-ok' : 'judge-ng';
+
+        row.innerHTML = `
+            <td>${process.name}</td>
+            <td><span class="judge-badge ${judgeClass}">${process.judge}</span></td>
+        `;
+
+        processTableBody.appendChild(row);
+    });
+
+    // Show modal
+    document.getElementById('detailModal').style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+/**
+ * Close detail modal
+ */
+function closeDetailModal() {
+    document.getElementById('detailModal').style.display = 'none';
+    document.body.style.overflow = 'auto'; // Restore scrolling
+}
+
+// Close modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('detailModal');
+    if (event.target === modal) {
+        closeDetailModal();
+    }
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeDetailModal();
+    }
+});
