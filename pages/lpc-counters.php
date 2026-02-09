@@ -240,10 +240,8 @@ $base_url = '../';
     </style>
 </head>
 <body>
-    <!-- Top Header -->
     <div class="top-header">
         <div class="logo-section">
-            <!-- Hamburger Menu -->
             <div class="hamburger-menu" onclick="toggleSidebar()">
                 <div class="hamburger-line"></div>
                 <div class="hamburger-line"></div>
@@ -269,11 +267,9 @@ $base_url = '../';
         </div>
     </div>
 
-    <!-- Dashboard Container -->
     <div class="dashboard-container">
         <?php include '../includes/sidebar.php'; ?>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="content-header" style="margin-bottom: 12px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
@@ -281,7 +277,6 @@ $base_url = '../';
                         LPC Production Counters
                     </div>
 
-                    <!-- Real-time Monitoring Toggle -->
                     <div style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 8px; border: 2px solid #e9ecef; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                         <span style="font-size: 12px; font-weight: 600; color: #555;">Real-Time Monitor:</span>
                         <button id="toggle-realtime" onclick="window.lpcCountersDashboard.toggleRealTime()"
@@ -292,7 +287,6 @@ $base_url = '../';
                 </div>
             </div>
 
-            <!-- Page Description -->
             <div class="page-description">
                 <div class="description-title">Real-Time Counter Monitoring</div>
                 <div class="description-text">
@@ -301,9 +295,7 @@ $base_url = '../';
                 </div>
             </div>
 
-            <!-- Counters Grid -->
             <div class="counters-grid">
-                <!-- TR Line Counters -->
                 <div class="counter-card">
                     <div class="counter-header">
                         <h3 class="lpc-title">LPC 1</h3>
@@ -394,7 +386,6 @@ $base_url = '../';
                     </div>
                 </div>
 
-                <!-- 3SZ/KR Line Counter -->
                 <div class="counter-card">
                     <div class="counter-header">
                         <h3 class="lpc-title">LPC 9</h3>
@@ -413,7 +404,6 @@ $base_url = '../';
                     </div>
                 </div>
 
-                <!-- NR Line Counters -->
                 <div class="counter-card">
                     <div class="counter-header">
                         <h3 class="lpc-title">LPC 12</h3>
@@ -468,7 +458,6 @@ $base_url = '../';
                     </div>
                 </div>
 
-                <!-- WA Line Counter -->
                 <div class="counter-card">
                     <div class="counter-header">
                         <h3 class="lpc-title">LPC 11</h3>
@@ -488,7 +477,6 @@ $base_url = '../';
                 </div>
             </div>
 
-            <!-- Last Updated -->
             <div class="last-updated" id="last-updated">Last updated: --:--:--</div>
         </div>
     </div>

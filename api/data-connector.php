@@ -150,7 +150,7 @@ function fetchGeneralALPCData($part, $dateFrom = null, $dateTo = null) {
 }
 
 /**
- * Fetch counter data from counter tables
+ * Fetch counter data from specified counter tables for ID = 1
  *
  * @return array
  */
@@ -158,67 +158,36 @@ function fetchCounterData() {
     $pdo = getDatabaseConnection();
     $result = [];
 
+    // Define the tables and the columns we want to fetch
+    $tables = [
+        'tr_counter'    => ['LPC1', 'LPC2', 'LPC3', 'LPC4', 'LPC6'],
+        'sz_kr_counter' => ['LPC9'],
+        'nr_counter'    => ['LPC12', 'LPC13', 'LPC14'],
+        'wa_counter'    => ['LPC11']
+    ];
+
     try {
-        // Fetch TR counter data (LPC 1, 2, 3, 4, 6) - get latest record
-        $stmt = $pdo->query("SELECT LPC1, LPC2, LPC3, LPC4, LPC6 FROM tr_counter ORDER BY time DESC LIMIT 1");
-        $trData = $stmt->fetch(PDO::FETCH_ASSOC);
+        foreach ($tables as $tableName => $columns) {
+            // Select specified columns where id = 1
+            $columnList = implode(', ', $columns);
+            $stmt = $pdo->prepare("SELECT $columnList FROM $tableName WHERE id = 1 LIMIT 1");
+            $stmt->execute();
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $result['TR'] = [
-            'LPC1' => $trData['LPC1'] ?? 0,
-            'LPC2' => $trData['LPC2'] ?? 0,
-            'LPC3' => $trData['LPC3'] ?? 0,
-            'LPC4' => $trData['LPC4'] ?? 0,
-            'LPC6' => $trData['LPC6'] ?? 0
-        ];
-
-        // Fetch KR/SZ counter data (LPC 9) - get latest record
-        $stmt = $pdo->query("SELECT LPC9 FROM sz_kr_counter ORDER BY time DESC LIMIT 1");
-        $krSzData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        $result['3SZ-KR'] = [
-            'LPC9' => $krSzData['LPC9'] ?? 0
-        ];
-
-        // Fetch NR counter data (LPC 12, 13, 14) - get latest record
-        $stmt = $pdo->query("SELECT LPC12, LPC13, LPC14 FROM nr_counter ORDER BY time DESC LIMIT 1");
-        $nrData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        $result['NR'] = [
-            'LPC12' => $nrData['LPC12'] ?? 0,
-            'LPC13' => $nrData['LPC13'] ?? 0,
-            'LPC14' => $nrData['LPC14'] ?? 0
-        ];
-
-        // Fetch WA counter data (LPC 11) - get latest record
-        $stmt = $pdo->query("SELECT LPC11 FROM wa_counter ORDER BY time DESC LIMIT 1");
-        $waData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        $result['WA'] = [
-            'LPC11' => $waData['LPC11'] ?? 0
-        ];
+            // If data exists, use it; otherwise, fill with 0s
+            if ($data) {
+                $result[$tableName] = $data;
+            } else {
+                $result[$tableName] = array_fill_keys($columns, 0);
+            }
+        }
 
     } catch (Exception $e) {
-        // If database query fails, return zeros
-        $result = [
-            'TR' => [
-                'LPC1' => 0,
-                'LPC2' => 0,
-                'LPC3' => 0,
-                'LPC4' => 0,
-                'LPC6' => 0
-            ],
-            '3SZ-KR' => [
-                'LPC9' => 0
-            ],
-            'NR' => [
-                'LPC12' => 0,
-                'LPC13' => 0,
-                'LPC14' => 0
-            ],
-            'WA' => [
-                'LPC11' => 0
-            ]
-        ];
+        // Return 0s in case of error for all tables
+        foreach ($tables as $tableName => $columns) {
+            $result[$tableName] = array_fill_keys($columns, 0);
+        }
+        // Log error if needed: error_log($e->getMessage());
     }
 
     return $result;
@@ -334,3 +303,4 @@ try {
         'error' => $e->getMessage()
     ]);
 }
+?>

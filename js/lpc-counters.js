@@ -81,30 +81,32 @@ class LPCCountersDashboard {
     }
 
     updateCounterDisplay(data) {
-        // Update TR counters (LPC 1, 2, 3, 4, 6)
-        if (data.TR) {
-            this.updateCounter('tr-1', data.TR.LPC1 || 0);
-            this.updateCounter('tr-2', data.TR.LPC2 || 0);
-            this.updateCounter('tr-3', data.TR.LPC3 || 0);
-            this.updateCounter('tr-4', data.TR.LPC4 || 0);
-            this.updateCounter('tr-6', data.TR.LPC6 || 0);
+        // Update TR counters (LPC 1, 2, 3, 4, 6) from tr_counter table
+        if (data.tr_counter) {
+            this.updateCounter('tr-1', data.tr_counter.LPC1 || 0);
+            this.updateCounter('tr-2', data.tr_counter.LPC2 || 0);
+            this.updateCounter('tr-3', data.tr_counter.LPC3 || 0);
+            this.updateCounter('tr-4', data.tr_counter.LPC4 || 0);
+            this.updateCounter('tr-6', data.tr_counter.LPC6 || 0);
         }
 
-        // Update 3SZ/KR counter (LPC 9)
-        if (data['3SZ-KR']) {
-            this.updateCounter('3sz-kr', data['3SZ-KR'].LPC9 || 0);
+        // Update 3SZ/KR counter (LPC 9) from sz_kr_counter table
+        if (data.sz_kr_counter) {
+            // Matches ID 'value-3sz-kr' in the HTML
+            this.updateCounter('3sz-kr', data.sz_kr_counter.LPC9 || 0);
         }
 
-        // Update NR counters (LPC 12, 13, 14)
-        if (data.NR) {
-            this.updateCounter('nr-12', data.NR.LPC12 || 0);
-            this.updateCounter('nr-13', data.NR.LPC13 || 0);
-            this.updateCounter('nr-14', data.NR.LPC14 || 0);
+        // Update NR counters (LPC 12, 13, 14) from nr_counter table
+        if (data.nr_counter) {
+            this.updateCounter('nr-12', data.nr_counter.LPC12 || 0);
+            this.updateCounter('nr-13', data.nr_counter.LPC13 || 0);
+            this.updateCounter('nr-14', data.nr_counter.LPC14 || 0);
         }
 
-        // Update WA counter (LPC 11)
-        if (data.WA) {
-            this.updateCounter('wa', data.WA.LPC11 || 0);
+        // Update WA counter (LPC 11) from wa_counter table
+        if (data.wa_counter) {
+            // Matches ID 'value-wa' in the HTML
+            this.updateCounter('wa', data.wa_counter.LPC11 || 0);
         }
     }
 
