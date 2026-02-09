@@ -64,6 +64,11 @@ class LPCCountersDashboard {
             const result = await response.json();
 
             if (result.success) {
+                // Check for debug errors from the backend (if any table failed)
+                if (result.data._debug && Object.keys(result.data._debug).length > 0) {
+                    console.warn('⚠️ Some counters failed to load:', result.data._debug);
+                }
+
                 console.log('✅ Counter data updated:', result.data);
                 this.updateCounterDisplay(result.data);
                 this.showSuccessStatus();
@@ -81,72 +86,60 @@ class LPCCountersDashboard {
     }
 
     updateCounterDisplay(data) {
+        // Safe access helper
+        const getVal = (obj, key) => (obj && obj[key] !== undefined && obj[key] !== null) ? obj[key] : 0;
+
         // Update TR counters (LPC 1, 2, 3, 4, 6) from tr_counter table
         if (data.tr_counter) {
-            this.updateCounter('tr-1', data.tr_counter.LPC1 || 0);
-            this.updateCounter('tr-2', data.tr_counter.LPC2 || 0);
-            this.updateCounter('tr-3', data.tr_counter.LPC3 || 0);
-            this.updateCounter('tr-4', data.tr_counter.LPC4 || 0);
-            this.updateCounter('tr-6', data.tr_counter.LPC6 || 0);
+            this.updateCounter('tr-1', getVal(data.tr_counter, 'LPC1'));
+            this.updateCounter('tr-2', getVal(data.tr_counter, 'LPC2'));
+            this.updateCounter('tr-3', getVal(data.tr_counter, 'LPC3'));
+            this.updateCounter('tr-4', getVal(data.tr_counter, 'LPC4'));
+            this.updateCounter('tr-6', getVal(data.tr_counter, 'LPC6'));
         }
 
         // Update 3SZ/KR counter (LPC 9) from sz_kr_counter table
         if (data.sz_kr_counter) {
-            // Matches ID 'value-3sz-kr' in the HTML
-            this.updateCounter('3sz-kr', data.sz_kr_counter.LPC9 || 0);
+            this.updateCounter('3sz-kr', getVal(data.sz_kr_counter, 'LPC9'));
         }
 
         // Update NR counters (LPC 12, 13, 14) from nr_counter table
         if (data.nr_counter) {
-            this.updateCounter('nr-12', data.nr_counter.LPC12 || 0);
-            this.updateCounter('nr-13', data.nr_counter.LPC13 || 0);
-            this.updateCounter('nr-14', data.nr_counter.LPC14 || 0);
+            this.updateCounter('nr-12', getVal(data.nr_counter, 'LPC12'));
+            this.updateCounter('nr-13', getVal(data.nr_counter, 'LPC13'));
+            this.updateCounter('nr-14', getVal(data.nr_counter, 'LPC14'));
         }
 
         // Update WA counter (LPC 11) from wa_counter table
         if (data.wa_counter) {
-            // Matches ID 'value-wa' in the HTML
-            this.updateCounter('wa', data.wa_counter.LPC11 || 0);
+            this.updateCounter('wa', getVal(data.wa_counter, 'LPC11'));
         }
     }
 
     updateCounter(counterId, value) {
         const element = document.getElementById(`value-${counterId}`);
         if (element) {
-            const newValue = parseInt(value) || 0;
-            element.innerHTML = newValue;
+            // Ensure we are displaying a number, default to 0
+            const numericValue = parseInt(value);
+            const displayValue = isNaN(numericValue) ? 0 : numericValue;
+            
+            // Only update DOM if value changed (avoids flickering)
+            if (element.innerText != displayValue) {
+                element.innerText = displayValue;
+                
+                // Add flash animation
+                element.classList.remove('updated-flash');
+                void element.offsetWidth; // trigger reflow
+                element.classList.add('updated-flash');
+            }
         }
     }
 
-    animateCounter(element, from, to) {
-        const duration = 500; // 500ms animation
-        const start = Date.now();
-        const difference = to - from;
-
-        const animate = () => {
-            const elapsed = Date.now() - start;
-            const progress = Math.min(elapsed / duration, 1);
-            const current = Math.round(from + (difference * progress));
-
-            element.textContent = current;
-
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            }
-        };
-
-        animate();
-    }
-
     showUpdatingStatus() {
-        // Update all status indicators to updating
         const statusDots = document.querySelectorAll('.status-dot');
         const statusTexts = document.querySelectorAll('.status-text');
 
-        statusDots.forEach(dot => {
-            dot.className = 'status-dot updating';
-        });
-
+        statusDots.forEach(dot => dot.className = 'status-dot updating');
         statusTexts.forEach(text => {
             text.className = 'status-text updating';
             text.textContent = 'Updating...';
@@ -154,14 +147,10 @@ class LPCCountersDashboard {
     }
 
     showSuccessStatus() {
-        // Update all status indicators to active
         const statusDots = document.querySelectorAll('.status-dot');
         const statusTexts = document.querySelectorAll('.status-text');
 
-        statusDots.forEach(dot => {
-            dot.className = 'status-dot active';
-        });
-
+        statusDots.forEach(dot => dot.className = 'status-dot active');
         statusTexts.forEach(text => {
             text.className = 'status-text active';
             text.textContent = 'Active';
@@ -169,14 +158,10 @@ class LPCCountersDashboard {
     }
 
     showErrorStatus() {
-        // Update all status indicators to error
         const statusDots = document.querySelectorAll('.status-dot');
         const statusTexts = document.querySelectorAll('.status-text');
 
-        statusDots.forEach(dot => {
-            dot.className = 'status-dot error';
-        });
-
+        statusDots.forEach(dot => dot.className = 'status-dot error');
         statusTexts.forEach(text => {
             text.className = 'status-text error';
             text.textContent = 'Error';
@@ -192,12 +177,10 @@ class LPCCountersDashboard {
     }
 }
 
-// Initialize the dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     window.lpcCountersDashboard = new LPCCountersDashboard();
 });
 
-// Cleanup on page unload
 window.addEventListener('beforeunload', function() {
     if (window.lpcCountersDashboard) {
         window.lpcCountersDashboard.stopAutoUpdate();

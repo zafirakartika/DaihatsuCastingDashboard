@@ -157,6 +157,7 @@ function fetchGeneralALPCData($part, $dateFrom = null, $dateTo = null) {
 function fetchCounterData() {
     $pdo = getDatabaseConnection();
     $result = [];
+    $debugErrors = [];
 
     // Define the tables and the columns we want to fetch
     $tables = [
@@ -166,10 +167,16 @@ function fetchCounterData() {
         'wa_counter'    => ['LPC11']
     ];
 
-    try {
-        foreach ($tables as $tableName => $columns) {
-            // Select specified columns where id = 1
-            $columnList = implode(', ', $columns);
+    foreach ($tables as $tableName => $columns) {
+        try {
+            // Force column alias to ensure case sensitivity matches JS (LPC1 as LPC1)
+            $selectParts = [];
+            foreach ($columns as $col) {
+                $selectParts[] = "$col AS $col";
+            }
+            $columnList = implode(', ', $selectParts);
+
+            // Fetch row where id = 1
             $stmt = $pdo->prepare("SELECT $columnList FROM $tableName WHERE id = 1 LIMIT 1");
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -179,16 +186,17 @@ function fetchCounterData() {
                 $result[$tableName] = $data;
             } else {
                 $result[$tableName] = array_fill_keys($columns, 0);
+                $debugErrors[$tableName] = "Row with id=1 not found";
             }
-        }
-
-    } catch (Exception $e) {
-        // Return 0s in case of error for all tables
-        foreach ($tables as $tableName => $columns) {
+        } catch (Exception $e) {
+            // If ONE table fails, only that table gets 0s. The others continue.
             $result[$tableName] = array_fill_keys($columns, 0);
+            $debugErrors[$tableName] = $e->getMessage();
         }
-        // Log error if needed: error_log($e->getMessage());
     }
+
+    // Attach debug info to the result for troubleshooting
+    $result['_debug'] = $debugErrors;
 
     return $result;
 }
