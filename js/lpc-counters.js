@@ -64,9 +64,9 @@ class LPCCountersDashboard {
             const result = await response.json();
 
             if (result.success) {
-                // Check for debug errors from the backend (if any table failed)
+                // Debugging: Warn if any specific table failed in the backend
                 if (result.data._debug && Object.keys(result.data._debug).length > 0) {
-                    console.warn('⚠️ Some counters failed to load:', result.data._debug);
+                    console.warn('Backend warnings:', result.data._debug);
                 }
 
                 console.log('✅ Counter data updated:', result.data);
@@ -86,10 +86,12 @@ class LPCCountersDashboard {
     }
 
     updateCounterDisplay(data) {
-        // Safe access helper
+        // Safe access helper - handles undefined/null values gently
         const getVal = (obj, key) => (obj && obj[key] !== undefined && obj[key] !== null) ? obj[key] : 0;
 
-        // Update TR counters (LPC 1, 2, 3, 4, 6) from tr_counter table
+        // NOTE: Keys are now guaranteed to be UPPERCASE by the PHP script (LPC1, LPC2...)
+
+        // Update TR counters (LPC 1, 2, 3, 4, 6)
         if (data.tr_counter) {
             this.updateCounter('tr-1', getVal(data.tr_counter, 'LPC1'));
             this.updateCounter('tr-2', getVal(data.tr_counter, 'LPC2'));
@@ -98,19 +100,19 @@ class LPCCountersDashboard {
             this.updateCounter('tr-6', getVal(data.tr_counter, 'LPC6'));
         }
 
-        // Update 3SZ/KR counter (LPC 9) from sz_kr_counter table
+        // Update 3SZ/KR counter (LPC 9)
         if (data.sz_kr_counter) {
             this.updateCounter('3sz-kr', getVal(data.sz_kr_counter, 'LPC9'));
         }
 
-        // Update NR counters (LPC 12, 13, 14) from nr_counter table
+        // Update NR counters (LPC 12, 13, 14)
         if (data.nr_counter) {
             this.updateCounter('nr-12', getVal(data.nr_counter, 'LPC12'));
             this.updateCounter('nr-13', getVal(data.nr_counter, 'LPC13'));
             this.updateCounter('nr-14', getVal(data.nr_counter, 'LPC14'));
         }
 
-        // Update WA counter (LPC 11) from wa_counter table
+        // Update WA counter (LPC 11)
         if (data.wa_counter) {
             this.updateCounter('wa', getVal(data.wa_counter, 'LPC11'));
         }
@@ -119,17 +121,15 @@ class LPCCountersDashboard {
     updateCounter(counterId, value) {
         const element = document.getElementById(`value-${counterId}`);
         if (element) {
-            // Ensure we are displaying a number, default to 0
+            // Parse integer to ensure no "undefined" text appears
             const numericValue = parseInt(value);
             const displayValue = isNaN(numericValue) ? 0 : numericValue;
-            
-            // Only update DOM if value changed (avoids flickering)
+
             if (element.innerText != displayValue) {
                 element.innerText = displayValue;
-                
-                // Add flash animation
+                // Add flash animation class
                 element.classList.remove('updated-flash');
-                void element.offsetWidth; // trigger reflow
+                void element.offsetWidth; // Trigger reflow
                 element.classList.add('updated-flash');
             }
         }
@@ -177,10 +177,12 @@ class LPCCountersDashboard {
     }
 }
 
+// Initialize
 document.addEventListener('DOMContentLoaded', function() {
     window.lpcCountersDashboard = new LPCCountersDashboard();
 });
 
+// Cleanup
 window.addEventListener('beforeunload', function() {
     if (window.lpcCountersDashboard) {
         window.lpcCountersDashboard.stopAutoUpdate();

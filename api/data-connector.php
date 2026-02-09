@@ -16,11 +16,6 @@ require_once __DIR__ . '/../config/data-mapping.php';
 
 /**
  * Fetch casting performance data
- *
- * @param string $part Part type (WA, TR, KR, NR, 3SZ)
- * @param int $limit Number of records to fetch
- * @param string $since Fetch records since this timestamp
- * @return array
  */
 function fetchCastingData($part, $limit = null, $since = null) {
     global $CASTING_DATA_CONFIG;
@@ -32,7 +27,6 @@ function fetchCastingData($part, $limit = null, $since = null) {
     $config = $CASTING_DATA_CONFIG[$part];
     $pdo = getDatabaseConnection();
 
-    // Build column selection with mapping
     $selectColumns = [];
     foreach ($config['columns'] as $dashboardField => $dbColumn) {
         $selectColumns[] = "`$dbColumn` AS `$dashboardField`";
@@ -40,24 +34,20 @@ function fetchCastingData($part, $limit = null, $since = null) {
 
     $sql = "SELECT " . implode(', ', $selectColumns) . " FROM `{$config['table']}`";
 
-    // Add WHERE clause for incremental updates
     $params = [];
     if ($since && isset($config['columns']['timestamp'])) {
         $sql .= " WHERE `{$config['columns']['timestamp']}` > :since";
         $params[':since'] = $since;
     }
 
-    // Add ORDER BY
     $sql .= " ORDER BY {$config['order_by']}";
 
-    // Add LIMIT
     $fetchLimit = $limit ?? $config['limit'];
     $sql .= " LIMIT :limit";
     $params[':limit'] = $fetchLimit;
 
     $stmt = $pdo->prepare($sql);
 
-    // Bind parameters
     foreach ($params as $key => $value) {
         if ($key === ':limit') {
             $stmt->bindValue($key, $value, PDO::PARAM_INT);
@@ -72,10 +62,6 @@ function fetchCastingData($part, $limit = null, $since = null) {
 
 /**
  * Fetch finishing performance data
- *
- * @param string $part Part type (WA, TR)
- * @param int $limit Number of records
- * @return array
  */
 function fetchFinishingData($part, $limit = null) {
     global $FINISHING_DATA_CONFIG;
@@ -102,11 +88,6 @@ function fetchFinishingData($part, $limit = null) {
 
 /**
  * Fetch general ALPC production summary
- *
- * @param string $part Part type (WA, TR)
- * @param string $dateFrom Start date
- * @param string $dateTo End date
- * @return array
  */
 function fetchGeneralALPCData($part, $dateFrom = null, $dateTo = null) {
     global $GENERAL_ALPC_CONFIG;
@@ -150,52 +131,56 @@ function fetchGeneralALPCData($part, $dateFrom = null, $dateTo = null) {
 }
 
 /**
- * Fetch counter data from specified counter tables for ID = 1
- *
- * @return array
+ * Fetch counter data from specified counter tables
+ * * IMPROVED: Uses SELECT * and PHP key normalization to handle 
+ * case-sensitivity (lpc1 vs LPC1) and missing IDs robustly.
  */
 function fetchCounterData() {
     $pdo = getDatabaseConnection();
     $result = [];
     $debugErrors = [];
 
-    // Define the tables and the columns we want to fetch
-    $tables = [
-        'tr_counter'    => ['LPC1', 'LPC2', 'LPC3', 'LPC4', 'LPC6'],
-        'sz_kr_counter' => ['LPC9'],
-        'nr_counter'    => ['LPC12', 'LPC13', 'LPC14'],
-        'wa_counter'    => ['LPC11']
-    ];
+    // Define the tables we want to fetch
+    $tables = ['tr_counter', 'sz_kr_counter', 'nr_counter', 'wa_counter'];
 
-    foreach ($tables as $tableName => $columns) {
+    foreach ($tables as $tableName) {
         try {
-            // Force column alias to ensure case sensitivity matches JS (LPC1 as LPC1)
-            $selectParts = [];
-            foreach ($columns as $col) {
-                $selectParts[] = "$col AS $col";
-            }
-            $columnList = implode(', ', $selectParts);
-
-            // Fetch row where id = 1
-            $stmt = $pdo->prepare("SELECT $columnList FROM $tableName WHERE id = 1 LIMIT 1");
+            // 1. Try to fetch the specific row (id=1)
+            $stmt = $pdo->prepare("SELECT * FROM $tableName WHERE id = 1 LIMIT 1");
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // If data exists, use it; otherwise, fill with 0s
-            if ($data) {
-                $result[$tableName] = $data;
-            } else {
-                $result[$tableName] = array_fill_keys($columns, 0);
-                $debugErrors[$tableName] = "Row with id=1 not found";
+            // 2. Fallback: If id=1 not found, fetch the LATEST row (handling log-style tables)
+            if (!$data) {
+                // Try ordering by 'time' if it exists, or 'id' as a fallback
+                try {
+                    $stmt = $pdo->prepare("SELECT * FROM $tableName ORDER BY time DESC LIMIT 1");
+                    $stmt->execute();
+                    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+                } catch (Exception $ex) {
+                    // If 'time' column doesn't exist, try ID
+                    $stmt = $pdo->prepare("SELECT * FROM $tableName ORDER BY id DESC LIMIT 1");
+                    $stmt->execute();
+                    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+                }
             }
+
+            if ($data) {
+                // IMPORTANT: Normalize keys to UPPERCASE (lpc1 -> LPC1)
+                // This fixes issues where DB columns are lowercase but JS expects uppercase
+                $result[$tableName] = array_change_key_case($data, CASE_UPPER);
+            } else {
+                $result[$tableName] = []; // Empty object if no data found
+                $debugErrors[$tableName] = "No data found (checked id=1 and latest)";
+            }
+
         } catch (Exception $e) {
-            // If ONE table fails, only that table gets 0s. The others continue.
-            $result[$tableName] = array_fill_keys($columns, 0);
+            $result[$tableName] = [];
             $debugErrors[$tableName] = $e->getMessage();
         }
     }
 
-    // Attach debug info to the result for troubleshooting
+    // Attach debug info
     $result['_debug'] = $debugErrors;
 
     return $result;
@@ -203,10 +188,6 @@ function fetchCounterData() {
 
 /**
  * Search traceability records
- *
- * @param string $searchTerm Search keyword
- * @param string $partType Filter by part type
- * @return array
  */
 function searchTraceability($searchTerm = '', $partType = '') {
     global $TRACEABILITY_CONFIG;
@@ -223,7 +204,6 @@ function searchTraceability($searchTerm = '', $partType = '') {
     $params = [];
     $whereClauses = [];
 
-    // Search across multiple fields
     if (!empty($searchTerm)) {
         $searchClauses = [];
         foreach ($TRACEABILITY_CONFIG['search_fields'] as $field) {
@@ -233,7 +213,6 @@ function searchTraceability($searchTerm = '', $partType = '') {
         $params[':search'] = "%$searchTerm%";
     }
 
-    // Filter by part type
     if (!empty($partType)) {
         $whereClauses[] = "`{$TRACEABILITY_CONFIG['columns']['part_type']}` = :part_type";
         $params[':part_type'] = $partType;
@@ -300,7 +279,7 @@ try {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'error' => 'Invalid endpoint. Available: casting, finishing, general-alpc, traceability, counters, test-connection'
+                'error' => 'Invalid endpoint'
             ]);
     }
 
