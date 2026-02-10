@@ -33,17 +33,17 @@
             <span class="expand-icon <?php echo in_array($current_page, ['lpc-counters', 'alpc-overview', 'general-alpc-wa', 'casting-performance-wa', 'finishing-wa', 'casting-performance-tr', 'general-alpc-tr', 'traceability-wa', 'traceability-tr']) ? 'expanded' : ''; ?>" id="expand-alpc">▼</span>
         </div>
         <div class="submenu <?php echo in_array($current_page, ['lpc-counters', 'alpc-overview', 'general-alpc-wa', 'casting-performance-wa', 'finishing-wa', 'casting-performance-tr', 'general-alpc-tr', 'traceability-wa', 'traceability-tr']) ? 'expanded' : ''; ?>" id="submenu-alpc">
+
+            <!-- ALPC Overview -->
+            <div class="submenu-item <?php echo ($current_page == 'alpc-overview') ? 'active' : ''; ?>" onclick="location.href='<?php echo $base_url; ?>pages/alpc-overview.php'">
+                Overview
+            </div>
+
             <!-- LPC Counters -->
             <div class="submenu-item <?php echo ($current_page == 'lpc-counters') ? 'active' : ''; ?>" onclick="location.href='<?php echo $base_url; ?>pages/lpc-counters.php'">
                 <div class="menu-item-left">
-                    <img src="<?php echo $base_url; ?>assets/icons/chart.svg" class="icon" alt="LPC Counters">
                     <span>LPC Counters</span>
                 </div>
-            </div>
-
-            <!-- ALPC Overview -->
-            <div class="submenu-item alpc-overview-item <?php echo ($current_page == 'alpc-overview') ? 'active' : ''; ?>" onclick="location.href='<?php echo $base_url; ?>pages/alpc-overview.php'">
-                Overview
             </div>
 
             <!-- ALPC LINE 1 -->
@@ -126,20 +126,6 @@
             <div class="menu-item-left">
                 <img src="<?php echo $base_url; ?>assets/icons/list.svg" class="icon" alt="Traceability">
                 <span>Traceability</span>
-            </div>
-        </div>
-
-        <div class="menu-item <?php echo ($current_page == 'trials-dandori') ? 'active' : ''; ?>" onclick="location.href='<?php echo $base_url; ?>pages/trials-dandori.php'">
-            <div class="menu-item-left">
-                <img src="<?php echo $base_url; ?>assets/icons/thermometer.svg" class="icon" alt="Trials">
-                <span>Trials-Dandori</span>
-            </div>
-        </div>
-
-        <div class="menu-item">
-            <div class="menu-item-left">
-                <img src="<?php echo $base_url; ?>assets/icons/chart.svg" class="icon" alt="Analysis">
-                <span>Changeover Analysis</span>
             </div>
         </div>
     </div>
