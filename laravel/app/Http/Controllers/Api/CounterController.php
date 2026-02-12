@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-// 1. IMPORT YOUR MODELS
+// Import your models
 use App\Models\TrCounter;
 use App\Models\WaCounter;
 use App\Models\SzKrCounter;
@@ -14,8 +14,8 @@ class CounterController extends Controller
 {
     public function index()
     {
-        // 2. FETCH DATA (Get the row where id=1 from each table)
-        // We use 'first()' which gets the first matching record (safer than find(1) if IDs vary)
+        // Fetch the first record from each table
+        // We use first() to get the single row of counters
         $data = [
             'tr_counter'    => TrCounter::first(),
             'wa_counter'    => WaCounter::first(),
@@ -25,7 +25,6 @@ class CounterController extends Controller
             'status'        => 'success'
         ];
 
-        // 3. RETURN AS JSON
         return response()->json(['success' => true, 'data' => $data]);
     }
 }
