@@ -1,28 +1,240 @@
+<?php
+// Set current page for sidebar active state
+$current_page = 'traceability';
+$base_url = '../';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/daihatsu-logo.png') }}">
-    <title>Traceability - Casting SMART Factory</title>
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="icon" type="image/png" href="../assets/images/daihatsu-logo.png">
+    <title>Traceability System - Casting SMART Factory</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        body {
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .traceability-page {
+            margin-left: 250px;
+            margin-top: 64px;
+            height: calc(100vh - 64px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            transition: margin-left 0.3s ease;
+            overflow: hidden;
+        }
+
+        /* Sidebar collapsed state - using class on body */
+        body.sidebar-collapsed .traceability-page {
+            margin-left: 0;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--accent-navy);
+            margin-bottom: 80px;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        .parts-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 60px;
+            flex-wrap: nowrap;
+        }
+
+        .part-box {
+            background: var(--white);
+            width: 140px;
+            height: 140px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            box-shadow: 0 2px 8px rgba(61, 74, 92, 0.08);
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            border: 1px solid var(--gray-border);
+        }
+
+        .part-box:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(74, 111, 165, 0.2);
+            border-color: var(--accent-blue);
+        }
+
+        .gear-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gray-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.25s ease;
+        }
+
+        .part-box:hover .gear-icon {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-navy));
+        }
+
+        .gear-icon::before {
+            content: '⚙️';
+            font-size: 36px;
+            filter: grayscale(0.3);
+            transition: filter 0.25s ease;
+        }
+
+        .part-box:hover .gear-icon::before {
+            filter: grayscale(0) brightness(1.2);
+        }
+
+        .part-label {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--accent-navy);
+            letter-spacing: 0.5px;
+            transition: color 0.25s ease;
+        }
+
+        .part-box:hover .part-label {
+            color: var(--accent-blue);
+        }
+
+        .connector-line {
+            width: 70px;
+            height: 2px;
+            background: var(--gray-border);
+            position: relative;
+            margin: 0 -8px;
+        }
+
+        .connector-line::before,
+        .connector-line::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.6;
+        }
+
+        .connector-line::before {
+            left: 0;
+        }
+
+        .connector-line::after {
+            right: 0;
+        }
+
+        .instruction-bubble {
+            background: var(--white);
+            padding: 14px 40px;
+            border-radius: 40px;
+            box-shadow: 0 2px 8px rgba(61, 74, 92, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            color: var(--text-light);
+            border: 1px solid var(--gray-border);
+        }
+
+        .hand-icon {
+            font-size: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .parts-container {
+                flex-wrap: wrap;
+                gap: 24px;
+            }
+
+            .connector-line {
+                display: none;
+            }
+
+            .part-box {
+                width: 130px;
+                height: 130px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page-title {
+                font-size: 28px;
+                margin-bottom: 50px;
+            }
+
+            .part-box {
+                width: 110px;
+                height: 110px;
+            }
+
+            .gear-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .gear-icon::before {
+                font-size: 28px;
+            }
+
+            .part-label {
+                font-size: 18px;
+            }
+
+            .instruction-bubble {
+                padding: 12px 28px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .traceability-page {
+                margin-left: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Top Header  -->
+    <!-- Top Header -->
     <div class="top-header">
         <div class="logo-section">
-            <img src="{{ asset('assets/images/daihatsu-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
+            <div class="hamburger-menu" onclick="toggleSidebar()">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+            <img src="../assets/images/daihatsu-logo.png" alt="Daihatsu Logo" class="company-logo">
         </div>
         <div class="header-center">
             <div class="monitoring-title">
-                <span class="monitoring-text">Monitoring Dashboard</span>
-                <div class="monitoring-subtitle">Casting SMART Factory System</div>
+                <span class="monitoring-text">Traceability</span>
+                <div class="monitoring-subtitle">CASTING SMART FACTORY SYSTEM</div>
             </div>
         </div>
         <div class="header-right">
             <div class="header-logos">
-                <img src="{{ asset('assets/images/icare.png') }}" alt="I CARE" class="company-logo">
-                <img src="{{ asset('assets/images/adm-unity.png') }}" alt="ADM Unity" class="company-logo">
+                <img src="../assets/images/icare.png" alt="I-CARE" class="company-logo">
+                <img src="../assets/images/adm-unity.png" alt="ADM" class="company-logo">
             </div>
             <div class="datetime-display">
                 <div class="date-text" id="current-date"></div>
@@ -31,132 +243,79 @@
         </div>
     </div>
 
-    <!-- Dashboard Container -->
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="menu-section">
-                <div class="menu-title">Main Menu</div>
-                
-                <div class="menu-item" onclick="location.href='{{ route('home') }}'">
-                    <div class="menu-item-left"><span>Dashboard</span></div>
-                </div>
+    <!-- Sidebar -->
+    <?php include '../includes/sidebar.php'; ?>
 
-                <div class="menu-item" onclick="toggleSubmenu('ahpc')">
-                    <div class="menu-item-left"><span>AHPC</span></div>
-                    <span class="expand-icon" id="expand-ahpc">▼</span>
-                </div>
-                <div class="submenu" id="submenu-ahpc">
-                    <div class="submenu-item">Casting Performance</div>
-                    <div class="submenu-item">Fin 1 Performance</div>
-                    <div class="submenu-item">Fin 2 Performance</div>
-                </div>
+    <!-- Main Content -->
+    <div class="traceability-page">
+        <h1 class="page-title">Traceability System</h1>
 
-                <div class="menu-item" onclick="toggleSubmenu('alpc')">
-                    <div class="menu-item-left"><span>ALPC</span></div>
-                    <span class="expand-icon" id="expand-alpc">▼</span>
-                </div>
-                <div class="submenu" id="submenu-alpc">
-                    <div class="nested-submenu-item" onclick="event.stopPropagation(); toggleSubmenu('alpc-line1')">
-                        <span>ALPC LINE 1</span>
-                        <span class="expand-icon" id="expand-alpc-line1">▼</span>
-                    </div>
-                    <div class="nested-submenu" id="submenu-alpc-line1">
-                        <div class="nested-submenu-child">ALPC TR</div>
-                        <div class="nested-submenu-child">ALPC 3SZ</div>
-                        <div class="nested-submenu-child">ALPC KR</div>
-                    </div>
-                    <div class="nested-submenu-item" onclick="event.stopPropagation(); toggleSubmenu('alpc-line2')">
-                        <span>ALPC LINE 2</span>
-                        <span class="expand-icon" id="expand-alpc-line2">▼</span>
-                    </div>
-                    <div class="nested-submenu" id="submenu-alpc-line2">
-                        <div class="nested-submenu-child">ALPC NR</div>
-                        <div class="nested-submenu-child">ALPC WA</div>
-                    </div>
-                </div>
-            </div>
+        <div class="parts-container">
+            <a href="traceability-kr.php" class="part-box">
+                <div class="gear-icon"></div>
+                <div class="part-label">KR</div>
+            </a>
 
-            <div class="menu-section">
-                <div class="menu-title">Others</div>
-                <div class="menu-item active">
-                    <div class="menu-item-left"><span>🔍</span><span>Traceability</span></div>
-                </div>
-                <div class="menu-item">
-                    <div class="menu-item-left"><span>⚙️</span><span>Trials & Dandori</span></div>
-                </div>
-                <div class="menu-item">
-                    <div class="menu-item-left"><span>🔄</span><span>Changeover Analysis</span></div>
-                </div>
-            </div>
+            <div class="connector-line"></div>
+
+            <a href="traceability-tr.php" class="part-box">
+                <div class="gear-icon"></div>
+                <div class="part-label">TR</div>
+            </a>
+
+            <div class="connector-line"></div>
+
+            <a href="traceability-3sz.php" class="part-box">
+                <div class="gear-icon"></div>
+                <div class="part-label">3SZ</div>
+            </a>
+
+            <div class="connector-line"></div>
+
+            <a href="traceability-nr.php" class="part-box">
+                <div class="gear-icon"></div>
+                <div class="part-label">NR</div>
+            </a>
+
+            <div class="connector-line"></div>
+
+            <a href="traceability-wa.php" class="part-box">
+                <div class="gear-icon"></div>
+                <div class="part-label">WA</div>
+            </a>
         </div>
 
-        <!-- Main Content - Traceability -->
-        <div class="trace-content">
-            <div class="page-title">
-                <h1>Traceability System</h1>
-            </div>
-
-            <div class="flow-container" id="partContainer"></div>
-
-            <div class="instruction">
-                <span class="instruction-icon">👆</span>
-                <span class="instruction-text">Click to view detailed traceability data</span>
-            </div>
+        <div class="instruction-bubble">
+            <span class="hand-icon">👆</span>
+            <span>Click on a part to view detailed traceability data</span>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal-overlay" id="modal">
-        <div class="modal">
-            <div class="modal-icon" id="modalIcon">⚙️</div>
-            <h2 id="modalTitle">Part KR</h2>
-            <p id="modalDesc">View traceability data for KR process.</p>
-            <div class="modal-actions">
-                <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
-                <button class="modal-btn primary" onclick="navigateToPart()">View Traceability →</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="../js/main.js"></script>
     <script>
-        // Fungsi toggle submenu
-        function toggleSubmenu(id) {
-            const submenu = document.getElementById('submenu-' + id);
-            const expandIcon = document.getElementById('expand-' + id);
-            
-            if (submenu.classList.contains('expanded')) {
-                submenu.classList.remove('expanded');
-                if (expandIcon) expandIcon.classList.remove('expanded');
-            } else {
-                submenu.classList.add('expanded');
-                if (expandIcon) expandIcon.classList.add('expanded');
+        // Override toggleSidebar to add body class for proper page margin
+        const originalToggleSidebar = window.toggleSidebar;
+        window.toggleSidebar = function() {
+            if (originalToggleSidebar) {
+                originalToggleSidebar();
             }
-        }
-        
-        // Update waktu dan tanggal
-        function updateTime() {
-            const now = new Date();
-            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-            const dayName = days[now.getDay()];
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            const monthName = months[now.getMonth()];
-            const day = String(now.getDate()).padStart(2, '0');
-            const year = now.getFullYear();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            
-            const dateDisplay = document.getElementById('current-date');
-            const timeDisplay = document.getElementById('current-time');
-            
-            if (dateDisplay) dateDisplay.textContent = `${dayName}, ${day}-${monthName}-${year}`;
-            if (timeDisplay) timeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
-        }
-        
-        updateTime();
-        setInterval(updateTime, 1000);
+
+            // Toggle body class for page margin adjustment
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar && sidebar.classList.contains('hidden')) {
+                document.body.classList.add('sidebar-collapsed');
+            } else {
+                document.body.classList.remove('sidebar-collapsed');
+            }
+        };
+
+        // Check sidebar state on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar && sidebar.classList.contains('hidden')) {
+                document.body.classList.add('sidebar-collapsed');
+            }
+        });
     </script>
 </body>
 </html>
