@@ -1,15 +1,11 @@
-<?php
-$current_page = 'lpc-counters';
-$base_url = '../';
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="../assets/images/daihatsu-logo.png">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/daihatsu-logo.png') }}">
     <title>LPC Counters - ALPC Monitoring</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <style>
         .counters-grid {
             display: grid;
@@ -247,7 +243,7 @@ $base_url = '../';
                 <div class="hamburger-line"></div>
                 <div class="hamburger-line"></div>
             </div>
-            <img src="../assets/images/daihatsu-logo.png" alt="Daihatsu Logo" class="company-logo">
+            <img src="{{ asset('assets/images/daihatsu-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
         </div>
         <div class="header-center">
             <div class="monitoring-title">
@@ -257,8 +253,8 @@ $base_url = '../';
         </div>
         <div class="header-right">
             <div class="header-logos">
-                <img src="../assets/images/icare.png" alt="I CARE" class="company-logo">
-                <img src="../assets/images/adm-unity.png" alt="ADM Unity" class="company-logo">
+                <img src="{{ asset('assets/images/icare.png') }}" alt="I CARE" class="company-logo">
+                <img src="{{ asset('assets/images/adm-unity.png') }}" alt="ADM Unity" class="company-logo">
             </div>
             <div class="datetime-display">
                 <div class="date-text" id="current-date"></div>
@@ -268,7 +264,7 @@ $base_url = '../';
     </div>
 
     <div class="dashboard-container">
-        <?php include '../includes/sidebar.php'; ?>
+        @include('includes.sidebar')
 
         <div class="main-content">
             <div class="content-header" style="margin-bottom: 12px;">
@@ -481,7 +477,7 @@ $base_url = '../';
         </div>
     </div>
 
-    <script src="../js/main.js"></script>
-    <script src="../js/lpc-counters.js"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/lpc-counters.js') }}"></script>
 </body>
 </html>

@@ -1,118 +1,75 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageController;
 
 // ============================================================
 // HOME / DASHBOARD
 // ============================================================
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [PageController::class, 'home'])->name('home');
 
 // ============================================================
-// ALPC OVERVIEW
+// PRODUCTION DASHBOARD
 // ============================================================
-Route::get('/alpc-overview', function () {
-    return view('alpc-overview');
-})->name('alpc-overview');
+Route::get('/production-dashboard', [PageController::class, 'productionDashboard'])->name('production-dashboard');
+
+// ============================================================
+// ALPC OVERVIEW & LPC COUNTERS
+// ============================================================
+Route::get('/alpc-overview', [PageController::class, 'alpcOverview'])->name('alpc-overview');
+Route::get('/lpc-counters', [PageController::class, 'lpcCounters'])->name('lpc-counters');
 
 // ============================================================
 // ALPC TR (Line 1)
 // ============================================================
-Route::get('/general-alpc-tr', function () {
-    return view('general-alpc-tr');
-})->name('general-alpc-tr');
-
-Route::get('/casting-performance-tr', function () {
-    return view('casting-performance-tr', ['current_page' => 'casting-performance-tr']);
-})->name('casting-performance-tr');
-
-Route::get('/finishing-performance-tr', function () {
-    return view('finishing-performance-tr', ['current_page' => 'finishing-performance-tr']);
-})->name('finishing-performance-tr');
+Route::get('/general-alpc-tr', [PageController::class, 'generalAlpcTr'])->name('general-alpc-tr');
+Route::get('/casting-performance-tr', [PageController::class, 'castingPerformanceTr'])->name('casting-performance-tr');
+Route::get('/finishing-performance-tr', [PageController::class, 'finishingPerformanceTr'])->name('finishing-performance-tr');
 
 // ============================================================
 // ALPC 3SZ (Line 1)
 // ============================================================
-Route::get('/general-alpc-3sz', function () {
-    return view('general-alpc-3sz');
-})->name('general-alpc-3sz');
-
-Route::get('/casting-performance-3sz', function () {
-    return view('casting-performance-3sz', ['current_page' => 'casting-performance-3sz']);
-})->name('casting-performance-3sz');
+Route::get('/general-alpc-3sz', [PageController::class, 'generalAlpc3sz'])->name('general-alpc-3sz');
+Route::get('/casting-performance-3sz', [PageController::class, 'castingPerformance3sz'])->name('casting-performance-3sz');
 
 // ============================================================
 // ALPC KR (Line 1)
 // ============================================================
-Route::get('/general-alpc-kr', function () {
-    return view('general-alpc-kr');
-})->name('general-alpc-kr');
-
-Route::get('/casting-performance-kr', function () {
-    return view('casting-performance-kr', ['current_page' => 'casting-performance-kr']);
-})->name('casting-performance-kr');
-
-Route::get('/finishing-performance-kr', function () {
-    return view('finishing-performance-kr', ['current_page' => 'finishing-performance-kr']);
-})->name('finishing-performance-kr');
+Route::get('/general-alpc-kr', [PageController::class, 'generalAlpcKr'])->name('general-alpc-kr');
+Route::get('/casting-performance-kr', [PageController::class, 'castingPerformanceKr'])->name('casting-performance-kr');
+Route::get('/finishing-performance-kr', [PageController::class, 'finishingPerformanceKr'])->name('finishing-performance-kr');
 
 // ============================================================
 // ALPC NR (Line 2)
 // ============================================================
-Route::get('/general-alpc-nr', function () {
-    return view('general-alpc-nr');
-})->name('general-alpc-nr');
-
-Route::get('/casting-performance-nr', function () {
-    return view('casting-performance-nr', ['current_page' => 'casting-performance-nr']);
-})->name('casting-performance-nr');
-
-Route::get('/finishing-performance-nr', function () {
-    return view('finishing-performance-nr', ['current_page' => 'finishing-performance-nr']);
-})->name('finishing-performance-nr');
+Route::get('/general-alpc-nr', [PageController::class, 'generalAlpcNr'])->name('general-alpc-nr');
+Route::get('/casting-performance-nr', [PageController::class, 'castingPerformanceNr'])->name('casting-performance-nr');
+Route::get('/finishing-performance-nr', [PageController::class, 'finishingPerformanceNr'])->name('finishing-performance-nr');
 
 // ============================================================
 // ALPC WA (Line 2)
 // ============================================================
-Route::get('/general-alpc-wa', function () {
-    return view('general-alpc-wa');
-})->name('general-alpc-wa');
-
-Route::get('/casting-performance-wa', function () {
-    return view('casting-performance-wa', ['current_page' => 'casting-performance-wa']);
-})->name('casting-performance-wa');
-
-Route::get('/finishing-performance-wa', function () {
-    return view('finishing-performance-wa', ['current_page' => 'finishing-performance-wa']);
-})->name('finishing-performance-wa');
+Route::get('/general-alpc-wa', [PageController::class, 'generalAlpcWa'])->name('general-alpc-wa');
+Route::get('/casting-performance-wa', [PageController::class, 'castingPerformanceWa'])->name('casting-performance-wa');
+Route::get('/finishing-performance-wa', [PageController::class, 'finishingPerformanceWa'])->name('finishing-performance-wa');
 
 // ============================================================
 // TRACEABILITY
 // ============================================================
-Route::get('/traceability', function () {
-    return view('traceability');
-})->name('traceability');
+Route::get('/traceability', [PageController::class, 'traceability'])->name('traceability');
+Route::get('/traceability-wa', [PageController::class, 'traceabilityWa'])->name('traceability-wa');
+Route::get('/traceability-tr', [PageController::class, 'traceabilityTr'])->name('traceability-tr');
+Route::get('/traceability-kr', [PageController::class, 'traceabilityKr'])->name('traceability-kr');
+Route::get('/traceability-nr', [PageController::class, 'traceabilityNr'])->name('traceability-nr');
+Route::get('/traceability-3sz', [PageController::class, 'traceability3sz'])->name('traceability-3sz');
 
-Route::get('/traceability-wa', function () {
-    return view('traceability-wa');
-})->name('traceability-wa');
-
-Route::get('/traceability-tr', function () {
-    return view('traceability-tr');
-})->name('traceability-tr');
-
-Route::get('/traceability-kr', function () {
-    return view('traceability-kr');
-})->name('traceability-kr');
-
-Route::get('/traceability-nr', function () {
-    return view('traceability-nr');
-})->name('traceability-nr');
-
-Route::get('/traceability-3sz', function () {
-    return view('traceability-3sz');
-})->name('traceability-3sz');
+// ============================================================
+// MANAGEMENT / ANALYTICS DASHBOARDS
+// ============================================================
+Route::get('/management-dashboard', [PageController::class, 'managementDashboard'])->name('management-dashboard');
+Route::get('/quality-dashboard', [PageController::class, 'qualityDashboard'])->name('quality-dashboard');
+Route::get('/pcl-dashboard', [PageController::class, 'pclDashboard'])->name('pcl-dashboard');
+Route::get('/maintenance-dashboard', [PageController::class, 'maintenanceDashboard'])->name('maintenance-dashboard');
 
 // ============================================================
 // API ROUTES (proxied through Laravel instead of raw PHP files)

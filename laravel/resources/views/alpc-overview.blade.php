@@ -868,7 +868,6 @@
         </div>
     </div>
 
-    @include('includes.alpc-modals') 
     <div class="modal-overlay" id="modal-tr" onclick="closeModal('tr')">
         <div class="modal-container" onclick="event.stopPropagation()">
             <div class="modal-header">

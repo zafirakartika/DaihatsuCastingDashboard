@@ -1,13 +1,9 @@
-<?php
-// Landing Page - Central Hub
-$current_page = 'home';
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="assets/images/daihatsu-logo.png">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/daihatsu-logo.png') }}">
     <title>Daihatsu Casting SMART Factory</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +35,7 @@ $current_page = 'home';
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: url('assets/images/ADM.png');
+            background-image: url('{{ asset('assets/images/ADM.png') }}');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -340,7 +336,7 @@ $current_page = 'home';
     <!-- Top Header -->
     <div class="top-header">
         <div class="header-left">
-            <img src="assets/images/daihatsu-logo.png" alt="Daihatsu" class="company-logo">
+            <img src="{{ asset('assets/images/daihatsu-logo.png') }}" alt="Daihatsu" class="company-logo">
             <div class="header-title">
                 <h1>SMART FACTORY</h1>
                 <p>Casting Dashboard System</p>
@@ -348,8 +344,8 @@ $current_page = 'home';
         </div>
         <div class="header-right">
             <div class="header-logos">
-                <img src="assets/images/icare.png" alt="I CARE">
-                <img src="assets/images/adm-unity.png" alt="ADM Unity">
+                <img src="{{ asset('assets/images/icare.png') }}" alt="I CARE">
+                <img src="{{ asset('assets/images/adm-unity.png') }}" alt="ADM Unity">
             </div>
             <div class="datetime-box">
                 <div class="time" id="live-time">00:00:00</div>
@@ -367,25 +363,25 @@ $current_page = 'home';
 
         <div class="modules-grid">
             <!-- Production Module -->
-            <div class="module-card production" onclick="location.href='pages/production-dashboard.php'">
+            <div class="module-card production" onclick="location.href='{{ route('production-dashboard') }}'">
                 <div class="module-icon">🏭</div>
                 <div class="module-name">Production</div>
             </div>
 
             <!-- Maintenance Module -->
-            <div class="module-card maintenance" onclick="location.href='pages/maintenance-dashboard.php'">
+            <div class="module-card maintenance" onclick="location.href='{{ route('maintenance-dashboard') }}'">
                 <div class="module-icon">🔧</div>
                 <div class="module-name">Maintenance</div>
             </div>
 
             <!-- Quality Module -->
-            <div class="module-card quality" onclick="location.href='pages/quality-dashboard.php'">
+            <div class="module-card quality" onclick="location.href='{{ route('quality-dashboard') }}'">
                 <div class="module-icon">✅</div>
                 <div class="module-name">Quality</div>
             </div>
 
             <!-- PCL Module -->
-            <div class="module-card pcl" onclick="location.href='pages/pcl-dashboard.php'">
+            <div class="module-card pcl" onclick="location.href='{{ route('pcl-dashboard') }}'">
                 <div class="module-icon">📦</div>
                 <div class="module-name">PCL</div>
             </div>
