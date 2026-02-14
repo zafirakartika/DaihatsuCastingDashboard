@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ asset('assets/images/daihatsu-logo.png') }}">
-    <title>Casting Performance - ALPC WA</title>
+    <title>Casting Performance - ALPC TR</title>
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/casting-performance.css') }}">
 </head>
@@ -22,7 +22,7 @@
         <div class="header-center">
             <div class="monitoring-title">
                 <span class="monitoring-text">Casting Performance</span>
-                <div class="monitoring-subtitle">ALPC WA - Real-Time Monitoring</div>
+                <div class="monitoring-subtitle">ALPC TR - Real-Time Monitoring</div>
             </div>
         </div>
         <div class="header-right">
@@ -44,7 +44,7 @@
             <div class="content-header" style="margin-bottom: 12px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                     <div class="page-title" style="font-size: 32px; font-weight: 700; color: var(--accent-navy); text-shadow: 2px 2px 4px rgba(13, 59, 102, 0.1); border-left: 5px solid var(--accent-blue); padding-left: 15px; margin-bottom: 0;">
-                        Casting Performance - ALPC WA
+                        Casting Performance - ALPC TR
                     </div>
                 </div>
                 <div class="filter-controls" style="display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap;">
@@ -75,7 +75,7 @@
                     <option value="night">Night (19:00 - 06:00)</option>
                 </select>
 
-                <button class="filter-btn active" onclick="CastingPerformance.loadAllData()" style="padding: 6px 16px; font-size: 12px; margin-left: 8px;">
+                <button class="filter-btn active" onclick="CastingPerformanceTR.loadAllData()" style="padding: 6px 16px; font-size: 12px; margin-left: 8px;">
                     Apply Filter
                 </button>
                 <button class="filter-btn" onclick="resetFilters()" style="padding: 6px 12px; font-size: 12px; background: var(--gray-light); color: var(--text-dark);">
@@ -83,8 +83,7 @@
                 </button>
             </div>
 
-            @include('includes.casting-wa-metrics') 
-            
+            @include('includes.casting-tr-metrics') 
             <div class="refresh-info" style="font-size: 12px; padding: 5px 0; color: var(--text-light);">
                 Last updated: <span id="last-update">--:--:--</span> | Auto-refresh: <span id="refresh-status">60s</span>
             </div>
@@ -97,7 +96,7 @@
     
     <script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/casting-performance-core.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/casting-performance-wa-config.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/casting-performance-tr-config.js') }}?v={{ time() }}"></script>
     
     <script>
         function toggleSidebar() {
@@ -105,6 +104,7 @@
             if(sidebar) sidebar.classList.toggle('active');
         }
 
+        // (Include the rest of your JS logic here, identical to source)
         function resetFilters() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('filter-date').value = today;
@@ -114,10 +114,10 @@
             const allRadio = document.querySelector('input[name="temp-trend-filter"][value="all"]');
             if (allRadio) allRadio.checked = true;
 
-            if (typeof CastingPerformance !== 'undefined') {
-                CastingPerformance.filterTemperatureMetrics('all');
-                CastingPerformance.filterTrendChart('all');
-                CastingPerformance.loadAllData();
+            if(typeof CastingPerformanceTR !== 'undefined') {
+                CastingPerformanceTR.filterTemperatureMetrics('all');
+                CastingPerformanceTR.filterTrendChart('all');
+                CastingPerformanceTR.loadAllData();
             }
         }
 
@@ -128,8 +128,8 @@
             
             const shiftInput = document.getElementById('filter-shift');
             if(shiftInput) shiftInput.value = 'auto';
-            
-            console.log('Page loaded - CastingPerformance module will auto-initialize');
+
+            console.log('Page loaded - showing current shift data');
         });
 
         // Real-time monitoring toggle
@@ -142,15 +142,15 @@
             const refreshStatus = document.getElementById('refresh-status');
 
             if (isRealTimeEnabled) {
-                toggleBtn.style.background = 'linear-gradient(135deg, #27ae60 0%, #229954 100%)';
+                toggleBtn.style.background = '#27ae60';
                 statusText.textContent = 'ON';
-                if(refreshStatus) refreshStatus.textContent = '2s';
-                if (typeof CastingPerformance !== 'undefined') CastingPerformance.loadAllData();
+                if(refreshStatus) refreshStatus.textContent = '3s';
+                if(typeof CastingPerformanceTR !== 'undefined') CastingPerformanceTR.startSimulation(3);
             } else {
-                toggleBtn.style.background = 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';
+                toggleBtn.style.background = '#e74c3c';
                 statusText.textContent = 'OFF';
                 if(refreshStatus) refreshStatus.textContent = 'Paused';
-                if (typeof CastingPerformance !== 'undefined') CastingPerformance.stopSimulation();
+                if(typeof CastingPerformanceTR !== 'undefined') CastingPerformanceTR.stopSimulation();
             }
         }
     </script>

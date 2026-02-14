@@ -2,43 +2,43 @@
 
 use Illuminate\Support\Facades\Route;
 
-// 1. Landing Page (Index)
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// 2. Main Dashboards
-Route::get('/production-dashboard', function () {
-    return view('production-dashboard'); 
-})->name('production-dashboard');
-
+// --- ALPC Overview ---
 Route::get('/alpc-overview', function () {
     return view('alpc-overview');
 })->name('alpc-overview');
 
-// 3. ALPC Line 1 Routes
-Route::get('/general-alpc-tr', function () {
-    return view('general-alpc-tr');
-})->name('general-alpc-tr');
-
+// --- Casting Performance Pages ---
 Route::get('/casting-performance-tr', function () {
-    return view('casting-performance-tr');
+    return view('casting-performance-tr', ['current_page' => 'casting-performance-tr']);
 })->name('casting-performance-tr');
 
-// 4. ALPC Line 2 Routes
+Route::get('/casting-performance-wa', function () {
+    return view('casting-performance-wa', ['current_page' => 'casting-performance-wa']);
+})->name('casting-performance-wa');
+
+// --- General ALPC Pages (Linked from Overview) ---
+// These are needed so the "Navigate" buttons in the Overview modal work.
+// Even if you haven't migrated the files yet, these routes must exist.
+Route::get('/general-alpc-tr', function () {
+    return view('general-alpc-tr'); // Ensure this view exists or create a blank one
+})->name('general-alpc-tr');
+
 Route::get('/general-alpc-wa', function () {
     return view('general-alpc-wa');
 })->name('general-alpc-wa');
 
-Route::get('/casting-performance-wa', function () {
-    return view('casting-performance-wa');
-})->name('casting-performance-wa');
+Route::get('/general-alpc-3sz', function () {
+    return view('general-alpc-3sz');
+})->name('general-alpc-3sz');
 
-Route::get('/finishing-performance-wa', function () {
-    return view('finishing-performance-wa');
-})->name('finishing-performance-wa');
+Route::get('/general-alpc-kr', function () {
+    return view('general-alpc-kr');
+})->name('general-alpc-kr');
 
-// 5. Other Pages
-Route::get('/traceability', function () {
-    return view('traceability');
-})->name('traceability');
+Route::get('/general-alpc-nr', function () {
+    return view('general-alpc-nr');
+})->name('general-alpc-nr');
