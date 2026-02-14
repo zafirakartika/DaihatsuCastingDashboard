@@ -1,0 +1,15 @@
+# Claude Code settings
+.claude/
+
+# VS Code workspace settings
+.vscode/
+
+# Laravel
+laravel/vendor/
+laravel/.env
+laravel/storage/logs/*.log
+laravel/bootstrap/cache/*.php
+
+# OS
+.DS_Store
+Thumbs.db

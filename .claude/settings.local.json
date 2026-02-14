@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(python3:*)",
-      "Bash(cd /d/new xampp/htdocs/daihatsu-dashboard/laravel/public/js)",
-      "Bash(wc:*)"
-    ]
-  }
-}
