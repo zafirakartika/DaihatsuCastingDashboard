@@ -2,8 +2,8 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class TrCounter extends Model
+class NrCounter extends Model
 {
-    protected $table = 'nr_counter'; 
+    protected $table = 'nr_counter';
     public $timestamps = false;    
 }

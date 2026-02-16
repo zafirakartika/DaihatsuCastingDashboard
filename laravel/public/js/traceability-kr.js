@@ -5,7 +5,7 @@
  */
 
 const CONFIG = {
-    API_URL: '/daihatsu-dashboard/laravel/public/api/traceability-data-consolidated.php?part=KR'
+    API_URL: '/api/traceability?action=recent&line=kr'
 };
 
 let allData = [];

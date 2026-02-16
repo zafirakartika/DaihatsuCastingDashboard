@@ -7,7 +7,7 @@
 
 // Configuration
 const CONFIG = {
-    API_URL: '/daihatsu-dashboard/laravel/public/api/traceability-data-consolidated.php?part=TR'
+    API_URL: '/api/traceability?action=recent&line=tr'
 };
 
 // State management
