@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\FinishingPerformanceController;
 
 // Counter data (LPC counters)
 Route::get('/counters', [CounterController::class, 'index']);
+Route::get('/counters/history', [CounterController::class, 'history']);
 
 // Casting data (WA-focused, action-based for backwards compatibility)
 Route::get('/casting-data', [CastingDataController::class, 'handle']);
