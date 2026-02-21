@@ -128,6 +128,10 @@ class LPCHistory {
         document.getElementById('hist-result-info').textContent = '—';
         document.getElementById('hist-table-area').innerHTML =
             '<div class="history-empty"><p>Select filters and click Apply to load history.</p></div>';
+        this.lastData = null;
+        this.lastLine = null;
+        const dlBtn = document.getElementById('btn-hist-download');
+        if (dlBtn) dlBtn.disabled = true;
     }
 
     shiftLabel(row) {
@@ -169,6 +173,10 @@ class LPCHistory {
             if (!json.success) throw new Error(json.message || 'API error');
 
             const rows = json.data;
+            this.lastData = rows;
+            this.lastLine = line;
+            const dlBtn = document.getElementById('btn-hist-download');
+            if (dlBtn) dlBtn.disabled = rows.length === 0;
             info.innerHTML = `Showing <strong>${rows.length}</strong> record${rows.length !== 1 ? 's' : ''}`;
 
             if (rows.length === 0) {
@@ -212,5 +220,51 @@ class LPCHistory {
             area.innerHTML = `<div class="history-empty"><p>⚠️ Error loading data: ${err.message}</p></div>`;
             info.textContent = 'Error';
         }
+    }
+
+    download() {
+        if (!this.lastData || this.lastData.length === 0) {
+            alert('No data loaded. Please apply filters and load data first.');
+            return;
+        }
+
+        const line = this.lastLine;
+        const cols = LPCHistory.COLUMNS[line] || [];
+
+        // Build header row
+        const header = ['#', 'Date & Time', 'Shift', ...cols.map(c => c.label), 'Total'];
+
+        // Build data rows (plain text, no HTML badges)
+        const dataRows = this.lastData.map((row, i) => {
+            const h = parseInt(row.hour);
+            const shiftText = h === 20 ? 'Morning' : h === 7 ? 'Night' : '—';
+            return [
+                i + 1,
+                this.formatDatetime(row.datetime),
+                shiftText,
+                ...cols.map(c => row[c.key] ?? 0),
+                row.total ?? 0,
+            ];
+        });
+
+        const wsData = [header, ...dataRows];
+        const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+        // Auto column widths
+        const colWidths = header.map((h, ci) => {
+            const maxLen = Math.max(h.length, ...dataRows.map(r => String(r[ci] ?? '').length));
+            return { wch: Math.min(maxLen + 4, 30) };
+        });
+        ws['!cols'] = colWidths;
+
+        // Style header row bold (SheetJS CE supports basic cell styles via s property only with pro; skip for CE)
+        const wb = XLSX.utils.book_new();
+        const lineLabel = { tr: 'TR', wa: 'WA', szkr: '3SZ-KR', nr: 'NR' }[line] || line.toUpperCase();
+        XLSX.utils.book_append_sheet(wb, ws, `LPC History ${lineLabel}`);
+
+        // Filename: LPC_Counter_History_TR_20260221.xlsx
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
+        XLSX.writeFile(wb, `LPC_Counter_History_${lineLabel}_${dateStr}.xlsx`);
     }
 }

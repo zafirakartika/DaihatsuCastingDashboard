@@ -371,6 +371,24 @@
             align-self: flex-end;
         }
         .btn-reset:hover { background: #e8e8e8; }
+        .btn-download {
+            padding: 8px 18px;
+            background: linear-gradient(135deg, #1a7f4b 0%, #145c36 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(26,127,75,0.3);
+            align-self: flex-end;
+        }
+        .btn-download:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(26,127,75,0.4); }
+        .btn-download:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
         /* Table Area */
         .history-body {
@@ -779,6 +797,10 @@
                 </div>
                 <button class="btn-apply" onclick="window.lpcHistory.load()">Apply</button>
                 <button class="btn-reset" onclick="window.lpcHistory.reset()">Reset</button>
+                <button class="btn-download" id="btn-hist-download" onclick="window.lpcHistory.download()" disabled>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download Excel
+                </button>
             </div>
 
             <div class="history-body">
@@ -795,6 +817,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
     <script src="{{ asset('js/main.js') }}"></script>
     <script src="{{ asset('js/lpc-counters.js') }}"></script>
 </body>
