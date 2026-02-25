@@ -868,6 +868,7 @@
         </div>
     </div>
 
+    <!-- TR Modal (5 LPCs) -->
     <div class="modal-overlay" id="modal-tr" onclick="closeModal('tr')">
         <div class="modal-container" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -879,6 +880,7 @@
             </div>
             <div class="modal-body">
                 <div class="lpc-modal-grid">
+                    <!-- LPC 1 -->
                     <div class="lpc-modal-card" onclick="navigateToLPC('tr', '1')">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                             <div class="lpc-modal-name">LPC 1</div>
@@ -886,23 +888,86 @@
                         </div>
                         <div class="lpc-modal-metrics">
                             <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">88.5%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">97.2%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">89.8%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">90.0%</div></div>
                         </div>
+                        <div class="info-badge"><span>Click to view details</span></div>
                     </div>
+                    <!-- LPC 2 -->
+                    <div class="lpc-modal-card" onclick="navigateToLPC('tr', '2')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div class="lpc-modal-name">LPC 2</div>
+                            <div class="lpc-modal-status normal">Normal</div>
+                        </div>
+                        <div class="lpc-modal-metrics">
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">90.1%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">96.8%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">91.2%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">95.0%</div></div>
+                        </div>
+                        <div class="info-badge"><span>Click to view details</span></div>
                     </div>
+                    <!-- LPC 3 -->
+                    <div class="lpc-modal-card" onclick="navigateToLPC('tr', '3')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div class="lpc-modal-name">LPC 3</div>
+                            <div class="lpc-modal-status warning">Warning</div>
+                        </div>
+                        <div class="lpc-modal-metrics">
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value warning">82.3%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">95.1%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value warning">85.5%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value warning">80.0%</div></div>
+                        </div>
+                        <div class="info-badge"><span>Needs attention</span></div>
+                    </div>
+                    <!-- LPC 4 -->
+                    <div class="lpc-modal-card" onclick="navigateToLPC('tr', '4')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div class="lpc-modal-name">LPC 4</div>
+                            <div class="lpc-modal-status normal">Normal</div>
+                        </div>
+                        <div class="lpc-modal-metrics">
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">87.9%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">96.5%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">89.2%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">90.0%</div></div>
+                        </div>
+                        <div class="info-badge"><span>Click to view details</span></div>
+                    </div>
+                    <!-- LPC 6 -->
+                    <div class="lpc-modal-card" onclick="navigateToLPC('tr', '5')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div class="lpc-modal-name">LPC 6</div>
+                            <div class="lpc-modal-status normal">Normal</div>
+                        </div>
+                        <div class="lpc-modal-metrics">
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">86.8%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">96.9%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">88.3%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value warning">85.7%</div></div>
+                        </div>
+                        <div class="info-badge"><span>Click to view details</span></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
+
+    <!-- WA Modal (1 LPC) -->
     <div class="modal-overlay" id="modal-wa" onclick="closeModal('wa')">
         <div class="modal-container" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <div>
                     <h2 style="margin: 0; font-size: 28px; font-weight: 800;">ALPC WA Line</h2>
+                    <p style="margin: 8px 0 0 0; opacity: 0.9; font-size: 14px;">Select LPC to view detailed performance</p>
                 </div>
                 <button class="modal-close" onclick="closeModal('wa')">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="lpc-modal-grid">
+                    <!-- LPC 11 -->
                     <div class="lpc-modal-card" onclick="navigateToLPC('wa', '1')">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                             <div class="lpc-modal-name">LPC 11</div>
@@ -910,7 +975,132 @@
                         </div>
                         <div class="lpc-modal-metrics">
                             <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">92.1%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">98.2%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">94.5%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">100%</div></div>
                         </div>
+                        <div class="info-badge"><span>Click to view details</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KR Modal (1 LPC) -->
+    <div class="modal-overlay" id="modal-kr" onclick="closeModal('kr')">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <h2 style="margin: 0; font-size: 28px; font-weight: 800;">ALPC KR Line</h2>
+                    <p style="margin: 8px 0 0 0; opacity: 0.9; font-size: 14px;">Select LPC to view detailed performance</p>
+                </div>
+                <button class="modal-close" onclick="closeModal('kr')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="lpc-modal-grid">
+                    <!-- LPC 9 -->
+                    <div class="lpc-modal-card" onclick="navigateToLPC('kr', '1')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div class="lpc-modal-name">LPC 9</div>
+                            <div class="lpc-modal-status normal">Normal</div>
+                        </div>
+                        <div class="lpc-modal-metrics">
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">89.8%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">97.1%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">91.2%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">94.1%</div></div>
+                        </div>
+                        <div class="info-badge"><span>Click to view details</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3SZ Modal (1 LPC) -->
+    <div class="modal-overlay" id="modal-3sz" onclick="closeModal('3sz')">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <h2 style="margin: 0; font-size: 28px; font-weight: 800;">ALPC 3SZ Line</h2>
+                    <p style="margin: 8px 0 0 0; opacity: 0.9; font-size: 14px;">Select LPC to view detailed performance</p>
+                </div>
+                <button class="modal-close" onclick="closeModal('3sz')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="lpc-modal-grid">
+                    <!-- LPC 9 -->
+                    <div class="lpc-modal-card" onclick="navigateToLPC('3sz', '1')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div class="lpc-modal-name">LPC 9</div>
+                            <div class="lpc-modal-status normal">Normal</div>
+                        </div>
+                        <div class="lpc-modal-metrics">
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">90.5%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">95.8%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">92.8%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">97.0%</div></div>
+                        </div>
+                        <div class="info-badge"><span>Click to view details</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NR Modal (3 LPCs) -->
+    <div class="modal-overlay" id="modal-nr" onclick="closeModal('nr')">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <h2 style="margin: 0; font-size: 28px; font-weight: 800;">ALPC NR Line</h2>
+                    <p style="margin: 8px 0 0 0; opacity: 0.9; font-size: 14px;">Select LPC to view detailed performance</p>
+                </div>
+                <button class="modal-close" onclick="closeModal('nr')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="lpc-modal-grid">
+                    <!-- LPC 12 -->
+                    <div class="lpc-modal-card" onclick="navigateToLPC('nr', '1')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div class="lpc-modal-name">LPC 12</div>
+                            <div class="lpc-modal-status normal">Normal</div>
+                        </div>
+                        <div class="lpc-modal-metrics">
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">87.2%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">95.8%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">90.1%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">91.2%</div></div>
+                        </div>
+                        <div class="info-badge"><span>Click to view details</span></div>
+                    </div>
+                    <!-- LPC 13 -->
+                    <div class="lpc-modal-card" onclick="navigateToLPC('nr', '2')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div class="lpc-modal-name">LPC 13</div>
+                            <div class="lpc-modal-status warning">Warning</div>
+                        </div>
+                        <div class="lpc-modal-metrics">
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value warning">81.8%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">92.5%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value warning">87.2%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value warning">85.3%</div></div>
+                        </div>
+                        <div class="info-badge"><span>Needs attention</span></div>
+                    </div>
+                    <!-- LPC 14 -->
+                    <div class="lpc-modal-card" onclick="navigateToLPC('nr', '3')">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div class="lpc-modal-name">LPC 14</div>
+                            <div class="lpc-modal-status normal">Normal</div>
+                        </div>
+                        <div class="lpc-modal-metrics">
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">86.9%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">94.5%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">91.2%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">90.0%</div></div>
+                        </div>
+                        <div class="info-badge"><span>Click to view details</span></div>
                     </div>
                 </div>
             </div>
