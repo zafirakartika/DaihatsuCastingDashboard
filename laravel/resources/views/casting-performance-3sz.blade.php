@@ -67,18 +67,16 @@
                 <button class="filter-btn active" onclick="CastingPerformance.loadAllData()" style="padding: 6px 16px; font-size: 12px; margin-left: 8px;">Apply Filter</button>
                 <button class="filter-btn" onclick="resetFilters()" style="padding: 6px 12px; font-size: 12px; background: var(--gray-light); color: var(--text-dark);">Reset</button>
             </div>
-            <div id="casting-metrics-container">
-                <div style="text-align: center; padding: 40px; color: #999;">Loading casting performance data...</div>
-            </div>
+            @include('includes.casting-3sz-metrics')
             <div class="refresh-info" style="font-size: 12px; padding: 5px 0; color: var(--text-light);">Last updated: <span id="last-update">--:--:--</span> | Auto-refresh: <span id="refresh-status">60s</span></div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
-    <script src="{{ asset('js/casting-performance-core.js') }}"></script>
-    <script src="{{ asset('js/casting-performance-3sz-config.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/casting-performance-core.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/casting-performance-3sz-config.js') }}?v={{ time() }}"></script>
     <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
@@ -88,7 +86,16 @@
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('filter-date').value = today;
             document.getElementById('filter-shift').value = 'auto';
-            if (typeof CastingPerformance !== 'undefined') CastingPerformance.loadAllData();
+            document.getElementById('temp-metric-filter').value = 'all';
+
+            const allRadio = document.querySelector('input[name="temp-trend-filter"][value="all"]');
+            if (allRadio) allRadio.checked = true;
+
+            if (typeof CastingPerformance !== 'undefined') {
+                CastingPerformance.filterTemperatureMetrics('all');
+                CastingPerformance.filterTrendChart('all');
+                CastingPerformance.loadAllData();
+            }
         }
         window.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];

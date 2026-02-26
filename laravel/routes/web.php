@@ -31,6 +31,7 @@ Route::get('/finishing-performance-tr', [PageController::class, 'finishingPerfor
 // ============================================================
 Route::get('/general-alpc-3sz', [PageController::class, 'generalAlpc3sz'])->name('general-alpc-3sz');
 Route::get('/casting-performance-3sz', [PageController::class, 'castingPerformance3sz'])->name('casting-performance-3sz');
+Route::get('/finishing-performance-3sz', [PageController::class, 'finishingPerformance3sz'])->name('finishing-performance-3sz');
 
 // ============================================================
 // ALPC KR (Line 1)

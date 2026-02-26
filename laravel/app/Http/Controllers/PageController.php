@@ -57,6 +57,11 @@ class PageController extends Controller
         return view('casting-performance-3sz', ['current_page' => 'casting-performance-3sz']);
     }
 
+    public function finishingPerformance3sz()
+    {
+        return view('finishing-performance-3sz', ['current_page' => 'finishing-performance-3sz']);
+    }
+
     // ── ALPC KR ───────────────────────────────────────────────────────────
     public function generalAlpcKr()
     {

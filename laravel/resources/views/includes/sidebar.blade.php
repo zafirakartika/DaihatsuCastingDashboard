@@ -30,18 +30,18 @@
             $alpcActive = request()->routeIs(
                 'alpc-overview','lpc-counters',
                 'general-alpc-tr','casting-performance-tr','finishing-performance-tr',
-                'general-alpc-3sz','casting-performance-3sz',
+                'general-alpc-3sz','casting-performance-3sz','finishing-performance-3sz',
                 'general-alpc-kr','casting-performance-kr','finishing-performance-kr',
                 'general-alpc-nr','casting-performance-nr','finishing-performance-nr',
                 'general-alpc-wa','casting-performance-wa','finishing-performance-wa'
             );
             $line1Active = request()->routeIs(
                 'general-alpc-tr','casting-performance-tr','finishing-performance-tr',
-                'general-alpc-3sz','casting-performance-3sz',
+                'general-alpc-3sz','casting-performance-3sz','finishing-performance-3sz',
                 'general-alpc-kr','casting-performance-kr','finishing-performance-kr'
             );
             $trActive    = request()->routeIs('general-alpc-tr','casting-performance-tr','finishing-performance-tr');
-            $szActive    = request()->routeIs('general-alpc-3sz','casting-performance-3sz');
+            $szActive    = request()->routeIs('general-alpc-3sz','casting-performance-3sz','finishing-performance-3sz');
             $krActive    = request()->routeIs('general-alpc-kr','casting-performance-kr','finishing-performance-kr');
             $line2Active = request()->routeIs(
                 'general-alpc-nr','casting-performance-nr','finishing-performance-nr',
@@ -101,6 +101,8 @@
                          onclick="location.href='{{ route('general-alpc-3sz') }}'">General ALPC 3SZ</div>
                     <div class="nested-submenu-child {{ request()->routeIs('casting-performance-3sz') ? 'active' : '' }}"
                          onclick="location.href='{{ route('casting-performance-3sz') }}'">Casting Performance</div>
+                    <div class="nested-submenu-child {{ request()->routeIs('finishing-performance-3sz') ? 'active' : '' }}"
+                         onclick="location.href='{{ route('finishing-performance-3sz') }}'">Finishing Performance</div>
                 </div>
 
                 {{-- KR --}}

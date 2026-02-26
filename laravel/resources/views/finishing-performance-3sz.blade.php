@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ asset('assets/images/daihatsu-logo.png') }}">
-    <title>Finishing 1 Performance - ALPC TR</title>
+    <title>Finishing 1 Performance - ALPC 3SZ</title>
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 </head>
 <body>
@@ -18,7 +18,7 @@
         <div class="header-center">
             <div class="monitoring-title">
                 <span class="monitoring-text">Finishing 1 Performance</span>
-                <div class="monitoring-subtitle">ALPC TR - Real-Time Monitoring</div>
+                <div class="monitoring-subtitle">ALPC 3SZ - Real-Time Monitoring</div>
             </div>
         </div>
         <div class="header-right">
@@ -37,7 +37,7 @@
         <div class="main-content">
             <div class="content-header" style="margin-bottom: 12px;">
                 <div class="page-title" style="font-size: 32px; font-weight: 700; color: var(--accent-navy); text-shadow: 2px 2px 4px rgba(13, 59, 102, 0.1); border-left: 5px solid var(--accent-blue); padding-left: 15px; margin-bottom: 8px;">
-                    Finishing 1 Performance - ALPC TR
+                    Finishing 1 Performance - ALPC 3SZ
                 </div>
                 <div class="filter-controls" style="display: flex; gap: 10px; align-items: center;">
                     <div style="display: flex; align-items: center; gap: 8px; padding: 4px 12px; background: white; border-radius: 6px; border: 1px solid #ddd;">
