@@ -46,32 +46,40 @@ class LPCCountersDashboard {
 
     renderData(data) {
         // Helper to safely get value or 0
-        const getVal = (obj, key) => (obj && obj[key]) ? obj[key] : 0;
+        const getVal = (obj, key) => (obj && obj[key] !== null && obj[key] !== undefined) ? obj[key] : 0;
 
         // TR Line
         if (data.tr_counter) {
-            this.setVal('value-tr-1', getVal(data.tr_counter, 'LPC1'));
-            this.setVal('value-tr-2', getVal(data.tr_counter, 'LPC2'));
-            this.setVal('value-tr-3', getVal(data.tr_counter, 'LPC3'));
-            this.setVal('value-tr-4', getVal(data.tr_counter, 'LPC4'));
-            this.setVal('value-tr-6', getVal(data.tr_counter, 'LPC6'));
+            this.setVal('value-tr-1',  getVal(data.tr_counter, 'LPC1'));
+            this.setVal('value-tr-2',  getVal(data.tr_counter, 'LPC2'));
+            this.setVal('value-tr-3',  getVal(data.tr_counter, 'LPC3'));
+            this.setVal('value-tr-4',  getVal(data.tr_counter, 'LPC4'));
+            this.setVal('value-tr-6',  getVal(data.tr_counter, 'LPC6'));
+            this.setVal('shellcore-tr', getVal(data.tr_counter, 'shellcore'));
+            this.setVal('fin1-tr',      getVal(data.tr_counter, 'fin1'));
         }
 
         // 3SZ/KR
         if (data.sz_kr_counter) {
-            this.setVal('value-3sz-kr', getVal(data.sz_kr_counter, 'LPC9'));
+            this.setVal('value-3sz-kr',   getVal(data.sz_kr_counter, 'LPC9'));
+            this.setVal('shellcore-szkr', getVal(data.sz_kr_counter, 'shellcore'));
+            this.setVal('fin1-szkr',      getVal(data.sz_kr_counter, 'fin1'));
         }
 
         // NR Line
         if (data.nr_counter) {
-            this.setVal('value-nr-12', getVal(data.nr_counter, 'LPC12'));
-            this.setVal('value-nr-13', getVal(data.nr_counter, 'LPC13'));
-            this.setVal('value-nr-14', getVal(data.nr_counter, 'LPC14'));
+            this.setVal('value-nr-12',  getVal(data.nr_counter, 'LPC12'));
+            this.setVal('value-nr-13',  getVal(data.nr_counter, 'LPC13'));
+            this.setVal('value-nr-14',  getVal(data.nr_counter, 'LPC14'));
+            this.setVal('shellcore-nr', getVal(data.nr_counter, 'shellcore'));
+            this.setVal('fin1-nr',      getVal(data.nr_counter, 'fin1'));
         }
 
         // WA Line
         if (data.wa_counter) {
-            this.setVal('value-wa', getVal(data.wa_counter, 'LPC11'));
+            this.setVal('value-wa',     getVal(data.wa_counter, 'LPC11'));
+            this.setVal('shellcore-wa', getVal(data.wa_counter, 'shellcore'));
+            this.setVal('fin1-wa',      getVal(data.wa_counter, 'fin1'));
         }
     }
 
@@ -104,10 +112,10 @@ class LPCHistory {
 
     // Column definitions per line
     static COLUMNS = {
-        tr:   [{ key: 'LPC1', label: 'LPC 1' }, { key: 'LPC2', label: 'LPC 2' }, { key: 'LPC3', label: 'LPC 3' }, { key: 'LPC4', label: 'LPC 4' }],
-        wa:   [{ key: 'LPC11', label: 'LPC 11' }],
-        szkr: [{ key: 'LPC9', label: 'LPC 9' }],
-        nr:   [{ key: 'LPC12', label: 'LPC 12' }, { key: 'LPC13', label: 'LPC 13' }, { key: 'LPC14', label: 'LPC 14' }],
+        tr:   [{ key: 'LPC1', label: 'LPC 1' }, { key: 'LPC2', label: 'LPC 2' }, { key: 'LPC3', label: 'LPC 3' }, { key: 'LPC4', label: 'LPC 4' }, { key: 'shellcore', label: 'Shellcore' }, { key: 'fin1', label: 'Fin1' }],
+        wa:   [{ key: 'LPC11', label: 'LPC 11' }, { key: 'shellcore', label: 'Shellcore' }, { key: 'fin1', label: 'Fin1' }],
+        szkr: [{ key: 'LPC9', label: 'LPC 9' }, { key: 'shellcore', label: 'Shellcore' }, { key: 'fin1', label: 'Fin1' }],
+        nr:   [{ key: 'LPC12', label: 'LPC 12' }, { key: 'LPC13', label: 'LPC 13' }, { key: 'LPC14', label: 'LPC 14' }, { key: 'shellcore', label: 'Shellcore' }, { key: 'fin1', label: 'Fin1' }],
     };
 
     open() {
