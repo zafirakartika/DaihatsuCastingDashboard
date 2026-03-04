@@ -492,6 +492,99 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
+
+        /* ── Shellcore / Fin1 Summary Table ──────────────── */
+        .sf-section {
+            margin-top: 28px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 2px solid #e8e8e8;
+            overflow: hidden;
+            position: relative;
+        }
+        .sf-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue) 0%, var(--accent-navy) 100%);
+            border-radius: 12px 12px 0 0;
+        }
+        .sf-section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+        .sf-section-header h3 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-navy);
+            letter-spacing: 0.3px;
+        }
+        .sf-pulse {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #27ae60;
+            box-shadow: 0 0 5px rgba(39, 174, 96, 0.5);
+            animation: pulse 1.4s infinite;
+            display: inline-block;
+        }
+        .sf-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .sf-table thead tr { background: #f8f9fa; }
+        .sf-table thead th {
+            padding: 9px 18px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #888;
+            border-bottom: 1px solid #e8e8e8;
+            white-space: nowrap;
+        }
+        .sf-table thead th.th-shellcore { color: #1a7f4b; }
+        .sf-table thead th.th-fin1      { color: #ca6f1e; }
+        .sf-table tbody tr:hover { background: #f8f9fa; }
+        .sf-table td {
+            padding: 12px 18px;
+            border-bottom: 1px solid #f0f0f0;
+            color: var(--accent-navy);
+        }
+        .sf-table tbody tr:last-child td { border-bottom: none; }
+        .sf-table td.line-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            white-space: nowrap;
+        }
+        .line-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .line-dot.tr   { background: var(--accent-blue); }
+        .line-dot.wa   { background: #8e44ad; }
+        .line-dot.szkr { background: #16a085; }
+        .line-dot.nr   { background: #c0392b; }
+        .sf-val {
+            font-size: 20px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            display: inline-block;
+            min-width: 50px;
+        }
+        .sf-val.shellcore-val { color: #1a7f4b; }
+        .sf-val.fin1-val      { color: #ca6f1e; }
     </style>
 </head>
 <body>
@@ -729,6 +822,46 @@
                         <div class="status-text active">Active</div>
                     </div>
                 </div>
+
+            </div>
+
+            <!-- ── Shellcore & Fin1 Summary Table ──────────── -->
+            <div class="sf-section">
+                <div class="sf-section-header">
+                    <span class="sf-pulse"></span>
+                    <h3>Shellcore &amp; Fin1 — Real-Time Summary</h3>
+                </div>
+                <table class="sf-table">
+                    <thead>
+                        <tr>
+                            <th>Line</th>
+                            <th class="th-shellcore">&#9632; Shellcore</th>
+                            <th class="th-fin1">&#9632; Fin1</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="line-name"><span class="line-dot tr"></span>TR Line</td>
+                            <td><span class="sf-val shellcore-val" id="shellcore-tr">0</span></td>
+                            <td><span class="sf-val fin1-val" id="fin1-tr">0</span></td>
+                        </tr>
+                        <tr>
+                            <td class="line-name"><span class="line-dot szkr"></span>3SZ / KR Line</td>
+                            <td><span class="sf-val shellcore-val" id="shellcore-szkr">0</span></td>
+                            <td><span class="sf-val fin1-val" id="fin1-szkr">0</span></td>
+                        </tr>
+                        <tr>
+                            <td class="line-name"><span class="line-dot nr"></span>NR Line</td>
+                            <td><span class="sf-val shellcore-val" id="shellcore-nr">0</span></td>
+                            <td><span class="sf-val fin1-val" id="fin1-nr">0</span></td>
+                        </tr>
+                        <tr>
+                            <td class="line-name"><span class="line-dot wa"></span>WA Line</td>
+                            <td><span class="sf-val shellcore-val" id="shellcore-wa">0</span></td>
+                            <td><span class="sf-val fin1-val" id="fin1-wa">0</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="last-updated" id="last-updated">Last updated: --:--:--</div>
