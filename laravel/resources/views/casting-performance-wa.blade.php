@@ -7,6 +7,37 @@
     <title>Casting Performance - ALPC WA</title>
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/casting-performance.css') }}">
+    <style>
+        .btn-casting-hist{display:inline-flex;align-items:center;gap:7px;padding:8px 18px;font-size:12px;font-weight:700;border:none;border-radius:8px;cursor:pointer;transition:all .3s;background:linear-gradient(135deg,#0ea5e9 0%,#2563eb 60%,#1e3a8a 100%);color:#fff;box-shadow:0 4px 14px rgba(14,165,233,.4);margin-left:auto}
+        .btn-casting-hist:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(14,165,233,.6)}
+        .btn-casting-hist svg{width:15px;height:15px}
+        .c-hist-overlay{display:none;position:fixed;inset:0;background:rgba(13,59,102,.55);backdrop-filter:blur(3px);z-index:9999;align-items:center;justify-content:center;padding:20px}
+        .c-hist-overlay.open{display:flex}
+        .c-hist-modal{background:#f0f2f5;border-radius:16px;width:100%;max-width:1150px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(13,59,102,.3);overflow:hidden}
+        .c-hist-header{background:linear-gradient(135deg,#3498db 0%,#1a4fa0 100%);color:#fff;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+        .c-hist-header h2{margin:0;font-size:16px;font-weight:700}.c-hist-header p{margin:3px 0 0;font-size:11px;opacity:.8}
+        .c-hist-close{background:rgba(255,255,255,.15);border:none;color:#fff;width:32px;height:32px;border-radius:8px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
+        .c-hist-close:hover{background:rgba(255,255,255,.28)}
+        .c-hist-filters{background:#fff;padding:14px 24px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;border-bottom:1px solid #e8e8e8;flex-shrink:0}
+        .c-hist-fg{display:flex;flex-direction:column;gap:4px}
+        .c-hist-fg label{font-size:10px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.5px}
+        .c-hist-fg select,.c-hist-fg input[type=date]{padding:6px 10px;border:1.5px solid #e0e0e0;border-radius:7px;font-size:12px;color:#1a3a6a;background:#fafafa;cursor:pointer;min-width:120px}
+        .c-hist-btn-apply{padding:7px 18px;background:linear-gradient(135deg,#3498db 0%,#1a4fa0 100%);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;align-self:flex-end}
+        .c-hist-btn-reset{padding:7px 12px;background:#f0f2f5;color:#666;border:1.5px solid #e0e0e0;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;align-self:flex-end}
+        .c-hist-btn-csv{padding:7px 16px;background:linear-gradient(135deg,#1a7f4b 0%,#145c36 100%);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;align-self:flex-end;display:flex;align-items:center;gap:5px}
+        .c-hist-btn-csv:disabled{opacity:.45;cursor:not-allowed}
+        .c-hist-body{flex:1;overflow-y:auto;padding:16px 24px}
+        .c-hist-meta{font-size:12px;color:#666;margin-bottom:10px}
+        .c-hist-table-wrap{border-radius:10px;overflow:hidden;border:1px solid #e0e0e0;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+        .c-hist-table{width:100%;border-collapse:collapse;font-size:12px}
+        .c-hist-table thead tr{background:linear-gradient(135deg,#3498db 0%,#1a4fa0 100%);color:#fff}
+        .c-hist-table th{padding:10px 12px;text-align:left;font-weight:600;white-space:nowrap}
+        .c-hist-table tbody tr{background:#fff}.c-hist-table tbody tr:nth-child(even){background:#f8f9fa}
+        .c-hist-table tbody tr:hover{background:#eef5fb}
+        .c-hist-table td{padding:8px 12px;border-bottom:1px solid #f0f0f0;white-space:nowrap;color:#2c3e50}
+        .c-hist-empty{text-align:center;padding:50px 20px;color:#aaa;font-size:13px}
+        .c-hist-loading{text-align:center;padding:50px 20px;color:#3498db;font-size:13px}
+    </style>
 </head>
 
 <body>
@@ -61,6 +92,10 @@
                             <span id="toggle-status">ON</span>
                         </button>
                     </div>
+                    <button class="btn-casting-hist" onclick="castingHistory.open()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        History
+                    </button>
                 </div>
             </div>
 
@@ -150,6 +185,123 @@
                 if (typeof CastingPerformance !== 'undefined') CastingPerformance.stopSimulation();
             }
         }
+    </script>
+
+    <!-- Casting History Modal - WA -->
+    <div class="c-hist-overlay" id="c-hist-overlay" onclick="if(event.target===this)castingHistory.close()">
+        <div class="c-hist-modal">
+            <div class="c-hist-header">
+                <div>
+                    <h2>📋 Casting Temperature History — ALPC WA</h2>
+                    <p>Temperature records from database | LPC 11 | Select date to view data</p>
+                </div>
+                <button class="c-hist-close" onclick="castingHistory.close()">✕</button>
+            </div>
+            <div class="c-hist-filters">
+                <div class="c-hist-fg">
+                    <label>Date</label>
+                    <input type="date" id="hist-date">
+                </div>
+                <div class="c-hist-fg">
+                    <label>Shift</label>
+                    <select id="hist-shift">
+                        <option value="all">All Shifts</option>
+                        <option value="morning">Morning (07:15–16:00)</option>
+                        <option value="night">Night (19:00–06:00)</option>
+                    </select>
+                </div>
+                <button class="c-hist-btn-apply" onclick="castingHistory.load()">Apply</button>
+                <button class="c-hist-btn-reset" onclick="castingHistory.reset()">Reset</button>
+                <button class="c-hist-btn-csv" id="hist-csv-btn" onclick="castingHistory.download()" disabled>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download CSV
+                </button>
+            </div>
+            <div class="c-hist-body">
+                <div class="c-hist-meta" id="hist-meta">—</div>
+                <div id="hist-table-area"><div class="c-hist-empty">Select filters and click Apply to load history.</div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const castingHistory = {
+        apiUrl: 'http://127.0.0.1:8000/api/casting-data',
+        dateField: 'datetime_stamp',
+        currentData: [],
+        columns: [
+            {key:'r_lower_gate1',label:'R Lower Gate 1'},{key:'r_lower_main1',label:'R Lower Main 1'},
+            {key:'l_lower_gate1',label:'L Lower Gate 1'},{key:'l_lower_main1',label:'L Lower Main 1'},
+            {key:'cooling_water',label:'Cooling Water'}
+        ],
+        open() {
+            const activeDate = document.getElementById('filter-date')?.value;
+            const histDate = document.getElementById('hist-date');
+            if (activeDate && histDate) histDate.value = activeDate;
+            document.getElementById('c-hist-overlay').classList.add('open');
+        },
+        close() { document.getElementById('c-hist-overlay').classList.remove('open'); },
+        async load() {
+            const area = document.getElementById('hist-table-area');
+            const meta = document.getElementById('hist-meta');
+            area.innerHTML = '<div class="c-hist-loading">Loading...</div>';
+            const date = document.getElementById('hist-date')?.value || new Date().toISOString().split('T')[0];
+            const shift = document.getElementById('hist-shift')?.value || 'all';
+            let st = '00:00:00', et = '23:59:59';
+            if (shift === 'morning') { st = '07:15:00'; et = '16:00:00'; }
+            else if (shift === 'night') { st = '19:00:00'; et = '06:00:00'; }
+            try {
+                const params = new URLSearchParams({action:'trend',date,start_time:st,end_time:et,limit:500});
+                const res = await fetch(`${this.apiUrl}?${params}`);
+                const json = await res.json();
+                if (json.status === 'success' && json.data?.length) {
+                    this.currentData = json.data;
+                    meta.textContent = `${json.data.length} records — LPC 11 | ${date} | ${shift === 'all' ? 'All Shifts' : shift}`;
+                    area.innerHTML = this._renderTable(json.data);
+                    document.getElementById('hist-csv-btn').disabled = false;
+                } else {
+                    this.currentData = [];
+                    meta.textContent = '—';
+                    area.innerHTML = '<div class="c-hist-empty">No data found for the selected filters.</div>';
+                    document.getElementById('hist-csv-btn').disabled = true;
+                }
+            } catch(e) {
+                this.currentData = [];
+                area.innerHTML = '<div class="c-hist-empty">Failed to load data. Check API connection.</div>';
+            }
+        },
+        _renderTable(data) {
+            const cols = this.columns;
+            const th = ['Datetime',...cols.map(c=>c.label)].map(h=>`<th>${h}</th>`).join('');
+            const rows = data.map(r => {
+                const dt = (r[this.dateField]||'—').toString().replace('T',' ').substring(0,19);
+                return `<tr><td>${dt}</td>${cols.map(c=>`<td>${r[c.key]!=null?parseFloat(r[c.key]).toFixed(1):'—'}</td>`).join('')}</tr>`;
+            }).join('');
+            return `<div class="c-hist-table-wrap"><table class="c-hist-table"><thead><tr>${th}</tr></thead><tbody>${rows}</tbody></table></div>`;
+        },
+        reset() {
+            document.getElementById('hist-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('hist-shift').value = 'all';
+            document.getElementById('hist-table-area').innerHTML = '<div class="c-hist-empty">Select filters and click Apply to load history.</div>';
+            document.getElementById('hist-meta').textContent = '—';
+            document.getElementById('hist-csv-btn').disabled = true;
+            this.currentData = [];
+        },
+        download() {
+            if (!this.currentData.length) return;
+            const date = document.getElementById('hist-date')?.value || '';
+            const headers = ['Datetime',...this.columns.map(c=>c.label)];
+            const rows = this.currentData.map(r => {
+                const dt = (r[this.dateField]||'').toString().replace('T',' ').substring(0,19);
+                return [dt,...this.columns.map(c=>r[c.key]??'')];
+            });
+            const csv = [headers,...rows].map(r=>r.join(',')).join('\n');
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+            a.download = `casting-wa-lpc11-${date}.csv`;
+            a.click();
+        }
+    };
     </script>
 </body>
 </html>
