@@ -64,23 +64,36 @@
                 </div>
             </div>
 
-            <div class="filter-section" style="margin-bottom: 12px; gap: 8px; display: flex; flex-wrap: wrap; align-items: center;">
-                <div class="filter-label" style="font-size: 12px; font-weight: 600;">Date:</div>
+            {{-- Filter Bar: LPC + Date + Shift all on one line --}}
+            <div class="filter-section" style="margin-bottom: 8px; gap: 8px; display: flex; flex-wrap: wrap; align-items: center;">
+                {{-- LPC group --}}
+                <span style="font-size: 12px; font-weight: 700; color: #2980b9;">LPC:</span>
+                <select id="lpc-select" style="padding: 6px 10px; font-size: 12px; font-weight: 600; border: 1px solid #bcd5e8; border-radius: 6px; background: #fff; color: #2c3e50; cursor: pointer;">
+                    <option value="1">LPC 1</option>
+                    <option value="2" selected>LPC 2</option>
+                    <option value="3">LPC 3</option>
+                    <option value="4">LPC 4</option>
+                    <option value="6">LPC 6</option>
+                </select>
+                <button onclick="applyLpc()" style="padding: 6px 12px; font-size: 12px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; background: linear-gradient(135deg, #2980b9 0%, #1a6fa0 100%); color: #fff; box-shadow: 0 2px 6px rgba(41,128,185,0.3);">
+                    Apply LPC
+                </button>
+                <span id="active-lpc-badge" style="padding: 4px 12px; font-size: 12px; font-weight: 700; border-radius: 20px; background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: #fff;">
+                    Active: LPC 2
+                </span>
+                {{-- Divider --}}
+                <div style="width: 1px; height: 24px; background: #ddd; margin: 0 4px;"></div>
+                {{-- Date + Shift group --}}
+                <span class="filter-label" style="font-size: 12px; font-weight: 600;">Date:</span>
                 <input type="date" id="filter-date" class="filter-input" style="padding: 6px; font-size: 12px;">
-
-                <div class="filter-label" style="font-size: 12px; font-weight: 600; margin-left: 12px;">Shift:</div>
+                <span class="filter-label" style="font-size: 12px; font-weight: 600;">Shift:</span>
                 <select id="filter-shift" class="filter-input" style="padding: 6px; font-size: 12px;">
                     <option value="auto">Auto (Current Shift)</option>
                     <option value="morning">Morning (07:15 - 16:00)</option>
                     <option value="night">Night (19:00 - 06:00)</option>
                 </select>
-
-                <button class="filter-btn active" onclick="CastingPerformanceTR.loadAllData()" style="padding: 6px 16px; font-size: 12px; margin-left: 8px;">
-                    Apply Filter
-                </button>
-                <button class="filter-btn" onclick="resetFilters()" style="padding: 6px 12px; font-size: 12px; background: var(--gray-light); color: var(--text-dark);">
-                    Reset
-                </button>
+                <button class="filter-btn active" onclick="CastingPerformanceTR.loadAllData()" style="padding: 6px 14px; font-size: 12px;">Apply Filter</button>
+                <button class="filter-btn" onclick="resetFilters()" style="padding: 6px 10px; font-size: 12px; background: var(--gray-light); color: var(--text-dark);">Reset</button>
             </div>
 
             @include('includes.casting-tr-metrics') 
@@ -104,7 +117,19 @@
             if(sidebar) sidebar.classList.toggle('active');
         }
 
-        // (Include the rest of your JS logic here, identical to source)
+        // Apply selected LPC
+        function applyLpc() {
+            const lpcSelect = document.getElementById('lpc-select');
+            const badge = document.getElementById('active-lpc-badge');
+            if (!lpcSelect) return;
+            const lpc = parseInt(lpcSelect.value, 10);
+            if (typeof CastingPerformanceTR !== 'undefined') {
+                CastingPerformanceTR.setLpc(lpc);
+                CastingPerformanceTR.loadAllData();
+            }
+            if (badge) badge.textContent = 'Active: LPC ' + lpc;
+        }
+
         function resetFilters() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('filter-date').value = today;
@@ -125,11 +150,9 @@
             const today = new Date().toISOString().split('T')[0];
             const dateInput = document.getElementById('filter-date');
             if(dateInput) dateInput.value = today;
-            
+
             const shiftInput = document.getElementById('filter-shift');
             if(shiftInput) shiftInput.value = 'auto';
-
-            console.log('Page loaded - showing current shift data');
         });
 
         // Real-time monitoring toggle

@@ -65,22 +65,19 @@
             </div>
 
             <div class="filter-section" style="margin-bottom: 12px; gap: 8px; display: flex; flex-wrap: wrap; align-items: center;">
+                <span style="font-size: 12px; font-weight: 700; color: #2980b9;">LPC:</span>
+                <span style="padding: 4px 14px; font-size: 12px; font-weight: 700; border-radius: 20px; background: linear-gradient(135deg, #2980b9 0%, #1a6fa0 100%); color: #fff;">LPC 11</span>
+                <div style="width: 1px; height: 24px; background: #ddd; margin: 0 4px;"></div>
                 <div class="filter-label" style="font-size: 12px; font-weight: 600;">Date:</div>
                 <input type="date" id="filter-date" class="filter-input" style="padding: 6px; font-size: 12px;">
-
-                <div class="filter-label" style="font-size: 12px; font-weight: 600; margin-left: 12px;">Shift:</div>
+                <div class="filter-label" style="font-size: 12px; font-weight: 600;">Shift:</div>
                 <select id="filter-shift" class="filter-input" style="padding: 6px; font-size: 12px;">
                     <option value="auto">Auto (Current Shift)</option>
                     <option value="morning">Morning (07:15 - 16:00)</option>
                     <option value="night">Night (19:00 - 06:00)</option>
                 </select>
-
-                <button class="filter-btn active" onclick="CastingPerformance.loadAllData()" style="padding: 6px 16px; font-size: 12px; margin-left: 8px;">
-                    Apply Filter
-                </button>
-                <button class="filter-btn" onclick="resetFilters()" style="padding: 6px 12px; font-size: 12px; background: var(--gray-light); color: var(--text-dark);">
-                    Reset
-                </button>
+                <button class="filter-btn active" onclick="CastingPerformance.loadAllData()" style="padding: 6px 14px; font-size: 12px;">Apply Filter</button>
+                <button class="filter-btn" onclick="resetFilters()" style="padding: 6px 10px; font-size: 12px; background: var(--gray-light); color: var(--text-dark);">Reset</button>
             </div>
 
             @include('includes.casting-wa-metrics') 
