@@ -96,6 +96,15 @@ const CastingPerformanceCore = (config) => {
     let simulationIndex = 0;
     let simulationIntervalId = null;
 
+    // LPC selection state
+    let currentLpc = config.lpcOptions ? config.lpcOptions.default : null;
+
+    function setLpc(lpc) {
+        currentLpc = lpc;
+        const lpcSelect = document.getElementById('lpc-select');
+        if (lpcSelect) lpcSelect.value = lpc;
+    }
+
     // Get current shift
     function getCurrentShift() {
         const now = new Date();
@@ -149,6 +158,14 @@ const CastingPerformanceCore = (config) => {
         // Update shift display
         updateShiftDisplay();
         setInterval(updateShiftDisplay, 60000); // Update every minute
+
+        // Initialize LPC dropdown
+        if (config.lpcOptions) {
+            const lpcSelect = document.getElementById('lpc-select');
+            if (lpcSelect) lpcSelect.value = currentLpc;
+            const badge = document.getElementById('active-lpc-badge');
+            if (badge) badge.textContent = 'Active: LPC ' + currentLpc;
+        }
 
         // Load initial data
         loadAllData();
@@ -1090,6 +1107,11 @@ const CastingPerformanceCore = (config) => {
             const urlParams = new URLSearchParams();
             urlParams.append('action', action);
 
+            // Append LPC selection if this line supports it
+            if (currentLpc !== null && currentLpc !== undefined) {
+                urlParams.append('lpc', currentLpc);
+            }
+
             Object.keys(params).forEach(key => {
                 urlParams.append(key, params[key]);
             });
@@ -1749,6 +1771,7 @@ const CastingPerformanceCore = (config) => {
         filterTemperatureMetrics,
         filterTrendChart,
         startSimulation,
-        stopSimulation
+        stopSimulation,
+        setLpc
     };
 };

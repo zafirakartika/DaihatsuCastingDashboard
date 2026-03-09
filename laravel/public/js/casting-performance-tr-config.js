@@ -7,6 +7,18 @@ const CastingPerformanceTR = CastingPerformanceCore({
     partName: 'TR',
     apiUrl: 'http://127.0.0.1:8000/api/casting-data-tr',
 
+    // LPC selection for TR Line 1 (LPCs 1–6)
+    lpcOptions: {
+        default: 2,
+        options: [
+            { value: 1, label: 'LPC 1' },
+            { value: 2, label: 'LPC 2' },
+            { value: 3, label: 'LPC 3' },
+            { value: 4, label: 'LPC 4' },
+            { value: 6, label: 'LPC 6' }
+        ]
+    },
+
     // TR doesn't have ID Part column
     showIdPart: false,
 

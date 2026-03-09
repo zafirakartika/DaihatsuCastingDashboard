@@ -57,18 +57,33 @@
                     </div>
                 </div>
             </div>
-            <div class="filter-section" style="margin-bottom: 12px; gap: 8px; display: flex; flex-wrap: wrap; align-items: center;">
+            <div class="filter-section" style="margin-bottom: 8px; gap: 8px; display: flex; flex-wrap: wrap; align-items: center;">
+                {{-- NR LPC dropdown (LPCs 12, 13, 14) --}}
+                <span style="font-size: 12px; font-weight: 700; color: #2980b9;">LPC:</span>
+                <select id="lpc-select" style="padding: 6px 10px; font-size: 12px; font-weight: 600; border: 1px solid #bcd5e8; border-radius: 6px; background: #fff; color: #2c3e50; cursor: pointer;">
+                    <option value="12">LPC 12</option>
+                    <option value="13">LPC 13</option>
+                    <option value="14">LPC 14</option>
+                </select>
+                <button onclick="applyLpc()" style="padding: 6px 12px; font-size: 12px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; background: linear-gradient(135deg, #2980b9 0%, #1a6fa0 100%); color: #fff; box-shadow: 0 2px 6px rgba(41,128,185,0.3);">
+                    Apply LPC
+                </button>
+                <span id="active-lpc-badge" style="padding: 4px 12px; font-size: 12px; font-weight: 700; border-radius: 20px; background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: #fff;">
+                    Active: LPC 12
+                </span>
+                <div style="width: 1px; height: 24px; background: #ddd; margin: 0 4px;"></div>
                 <div class="filter-label" style="font-size: 12px; font-weight: 600;">Date:</div>
                 <input type="date" id="filter-date" class="filter-input" style="padding: 6px; font-size: 12px;">
-                <div class="filter-label" style="font-size: 12px; font-weight: 600; margin-left: 12px;">Shift:</div>
+                <div class="filter-label" style="font-size: 12px; font-weight: 600;">Shift:</div>
                 <select id="filter-shift" class="filter-input" style="padding: 6px; font-size: 12px;">
                     <option value="auto">Auto (Current Shift)</option>
                     <option value="morning">Morning (07:15 - 16:00)</option>
                     <option value="night">Night (19:00 - 06:00)</option>
                 </select>
-                <button class="filter-btn active" onclick="CastingPerformance.loadAllData()" style="padding: 6px 16px; font-size: 12px; margin-left: 8px;">Apply Filter</button>
-                <button class="filter-btn" onclick="resetFilters()" style="padding: 6px 12px; font-size: 12px; background: var(--gray-light); color: var(--text-dark);">Reset</button>
+                <button class="filter-btn active" onclick="CastingPerformance.loadAllData()" style="padding: 6px 14px; font-size: 12px;">Apply Filter</button>
+                <button class="filter-btn" onclick="resetFilters()" style="padding: 6px 10px; font-size: 12px; background: var(--gray-light); color: var(--text-dark);">Reset</button>
             </div>
+
             <div id="casting-metrics-container">
                 <div style="text-align: center; padding: 40px; color: #999;">Loading casting performance data...</div>
             </div>
@@ -86,6 +101,16 @@
             const sidebar = document.querySelector('.sidebar');
             if(sidebar) sidebar.classList.toggle('active');
         }
+
+        function applyLpc() {
+            const lpcSelect = document.getElementById('lpc-select');
+            const badge = document.getElementById('active-lpc-badge');
+            if (!lpcSelect) return;
+            const lpc = parseInt(lpcSelect.value, 10);
+            if (badge) badge.textContent = 'Active: LPC ' + lpc;
+            if (typeof CastingPerformance !== 'undefined') CastingPerformance.loadAllData();
+        }
+
         function resetFilters() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('filter-date').value = today;
