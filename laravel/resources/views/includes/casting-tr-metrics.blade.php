@@ -54,65 +54,91 @@
             onchange="CastingPerformanceTR.filterTemperatureMetrics(this.value)">
         <option value="all">All Sensors</option>
         <option value="gate">Gate Sensors</option>
-        <option value="chamber">Chamber Sensors</option>
+        <option value="main">Main Sensors</option>
+        <option value="room">Room Temps</option>
     </select>
     <span style="font-size: 12px; font-weight: 600; color: #555; margin-left: 12px;">Chart View:</span>
-    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="all" checked onchange="CastingPerformanceTR.filterTrendChart(this.value)"> All</label>
-    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="gate" onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Gate</label>
-    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="chamber" onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Chamber</label>
-    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="left" onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Left</label>
-    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="right" onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Right</label>
+    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="all"   checked onchange="CastingPerformanceTR.filterTrendChart(this.value)"> All</label>
+    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="gate"          onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Gate</label>
+    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="main"          onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Main</label>
+    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="left"          onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Left</label>
+    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="right"         onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Right</label>
+    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="room"          onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Room</label>
 </div>
 
-{{-- Temperature Metrics Grid (8 sensors for TR) --}}
+{{-- Temperature Metrics Grid (11 sensors) --}}
 <div id="temperature-metrics-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px;">
-    <div class="metric-card" data-metric-type="gate" style="border-left: 3px solid #3498DB;">
-        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Gate Front</div>
-        <div class="metric-value" id="metric-l-gate-front" style="font-size: 26px; font-weight: 700;">--</div>
-        <div class="metric-unit" style="font-size: 11px;">°C</div>
-        <span class="status-badge status-normal" id="status-l-gate-front" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
-    </div>
-    <div class="metric-card" data-metric-type="gate" style="border-left: 3px solid #5DADE2;">
-        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Gate Rear</div>
-        <div class="metric-value" id="metric-l-gate-rear" style="font-size: 26px; font-weight: 700;">--</div>
-        <div class="metric-unit" style="font-size: 11px;">°C</div>
-        <span class="status-badge status-normal" id="status-l-gate-rear" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
-    </div>
-    <div class="metric-card" data-metric-type="chamber" style="border-left: 3px solid #85C1E2;">
-        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Chamber 1</div>
-        <div class="metric-value" id="metric-l-chamber-1" style="font-size: 26px; font-weight: 700;">--</div>
-        <div class="metric-unit" style="font-size: 11px;">°C</div>
-        <span class="status-badge status-normal" id="status-l-chamber-1" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
-    </div>
-    <div class="metric-card" data-metric-type="chamber" style="border-left: 3px solid #AED6F1;">
-        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Chamber 2</div>
-        <div class="metric-value" id="metric-l-chamber-2" style="font-size: 26px; font-weight: 700;">--</div>
-        <div class="metric-unit" style="font-size: 11px;">°C</div>
-        <span class="status-badge status-normal" id="status-l-chamber-2" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
-    </div>
+    {{-- R Side: gate --}}
     <div class="metric-card" data-metric-type="gate" style="border-left: 3px solid #E74C3C;">
-        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Gate Front</div>
-        <div class="metric-value" id="metric-r-gate-front" style="font-size: 26px; font-weight: 700;">--</div>
+        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Lower Gate1 Temp</div>
+        <div class="metric-value" id="metric-r-gate1-temp" style="font-size: 26px; font-weight: 700;">--</div>
         <div class="metric-unit" style="font-size: 11px;">°C</div>
-        <span class="status-badge status-normal" id="status-r-gate-front" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
+        <span class="status-badge status-normal" id="status-r-gate1-temp" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
     </div>
     <div class="metric-card" data-metric-type="gate" style="border-left: 3px solid #EC7063;">
-        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Gate Rear</div>
-        <div class="metric-value" id="metric-r-gate-rear" style="font-size: 26px; font-weight: 700;">--</div>
+        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Lower Gate2 Temp</div>
+        <div class="metric-value" id="metric-r-gate2-temp" style="font-size: 26px; font-weight: 700;">--</div>
         <div class="metric-unit" style="font-size: 11px;">°C</div>
-        <span class="status-badge status-normal" id="status-r-gate-rear" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
+        <span class="status-badge status-normal" id="status-r-gate2-temp" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
     </div>
-    <div class="metric-card" data-metric-type="chamber" style="border-left: 3px solid #F1948A;">
-        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Chamber 1</div>
-        <div class="metric-value" id="metric-r-chamber-1" style="font-size: 26px; font-weight: 700;">--</div>
+    {{-- R Side: main --}}
+    <div class="metric-card" data-metric-type="main" style="border-left: 3px solid #E67E22;">
+        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Lower Main1 Temp</div>
+        <div class="metric-value" id="metric-r-main1-temp" style="font-size: 26px; font-weight: 700;">--</div>
         <div class="metric-unit" style="font-size: 11px;">°C</div>
-        <span class="status-badge status-normal" id="status-r-chamber-1" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
+        <span class="status-badge status-normal" id="status-r-main1-temp" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
     </div>
-    <div class="metric-card" data-metric-type="chamber" style="border-left: 3px solid #F5B7B1;">
-        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Chamber 2</div>
-        <div class="metric-value" id="metric-r-chamber-2" style="font-size: 26px; font-weight: 700;">--</div>
+    <div class="metric-card" data-metric-type="main" style="border-left: 3px solid #F39C12;">
+        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Lower Main2 Temp</div>
+        <div class="metric-value" id="metric-r-main2-temp" style="font-size: 26px; font-weight: 700;">--</div>
         <div class="metric-unit" style="font-size: 11px;">°C</div>
-        <span class="status-badge status-normal" id="status-r-chamber-2" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
+        <span class="status-badge status-normal" id="status-r-main2-temp" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
+    </div>
+    {{-- L Side: upper main --}}
+    <div class="metric-card" data-metric-type="main" style="border-left: 3px solid #1ABC9C;">
+        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Upper Main Temp</div>
+        <div class="metric-value" id="metric-l-upper-main-temp" style="font-size: 26px; font-weight: 700;">--</div>
+        <div class="metric-unit" style="font-size: 11px;">°C</div>
+        <span class="status-badge status-normal" id="status-l-upper-main-temp" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
+    </div>
+    {{-- L Side: gate --}}
+    <div class="metric-card" data-metric-type="gate" style="border-left: 3px solid #3498DB;">
+        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Lower Gate1 Temp</div>
+        <div class="metric-value" id="metric-l-gate1-temp" style="font-size: 26px; font-weight: 700;">--</div>
+        <div class="metric-unit" style="font-size: 11px;">°C</div>
+        <span class="status-badge status-normal" id="status-l-gate1-temp" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
+    </div>
+    <div class="metric-card" data-metric-type="gate" style="border-left: 3px solid #5DADE2;">
+        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Lower Gate2 Temp</div>
+        <div class="metric-value" id="metric-l-gate2-temp" style="font-size: 26px; font-weight: 700;">--</div>
+        <div class="metric-unit" style="font-size: 11px;">°C</div>
+        <span class="status-badge status-normal" id="status-l-gate2-temp" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
+    </div>
+    {{-- L Side: lower main --}}
+    <div class="metric-card" data-metric-type="main" style="border-left: 3px solid #2980B9;">
+        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Lower Main1 Temp</div>
+        <div class="metric-value" id="metric-l-main1-temp" style="font-size: 26px; font-weight: 700;">--</div>
+        <div class="metric-unit" style="font-size: 11px;">°C</div>
+        <span class="status-badge status-normal" id="status-l-main1-temp" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
+    </div>
+    <div class="metric-card" data-metric-type="main" style="border-left: 3px solid #85C1E2;">
+        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Lower Main2 Temp</div>
+        <div class="metric-value" id="metric-l-main2-temp" style="font-size: 26px; font-weight: 700;">--</div>
+        <div class="metric-unit" style="font-size: 11px;">°C</div>
+        <span class="status-badge status-normal" id="status-l-main2-temp" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
+    </div>
+    {{-- Room temps --}}
+    <div class="metric-card" data-metric-type="room" style="border-left: 3px solid #9B59B6;">
+        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Pressure Room Temp</div>
+        <div class="metric-value" id="metric-pressure-room-temp" style="font-size: 26px; font-weight: 700;">--</div>
+        <div class="metric-unit" style="font-size: 11px;">°C</div>
+        <span class="status-badge status-normal" id="status-pressure-room-temp" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
+    </div>
+    <div class="metric-card" data-metric-type="room" style="border-left: 3px solid #8E44AD;">
+        <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Holding Room Temp</div>
+        <div class="metric-value" id="metric-holding-room-temp" style="font-size: 26px; font-weight: 700;">--</div>
+        <div class="metric-unit" style="font-size: 11px;">°C</div>
+        <span class="status-badge status-normal" id="status-holding-room-temp" style="font-size: 10px; padding: 3px 8px; margin-top: 4px; display: inline-block;">--</span>
     </div>
 </div>
 
@@ -142,6 +168,55 @@
     </div>
 </div>
 
+{{-- Flow Metrics Grid (8 sensors) --}}
+<div style="margin-bottom: 12px;">
+    <div style="font-size: 13px; font-weight: 700; color: var(--accent-navy); margin-bottom: 8px; padding-left: 4px; border-left: 3px solid #27AE60;">
+        Cooling Flow Sensors
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+        <div class="metric-card" style="border-left: 3px solid #27AE60;">
+            <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Upper SP Flow</div>
+            <div class="metric-value" id="metric-r-upper-sp-flow" style="font-size: 26px; font-weight: 700;">--</div>
+            <div class="metric-unit" style="font-size: 11px;">L/min</div>
+        </div>
+        <div class="metric-card" style="border-left: 3px solid #2ECC71;">
+            <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Upper Flow</div>
+            <div class="metric-value" id="metric-r-upper-flow" style="font-size: 26px; font-weight: 700;">--</div>
+            <div class="metric-unit" style="font-size: 11px;">L/min</div>
+        </div>
+        <div class="metric-card" style="border-left: 3px solid #16A085;">
+            <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Upper SP Flow</div>
+            <div class="metric-value" id="metric-l-upper-sp-flow" style="font-size: 26px; font-weight: 700;">--</div>
+            <div class="metric-unit" style="font-size: 11px;">L/min</div>
+        </div>
+        <div class="metric-card" style="border-left: 3px solid #1ABC9C;">
+            <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Upper Flow</div>
+            <div class="metric-value" id="metric-l-upper-flow" style="font-size: 26px; font-weight: 700;">--</div>
+            <div class="metric-unit" style="font-size: 11px;">L/min</div>
+        </div>
+        <div class="metric-card" style="border-left: 3px solid #117A65;">
+            <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Lower Cool Air1 Flow</div>
+            <div class="metric-value" id="metric-r-cool-air1-flow" style="font-size: 26px; font-weight: 700;">--</div>
+            <div class="metric-unit" style="font-size: 11px;">L/min</div>
+        </div>
+        <div class="metric-card" style="border-left: 3px solid #148F77;">
+            <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Lower Cool Air1 Flow</div>
+            <div class="metric-value" id="metric-l-cool-air1-flow" style="font-size: 26px; font-weight: 700;">--</div>
+            <div class="metric-unit" style="font-size: 11px;">L/min</div>
+        </div>
+        <div class="metric-card" style="border-left: 3px solid #0E6655;">
+            <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">R Lower Cool Air2 Flow</div>
+            <div class="metric-value" id="metric-r-cool-air2-flow" style="font-size: 26px; font-weight: 700;">--</div>
+            <div class="metric-unit" style="font-size: 11px;">L/min</div>
+        </div>
+        <div class="metric-card" style="border-left: 3px solid #17A589;">
+            <div class="metric-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">L Lower Cool Air2 Flow</div>
+            <div class="metric-value" id="metric-l-cool-air2-flow" style="font-size: 26px; font-weight: 700;">--</div>
+            <div class="metric-unit" style="font-size: 11px;">L/min</div>
+        </div>
+    </div>
+</div>
+
 {{-- Data Table --}}
 <div class="chart-wrapper" style="padding: 12px; margin-bottom: 8px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
@@ -152,10 +227,10 @@
             <select id="sort-column" style="padding: 5px 10px; font-size: 12px; border: 1px solid var(--gray-border); border-radius: 4px;">
                 <option value="timestamp-desc">Newest First</option>
                 <option value="timestamp-asc">Oldest First</option>
-                <option value="l_gate_front-desc">L Gate Front ↓</option>
-                <option value="l_gate_front-asc">L Gate Front ↑</option>
-                <option value="r_gate_front-desc">R Gate Front ↓</option>
-                <option value="r_gate_front-asc">R Gate Front ↑</option>
+                <option value="r_lower_gate1_temp_1-desc">R Gate1 Temp ↓</option>
+                <option value="r_lower_gate1_temp_1-asc">R Gate1 Temp ↑</option>
+                <option value="l_lower_gate1_temp_1-desc">L Gate1 Temp ↓</option>
+                <option value="l_lower_gate1_temp_1-asc">L Gate1 Temp ↑</option>
             </select>
             <button id="clear-search" class="filter-btn" style="padding: 5px 10px; font-size: 12px;">Clear</button>
         </div>
@@ -164,20 +239,23 @@
         <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
             <thead>
                 <tr style="background: var(--accent-navy); color: white;">
-                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Timestamp</th>
-                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">L Gate Front</th>
-                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">L Gate Rear</th>
-                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">L Chamber 1</th>
-                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">L Chamber 2</th>
-                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">R Gate Front</th>
-                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">R Gate Rear</th>
-                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">R Chamber 1</th>
-                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">R Chamber 2</th>
+                    <th style="padding: 8px; text-align: left;  border: 1px solid #ddd; white-space: nowrap;">Timestamp</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">R Gate1 Temp</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">R Gate2 Temp</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">R Main1 Temp</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">R Main2 Temp</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">L Up Main</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">L Gate1 Temp</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">L Gate2 Temp</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">L Main1 Temp</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">L Main2 Temp</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">Pres Room</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">Hold Room</th>
                 </tr>
             </thead>
             <tbody id="data-table-body">
                 <tr>
-                    <td colspan="9" style="padding: 20px; text-align: center; color: #999;">Loading data...</td>
+                    <td colspan="12" style="padding: 20px; text-align: center; color: #999;">Loading data...</td>
                 </tr>
             </tbody>
         </table>

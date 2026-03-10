@@ -105,16 +105,16 @@
                 <span style="font-size: 12px; font-weight: 700; color: #2980b9;">LPC:</span>
                 <select id="lpc-select" style="padding: 6px 10px; font-size: 12px; font-weight: 600; border: 1px solid #bcd5e8; border-radius: 6px; background: #fff; color: #2c3e50; cursor: pointer;">
                     <option value="1">LPC 1</option>
-                    <option value="2" selected>LPC 2</option>
+                    <option value="2">LPC 2</option>
                     <option value="3">LPC 3</option>
                     <option value="4">LPC 4</option>
-                    <option value="6">LPC 6</option>
+                    <option value="6" selected>LPC 6</option>
                 </select>
                 <button onclick="applyLpc()" style="padding: 6px 12px; font-size: 12px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; background: linear-gradient(135deg, #2980b9 0%, #1a6fa0 100%); color: #fff; box-shadow: 0 2px 6px rgba(41,128,185,0.3);">
                     Apply LPC
                 </button>
                 <span id="active-lpc-badge" style="padding: 4px 12px; font-size: 12px; font-weight: 700; border-radius: 20px; background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: #fff;">
-                    Active: LPC 2
+                    Active: LPC 6
                 </span>
                 {{-- Divider --}}
                 <div style="width: 1px; height: 24px; background: #ddd; margin: 0 4px;"></div>
@@ -228,10 +228,10 @@
                     <label>LPC</label>
                     <select id="hist-lpc">
                         <option value="1">LPC 1</option>
-                        <option value="2" selected>LPC 2</option>
+                        <option value="2">LPC 2</option>
                         <option value="3">LPC 3</option>
                         <option value="4">LPC 4</option>
-                        <option value="6">LPC 6</option>
+                        <option value="6" selected>LPC 6</option>
                     </select>
                 </div>
                 <div class="c-hist-fg">
@@ -263,13 +263,15 @@
     <script>
     const castingHistory = {
         apiUrl: 'http://127.0.0.1:8000/api/casting-data-tr',
-        dateField: 'datetime',
+        dateField: 'datetime',   // tr_loger_lpcX stores datetime as generated column
         currentData: [],
         columns: [
-            {key:'l_gate_front',label:'L Gate Front'},{key:'l_gate_rear',label:'L Gate Rear'},
-            {key:'l_chamber_1',label:'L Chamber 1'},{key:'l_chamber_2',label:'L Chamber 2'},
-            {key:'r_gate_front',label:'R Gate Front'},{key:'r_gate_rear',label:'R Gate Rear'},
-            {key:'r_chamber_1',label:'R Chamber 1'},{key:'r_chamber_2',label:'R Chamber 2'}
+            {key:'r_lower_gate1_temp_1',label:'R Gate1 Temp'},{key:'r_lower_gate2_temp_1',label:'R Gate2 Temp'},
+            {key:'r_lower_main1_temp_1',label:'R Main1 Temp'},{key:'r_lower_main2_temp_1',label:'R Main2 Temp'},
+            {key:'l_upper_main_temp_1', label:'L Up Main Temp'},
+            {key:'l_lower_gate1_temp_1',label:'L Gate1 Temp'},{key:'l_lower_gate2_temp_1',label:'L Gate2 Temp'},
+            {key:'l_lower_main1_temp_1',label:'L Main1 Temp'},{key:'l_lower_main2_temp_1',label:'L Main2 Temp'},
+            {key:'pressure_room_temp_1',label:'Pres Room Temp'},{key:'hoolding_room_temp_1',label:'Hold Room Temp'}
         ],
         open() {
             const activeLpc = document.getElementById('lpc-select')?.value;

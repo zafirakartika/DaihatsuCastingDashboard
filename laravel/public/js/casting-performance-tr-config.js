@@ -1,15 +1,15 @@
 /**
  * Casting Performance Configuration for TR Part
- * Contains part-specific settings for metrics, thresholds, and chart colors
+ * Updated to match actual tr_loger_lpcX table schema (LPC 1, 4, 6 confirmed)
  */
 
 const CastingPerformanceTR = CastingPerformanceCore({
     partName: 'TR',
     apiUrl: 'http://127.0.0.1:8000/api/casting-data-tr',
 
-    // LPC selection for TR Line 1 (LPCs 1–6)
+    // LPC selection for TR Line 1
     lpcOptions: {
-        default: 2,
+        default: 6,
         options: [
             { value: 1, label: 'LPC 1' },
             { value: 2, label: 'LPC 2' },
@@ -19,88 +19,104 @@ const CastingPerformanceTR = CastingPerformanceCore({
         ]
     },
 
-    // TR doesn't have ID Part column
     showIdPart: false,
-
-    // Maximum data points to show (10 waves = 20 points: 10 peaks + 10 valleys)
     trendDataLimit: 20,
 
-    // Real-time simulation mode (loops through existing data)
     simulationMode: {
-        enabled: true,          // ✅ ENABLED - Data flows gradually with wave pattern!
-        intervalSeconds: 2      // New part (2 amplitude points) every 2 seconds
+        enabled: true,
+        intervalSeconds: 2
     },
 
-    // Distribution chart configuration for TR (Last Shot - single part)
     distributionConfig: {
         useLastShotOnly: true,
-        lowerLimit: 490,
-        setPoint: 520,
-        upperLimit: 540
+        lowerLimit: 200,
+        setPoint: 300,
+        upperLimit: 400
     },
 
-    // Chart Y-axis range configuration (optimized range for TR data 200-400°C)
     chartConfig: {
-        yMin: 200,
-        yMax: 400,
-        tickCount: 11  // Every 20°C: 200, 220, 240, 260, 280, 300, 320, 340, 360, 380, 400
+        yMin: 0,
+        yMax: 500,
+        tickCount: 11
     },
 
-    // Metric definitions
+    // 11 temperature metrics — shown in trend chart
     metrics: [
-        { key: 'l_gate_front', elementId: 'l-gate-front', label: 'L Gate Front' },
-        { key: 'l_gate_rear', elementId: 'l-gate-rear', label: 'L Gate Rear' },
-        { key: 'l_chamber_1', elementId: 'l-chamber-1', label: 'L Chamber 1' },
-        { key: 'l_chamber_2', elementId: 'l-chamber-2', label: 'L Chamber 2' },
-        { key: 'r_gate_front', elementId: 'r-gate-front', label: 'R Gate Front' },
-        { key: 'r_gate_rear', elementId: 'r-gate-rear', label: 'R Gate Rear' },
-        { key: 'r_chamber_1', elementId: 'r-chamber-1', label: 'R Chamber 1' },
-        { key: 'r_chamber_2', elementId: 'r-chamber-2', label: 'R Chamber 2' }
+        { key: 'r_lower_gate1_temp_1', elementId: 'r-gate1-temp',       label: 'R Lower Gate1 Temp' },
+        { key: 'r_lower_gate2_temp_1', elementId: 'r-gate2-temp',       label: 'R Lower Gate2 Temp' },
+        { key: 'r_lower_main1_temp_1', elementId: 'r-main1-temp',       label: 'R Lower Main1 Temp' },
+        { key: 'r_lower_main2_temp_1', elementId: 'r-main2-temp',       label: 'R Lower Main2 Temp' },
+        { key: 'l_upper_main_temp_1',  elementId: 'l-upper-main-temp',  label: 'L Upper Main Temp'  },
+        { key: 'l_lower_gate1_temp_1', elementId: 'l-gate1-temp',       label: 'L Lower Gate1 Temp' },
+        { key: 'l_lower_gate2_temp_1', elementId: 'l-gate2-temp',       label: 'L Lower Gate2 Temp' },
+        { key: 'l_lower_main1_temp_1', elementId: 'l-main1-temp',       label: 'L Lower Main1 Temp' },
+        { key: 'l_lower_main2_temp_1', elementId: 'l-main2-temp',       label: 'L Lower Main2 Temp' },
+        { key: 'pressure_room_temp_1', elementId: 'pressure-room-temp', label: 'Pressure Room Temp' },
+        { key: 'hoolding_room_temp_1', elementId: 'holding-room-temp',  label: 'Holding Room Temp'  }
     ],
 
-    // Chart colors for each metric
+    // 8 flow metrics — shown as cards only (not in temperature trend chart)
+    additionalMetrics: [
+        { key: 'r_upper_sp_flow_1',          elementId: 'r-upper-sp-flow',   label: 'R Upper SP Flow'         },
+        { key: 'r_upper_flow_1',             elementId: 'r-upper-flow',      label: 'R Upper Flow'            },
+        { key: 'l_upper_sp_flow_1',          elementId: 'l-upper-sp-flow',   label: 'L Upper SP Flow'         },
+        { key: 'l_upper_flow_1',             elementId: 'l-upper-flow',      label: 'L Upper Flow'            },
+        { key: 'r_lower_cooling_air1_flow_1',elementId: 'r-cool-air1-flow',  label: 'R Lower Cool Air1 Flow'  },
+        { key: 'l_lower_cooling_air1_flow_1',elementId: 'l-cool-air1-flow',  label: 'L Lower Cool Air1 Flow'  },
+        { key: 'r_lower_cooling_air2_flow_1',elementId: 'r-cool-air2-flow',  label: 'R Lower Cool Air2 Flow'  },
+        { key: 'l_lower_cooling_air2_flow_1',elementId: 'l-cool-air2-flow',  label: 'L Lower Cool Air2 Flow'  }
+    ],
+
     chartColors: {
-        l_gate_front: '#3498DB',
-        l_gate_rear: '#5DADE2',
-        l_chamber_1: '#85C1E2',
-        l_chamber_2: '#AED6F1',
-        r_gate_front: '#E74C3C',
-        r_gate_rear: '#EC7063',
-        r_chamber_1: '#F1948A',
-        r_chamber_2: '#F5B7B1'
+        r_lower_gate1_temp_1: '#E74C3C',
+        r_lower_gate2_temp_1: '#EC7063',
+        r_lower_main1_temp_1: '#E67E22',
+        r_lower_main2_temp_1: '#F39C12',
+        l_upper_main_temp_1:  '#1ABC9C',
+        l_lower_gate1_temp_1: '#3498DB',
+        l_lower_gate2_temp_1: '#5DADE2',
+        l_lower_main1_temp_1: '#2980B9',
+        l_lower_main2_temp_1: '#85C1E2',
+        pressure_room_temp_1: '#9B59B6',
+        hoolding_room_temp_1: '#8E44AD'
     },
 
-    // Temperature thresholds for quality assessment
     thresholds: {
-        l_gate_front: { min: 60, max: 80 },
-        l_gate_rear: { min: 60, max: 80 },
-        l_chamber_1: { min: 60, max: 80 },
-        l_chamber_2: { min: 60, max: 80 },
-        r_gate_front: { min: 60, max: 80 },
-        r_gate_rear: { min: 60, max: 80 },
-        r_chamber_1: { min: 60, max: 80 },
-        r_chamber_2: { min: 60, max: 80 }
+        r_lower_gate1_temp_1: { min: 150, max: 400 },
+        r_lower_gate2_temp_1: { min: 150, max: 400 },
+        r_lower_main1_temp_1: { min: 150, max: 400 },
+        r_lower_main2_temp_1: { min: 150, max: 400 },
+        l_upper_main_temp_1:  { min: 150, max: 400 },
+        l_lower_gate1_temp_1: { min: 150, max: 400 },
+        l_lower_gate2_temp_1: { min: 150, max: 400 },
+        l_lower_main1_temp_1: { min: 150, max: 400 },
+        l_lower_main2_temp_1: { min: 150, max: 400 },
+        pressure_room_temp_1: { min: 100, max: 300 },
+        hoolding_room_temp_1: { min: 100, max: 300 }
     },
 
-    // Table column configuration
     tableColumns: [
-        { key: 'l_gate_front', label: 'L Gate Front' },
-        { key: 'l_gate_rear', label: 'L Gate Rear' },
-        { key: 'l_chamber_1', label: 'L Chamber 1' },
-        { key: 'l_chamber_2', label: 'L Chamber 2' },
-        { key: 'r_gate_front', label: 'R Gate Front' },
-        { key: 'r_gate_rear', label: 'R Gate Rear' },
-        { key: 'r_chamber_1', label: 'R Chamber 1' },
-        { key: 'r_chamber_2', label: 'R Chamber 2' }
+        { key: 'r_lower_gate1_temp_1', label: 'R Gate1 Temp'    },
+        { key: 'r_lower_gate2_temp_1', label: 'R Gate2 Temp'    },
+        { key: 'r_lower_main1_temp_1', label: 'R Main1 Temp'    },
+        { key: 'r_lower_main2_temp_1', label: 'R Main2 Temp'    },
+        { key: 'l_upper_main_temp_1',  label: 'L Upper Main'    },
+        { key: 'l_lower_gate1_temp_1', label: 'L Gate1 Temp'    },
+        { key: 'l_lower_gate2_temp_1', label: 'L Gate2 Temp'    },
+        { key: 'l_lower_main1_temp_1', label: 'L Main1 Temp'    },
+        { key: 'l_lower_main2_temp_1', label: 'L Main2 Temp'    },
+        { key: 'pressure_room_temp_1', label: 'Pres Room Temp'  },
+        { key: 'hoolding_room_temp_1', label: 'Hold Room Temp'  }
     ],
 
-    // Chart filter mappings (dataset indices)
+    // Dataset indices matching metrics array above (0–10)
     chartFilters: {
-        all: [0, 1, 2, 3, 4, 5, 6, 7],
-        gate: [0, 1, 4, 5],      
-        chamber: [2, 3, 6, 7],   
-        left: [0, 1, 2, 3],      
-        right: [4, 5, 6, 7]     
+        all:   [0,1,2,3,4,5,6,7,8,9,10],
+        gate:  [0,1,5,6],          // r_gate1, r_gate2, l_gate1, l_gate2
+        main:  [2,3,4,7,8],        // r_main1, r_main2, l_upper_main, l_main1, l_main2
+        left:  [4,5,6,7,8],        // l_upper_main, l_gate1, l_gate2, l_main1, l_main2
+        right: [0,1,2,3],          // r_gate1, r_gate2, r_main1, r_main2
+        room:  [9,10]              // pressure_room, holding_room
     }
 });
 
