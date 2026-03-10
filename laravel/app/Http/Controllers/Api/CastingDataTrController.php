@@ -10,7 +10,7 @@ class CastingDataTrController extends Controller
 {
     // TR Line supports LPCs 1–6, each stored in its own table: tr_loger_lpc1 … tr_loger_lpc6
     const VALID_LPCS = [1, 2, 3, 4, 5, 6];
-    const DEFAULT_LPC = 2;
+    const DEFAULT_LPC = 6;
 
     // Resolve table name from ?lpc param (validated whitelist – no injection risk)
     private function resolveTable(Request $request): string
@@ -117,14 +117,25 @@ class CastingDataTrController extends Controller
         try {
             $table = $this->resolveTable($request);
             $avg = DB::table($table)->selectRaw('
-                AVG(l_gate_front) as avg_l_gate_front,
-                AVG(l_gate_rear) as avg_l_gate_rear,
-                AVG(l_chamber_1) as avg_l_chamber_1,
-                AVG(l_chamber_2) as avg_l_chamber_2,
-                AVG(r_gate_front) as avg_r_gate_front,
-                AVG(r_gate_rear) as avg_r_gate_rear,
-                AVG(r_chamber_1) as avg_r_chamber_1,
-                AVG(r_chamber_2) as avg_r_chamber_2
+                AVG(r_lower_gate1_temp_1) as avg_r_lower_gate1_temp,
+                AVG(r_lower_gate2_temp_1) as avg_r_lower_gate2_temp,
+                AVG(r_lower_main1_temp_1) as avg_r_lower_main1_temp,
+                AVG(r_lower_main2_temp_1) as avg_r_lower_main2_temp,
+                AVG(l_upper_main_temp_1)  as avg_l_upper_main_temp,
+                AVG(l_lower_gate1_temp_1) as avg_l_lower_gate1_temp,
+                AVG(l_lower_gate2_temp_1) as avg_l_lower_gate2_temp,
+                AVG(l_lower_main1_temp_1) as avg_l_lower_main1_temp,
+                AVG(l_lower_main2_temp_1) as avg_l_lower_main2_temp,
+                AVG(pressure_room_temp_1) as avg_pressure_room_temp,
+                AVG(hoolding_room_temp_1) as avg_hoolding_room_temp,
+                AVG(r_upper_sp_flow_1)           as avg_r_upper_sp_flow,
+                AVG(r_upper_flow_1)              as avg_r_upper_flow,
+                AVG(l_upper_sp_flow_1)           as avg_l_upper_sp_flow,
+                AVG(l_upper_flow_1)              as avg_l_upper_flow,
+                AVG(r_lower_cooling_air1_flow_1) as avg_r_lower_cooling_air1_flow,
+                AVG(l_lower_cooling_air1_flow_1) as avg_l_lower_cooling_air1_flow,
+                AVG(r_lower_cooling_air2_flow_1) as avg_r_lower_cooling_air2_flow,
+                AVG(l_lower_cooling_air2_flow_1) as avg_l_lower_cooling_air2_flow
             ')->first();
             return response()->json(['status' => 'success', 'data' => $avg]);
         } catch (\Exception $e) {
