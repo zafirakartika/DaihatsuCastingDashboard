@@ -262,7 +262,7 @@
 
     <script>
     const castingHistory = {
-        apiUrl: 'http://127.0.0.1:8000/api/casting-data-tr',
+        apiUrl: '/api/casting-data-tr',
         dateField: 'datetime',   // tr_loger_lpcX stores datetime as generated column
         currentData: [],
         columns: [

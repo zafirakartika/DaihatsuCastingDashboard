@@ -5,7 +5,7 @@
 
 const CastingPerformanceTR = CastingPerformanceCore({
     partName: 'TR',
-    apiUrl: 'http://127.0.0.1:8000/api/casting-data-tr',
+    apiUrl: '/api/casting-data-tr',
 
     // LPC selection for TR Line 1
     lpcOptions: {

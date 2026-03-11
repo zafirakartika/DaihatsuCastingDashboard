@@ -7,7 +7,7 @@ const GeneralALPCNR = (function() {
     'use strict';
 
     const CONFIG = {
-        API_URL: 'http://127.0.0.1:8000/api/casting-data',
+        API_URL: '/api/casting-data',
         SIMULATION_ENABLED: false,
         REAL_TIME_ENABLED: true,
         REAL_TIME_INTERVAL: 10000,
