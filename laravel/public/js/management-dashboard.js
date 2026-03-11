@@ -6,9 +6,9 @@
 const ManagementDashboard = {
     config: {
         apiUrls: {
-            castingWA: 'http://127.0.0.1:8000/api/casting-data',
-            castingTR: 'http://127.0.0.1:8000/api/casting-data-tr',
-            traceability: 'http://127.0.0.1:8000/api/traceability-data'
+            castingWA: '/api/casting-data',
+            castingTR: '/api/casting-data-tr',
+            traceability: '/api/traceability-data'
         },
         refreshInterval: 30000 // 30 seconds
     },

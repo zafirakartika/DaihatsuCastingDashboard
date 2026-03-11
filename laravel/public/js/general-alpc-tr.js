@@ -8,7 +8,7 @@ const GeneralALPCTR = (function() {
 
     // Configuration
     const CONFIG = {
-        API_URL: 'http://127.0.0.1:8000/api/casting-data-tr',
+        API_URL: '/api/casting-data-tr',
         SIMULATION_ENABLED: true,
         SIMULATION_INTERVAL: 3, // seconds
         THRESHOLDS: {

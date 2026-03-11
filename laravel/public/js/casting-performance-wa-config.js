@@ -5,7 +5,7 @@
 
 const CastingPerformance = CastingPerformanceCore({
     partName: 'WA',
-    apiUrl: 'http://127.0.0.1:8000/api/casting-data',
+    apiUrl: '/api/casting-data',
 
     // Maximum data points to show (10 waves = 20 points: 10 peaks + 10 valleys)
     trendDataLimit: 20,

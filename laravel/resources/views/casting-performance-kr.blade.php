@@ -194,7 +194,7 @@
 
     <script>
     const castingHistory = {
-        apiUrl: 'http://127.0.0.1:8000/api/casting-data',
+        apiUrl: '/api/casting-data',
         dateField: 'datetime_stamp',
         currentData: [],
         columns: [

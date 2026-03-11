@@ -5,7 +5,7 @@
 
 const CastingPerformance = CastingPerformanceCore({
     partName: '3SZ',
-    apiUrl: 'http://127.0.0.1:8000/api/casting-data-3sz',
+    apiUrl: '/api/casting-data-3sz',
 
     // 3SZ doesn't have ID Part column
     showIdPart: false,

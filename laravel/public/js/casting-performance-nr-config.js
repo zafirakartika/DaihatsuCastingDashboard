@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         CastingPerformance.init({
             line: 'NR',
             lpc: 9,
-            apiUrl: 'http://127.0.0.1:8000/api/casting-data',
+            apiUrl: '/api/casting-data',
             refreshInterval: 10000
         });
     } else {

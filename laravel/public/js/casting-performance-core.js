@@ -25,7 +25,20 @@ const CastingPerformanceCore = (config) => {
         throttle: (key, func) => func(),
         requestAnimationFrame: (callback) => requestAnimationFrame(callback),
         setCache: () => {},
-        getCache: () => null
+        getCache: () => null,
+        batchDOMUpdates: (updates) => {
+            requestAnimationFrame(() => {
+                updates.forEach(u => {
+                    if (!u.selector) return;
+                    const el = document.querySelector(u.selector);
+                    if (!el) return;
+                    if (u.property !== undefined) el[u.property] = u.value;
+                    if (u.action === 'addClass' && u.className) {
+                        if (el.parentElement) el.parentElement.classList.add(u.className);
+                    }
+                });
+            });
+        }
     };
 
     // Merge configuration with defaults

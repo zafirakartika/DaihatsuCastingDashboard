@@ -8,7 +8,7 @@ const GeneralALPCWA = (function() {
 
     // Configuration
     const CONFIG = {
-        API_URL: 'http://127.0.0.1:8000/api/casting-data',
+        API_URL: '/api/casting-data',
         SIMULATION_ENABLED: false, // Disabled for real-time updates
         SIMULATION_INTERVAL: 3, // seconds
         REAL_TIME_ENABLED: true,
