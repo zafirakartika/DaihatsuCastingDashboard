@@ -82,8 +82,8 @@ const CastingPerformanceTR = CastingPerformanceCore({
     ],
 
     chartColors: {
-        r_lower_gate1_temp_1: '#E74C3C',
-        r_lower_gate2_temp_1: '#EC7063',
+        r_lower_gate1_temp_1: '#8E44AD',
+        r_lower_gate2_temp_1: '#BB8FCE',
         r_lower_main1_temp_1: '#E67E22',
         r_lower_main2_temp_1: '#F39C12',
         l_upper_main_temp_1:  '#1ABC9C',
