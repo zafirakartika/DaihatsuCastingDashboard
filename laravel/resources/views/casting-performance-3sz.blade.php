@@ -116,10 +116,6 @@
     <script src="{{ asset('js/casting-performance-core.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('js/casting-performance-3sz-config.js') }}?v={{ time() }}"></script>
     <script>
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            if(sidebar) sidebar.classList.toggle('active');
-        }
         function resetFilters() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('filter-date').value = today;

@@ -132,10 +132,6 @@
     <script src="{{ asset('js/casting-performance-wa-config.js') }}?v={{ time() }}"></script>
     
     <script>
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            if(sidebar) sidebar.classList.toggle('active');
-        }
 
         function resetFilters() {
             const today = new Date().toISOString().split('T')[0];

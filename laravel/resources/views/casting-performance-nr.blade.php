@@ -132,11 +132,6 @@
     <script src="{{ asset('js/casting-performance-core.js') }}"></script>
     <script src="{{ asset('js/casting-performance-nr-config.js') }}"></script>
     <script>
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            if(sidebar) sidebar.classList.toggle('active');
-        }
-
         function applyLpc() {
             const lpcSelect = document.getElementById('lpc-select');
             const badge = document.getElementById('active-lpc-badge');

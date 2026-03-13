@@ -100,22 +100,12 @@
     </div>
 </div>
 
-{{-- Pressure Room Temperature Trend Chart --}}
+{{-- Pressure & Holding Room Temperature Trend Chart --}}
 <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px;">
     <div class="chart-wrapper" style="padding: 12px;">
-        <div class="chart-title" style="margin-bottom: 10px; font-size: 15px;">Pressure Room Temperature Trend</div>
+        <div class="chart-title" style="margin-bottom: 10px; font-size: 15px;">Pressure &amp; Holding Room Temperature Trend</div>
         <div style="position: relative; height: 250px; width: 100%; overflow: hidden;">
             <canvas id="pressureRoomChart"></canvas>
-        </div>
-    </div>
-</div>
-
-{{-- Holding Room Temperature Trend Chart --}}
-<div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px;">
-    <div class="chart-wrapper" style="padding: 12px;">
-        <div class="chart-title" style="margin-bottom: 10px; font-size: 15px;">Holding Room Temperature Trend</div>
-        <div style="position: relative; height: 250px; width: 100%; overflow: hidden;">
-            <canvas id="holdingRoomChart"></canvas>
         </div>
     </div>
 </div>
