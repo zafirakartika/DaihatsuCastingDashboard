@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 
 class CastingDataTrController extends Controller
 {
-    // TR Line supports LPCs 1–6, each stored in its own table: tr_loger_lpc1 … tr_loger_lpc6
-    const VALID_LPCS = [1, 2, 3, 4, 5, 6];
+    // TR Line supports LPCs 1–4 and 6, each stored in its own table: tr_loger_lpc1 … tr_loger_lpc6
+    const VALID_LPCS = [1, 2, 3, 4, 6];
     const DEFAULT_LPC = 6;
 
     // Resolve table name from ?lpc param (validated whitelist – no injection risk)
@@ -69,12 +69,19 @@ class CastingDataTrController extends Controller
             $query = DB::table($table);
 
             if ($date) {
-                $startDateTime = $date . ' ' . $startTime;
-                $endDateTime = $date . ' ' . $endTime;
-                $rows = $query->whereBetween('datetime', [$startDateTime, $endDateTime])
-                    ->orderBy('datetime', 'asc')
-                    ->limit($limit)
-                    ->get();
+                // Night shift crosses midnight: start_time > end_time (e.g. 21:00 > 07:00)
+                if ($startTime > $endTime) {
+                    $nextDate = date('Y-m-d', strtotime($date . ' +1 day'));
+                    $rows = $query->whereBetween('datetime', [$date . ' ' . $startTime, $nextDate . ' ' . $endTime])
+                        ->orderBy('datetime', 'asc')
+                        ->limit($limit)
+                        ->get();
+                } else {
+                    $rows = $query->whereBetween('datetime', [$date . ' ' . $startTime, $date . ' ' . $endTime])
+                        ->orderBy('datetime', 'asc')
+                        ->limit($limit)
+                        ->get();
+                }
             } else {
                 $latestRecord = DB::table($table)->orderBy('datetime', 'desc')->first();
                 if ($latestRecord) {
@@ -100,12 +107,29 @@ class CastingDataTrController extends Controller
     public function recent(Request $request)
     {
         try {
-            $table = $this->resolveTable($request);
-            $limit = (int) $request->query('limit', 50);
-            $rows = DB::table($table)
-                ->orderBy('datetime', 'desc')
-                ->limit($limit)
-                ->get();
+            $table  = $this->resolveTable($request);
+            $limit  = (int) $request->query('limit', 50);
+            $date   = $request->query('date');
+            $startTime = $request->query('start_time', '07:15:00');
+            $endTime   = $request->query('end_time',   '20:50:00');
+
+            $query = DB::table($table);
+
+            if ($date) {
+                // Night shift crosses midnight: start_time > end_time (e.g. 21:00 > 07:00)
+                if ($startTime > $endTime) {
+                    // e.g. date = "2026-03-07", start = "21:00:00", end = "07:00:00"
+                    // covers 2026-03-07 21:00:00 → 2026-03-08 07:00:00
+                    $nextDate = date('Y-m-d', strtotime($date . ' +1 day'));
+                    $query->where(function ($q) use ($table, $date, $nextDate, $startTime, $endTime) {
+                        $q->whereBetween('datetime', [$date . ' ' . $startTime, $nextDate . ' ' . $endTime]);
+                    });
+                } else {
+                    $query->whereBetween('datetime', [$date . ' ' . $startTime, $date . ' ' . $endTime]);
+                }
+            }
+
+            $rows = $query->orderBy('datetime', 'desc')->limit($limit)->get();
             return response()->json(['status' => 'success', 'data' => $rows->toArray()]);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);

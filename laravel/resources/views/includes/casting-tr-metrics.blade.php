@@ -1,22 +1,3 @@
-{{-- Temperature Metrics Filter Controls --}}
-<div style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
-    <span style="font-size: 12px; font-weight: 600; color: #555;">Filter Metrics:</span>
-    <select id="temp-metric-filter" class="filter-input" style="padding: 5px 10px; font-size: 12px;"
-            onchange="CastingPerformanceTR.filterTemperatureMetrics(this.value)">
-        <option value="all">All Sensors</option>
-        <option value="gate">Gate Sensors</option>
-        <option value="main">Main Sensors</option>
-        <option value="room">Room Temps</option>
-    </select>
-    <span style="font-size: 12px; font-weight: 600; color: #555; margin-left: 12px;">Chart View:</span>
-    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="all"   checked onchange="CastingPerformanceTR.filterTrendChart(this.value)"> All</label>
-    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="gate"          onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Gate</label>
-    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="main"          onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Main</label>
-    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="left"          onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Left</label>
-    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="right"         onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Right</label>
-    <label style="font-size: 12px; cursor: pointer;"><input type="radio" name="temp-trend-filter" value="room"          onchange="CastingPerformanceTR.filterTrendChart(this.value)"> Room</label>
-</div>
-
 {{-- Temperature Metrics Grid (11 sensors) --}}
 <div id="temperature-metrics-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px;">
     {{-- R Side: gate --}}
@@ -93,28 +74,48 @@
     </div>
 </div>
 
-{{-- Temperature Trend Chart --}}
+{{-- Temperature Trend Chart (R & L Mold Die Temps) --}}
 <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px;">
     <div class="chart-wrapper" style="padding: 12px;">
-        <div class="chart-title" style="margin-bottom: 10px; font-size: 15px;">Temperature Trend (Mold Die Temp)</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+            <div class="chart-title" style="font-size: 15px;">Temperature Trend (Mold Die Temp)</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                <label style="font-size: 11px; cursor: pointer; user-select: none;">
+                    <input type="checkbox" checked onchange="CastingPerformanceTR.toggleTrendChartGroup('gate', this.checked)"> Gate
+                </label>
+                <label style="font-size: 11px; cursor: pointer; user-select: none;">
+                    <input type="checkbox" checked onchange="CastingPerformanceTR.toggleTrendChartGroup('main', this.checked)"> Main
+                </label>
+                <label style="font-size: 11px; cursor: pointer; user-select: none;">
+                    <input type="checkbox" checked onchange="CastingPerformanceTR.toggleTrendChartGroup('left', this.checked)"> Left
+                </label>
+                <label style="font-size: 11px; cursor: pointer; user-select: none;">
+                    <input type="checkbox" checked onchange="CastingPerformanceTR.toggleTrendChartGroup('right', this.checked)"> Right
+                </label>
+            </div>
+        </div>
         <div style="position: relative; height: 250px; width: 100%; overflow: hidden;">
             <canvas id="tempTrendChart"></canvas>
         </div>
     </div>
 </div>
 
-{{-- Comparison & Distribution Charts --}}
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+{{-- Pressure Room Temperature Trend Chart --}}
+<div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px;">
     <div class="chart-wrapper" style="padding: 12px;">
-        <div class="chart-title" style="margin-bottom: 10px; font-size: 15px;">Left vs Right Comparison</div>
-        <div style="position: relative; height: 200px; width: 100%; overflow: hidden;">
-            <canvas id="leftRightChart"></canvas>
+        <div class="chart-title" style="margin-bottom: 10px; font-size: 15px;">Pressure Room Temperature Trend</div>
+        <div style="position: relative; height: 250px; width: 100%; overflow: hidden;">
+            <canvas id="pressureRoomChart"></canvas>
         </div>
     </div>
+</div>
+
+{{-- Holding Room Temperature Trend Chart --}}
+<div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px;">
     <div class="chart-wrapper" style="padding: 12px;">
-        <div class="chart-title" style="margin-bottom: 10px; font-size: 15px;">Temperature Distribution</div>
-        <div style="position: relative; height: 200px; width: 100%; overflow: hidden;">
-            <canvas id="distributionChart"></canvas>
+        <div class="chart-title" style="margin-bottom: 10px; font-size: 15px;">Holding Room Temperature Trend</div>
+        <div style="position: relative; height: 250px; width: 100%; overflow: hidden;">
+            <canvas id="holdingRoomChart"></canvas>
         </div>
     </div>
 </div>
@@ -186,10 +187,10 @@
             <button id="clear-search" class="filter-btn" style="padding: 5px 10px; font-size: 12px;">Clear</button>
         </div>
     </div>
-    <div style="overflow-x: auto;">
+    <div style="overflow-x: auto; overflow-y: auto; max-height: 550px;">
         <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
             <thead>
-                <tr style="background: var(--accent-navy); color: white;">
+                <tr style="background: var(--accent-navy); color: white; position: sticky; top: 0; z-index: 1;">
                     <th style="padding: 8px; text-align: left;  border: 1px solid #ddd; white-space: nowrap;">Timestamp</th>
                     <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">R Gate1 Temp</th>
                     <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">R Gate2 Temp</th>
@@ -202,11 +203,19 @@
                     <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">L Main2 Temp</th>
                     <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">Pres Room</th>
                     <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">Hold Room</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">R Up SP Flow</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">R Up Flow</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">L Up SP Flow</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">L Up Flow</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">R Cool Air1</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">L Cool Air1</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">R Cool Air2</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd; white-space: nowrap;">L Cool Air2</th>
                 </tr>
             </thead>
             <tbody id="data-table-body">
                 <tr>
-                    <td colspan="12" style="padding: 20px; text-align: center; color: #999;">Loading data...</td>
+                    <td colspan="20" style="padding: 20px; text-align: center; color: #999;">Loading data...</td>
                 </tr>
             </tbody>
         </table>

@@ -90,7 +90,8 @@ const CastingPerformanceCore = (config) => {
     let charts = {
         trend: null,
         comparison: null,
-        distribution: null
+        distribution: null,
+        room: null
     };
 
     // Store all table data for filtering
@@ -125,24 +126,21 @@ const CastingPerformanceCore = (config) => {
         const minutes = now.getMinutes();
         const timeInMinutes = hours * 60 + minutes;
 
-        // Morning shift: 07:15 - 16:00 (435 - 960 minutes)
-        // Night shift: 19:00 - 06:00 (1140 minutes onwards, or 0 - 360 minutes)
-        if (timeInMinutes >= 435 && timeInMinutes < 960) {
+        // Morning shift: 07:15 - 20:50 (435 - 1250 minutes)
+        // Night shift: 21:00 - 07:00 (1260 minutes onwards, or 0 - 420 minutes)
+        if (timeInMinutes >= 435 && timeInMinutes < 1260) {
             return 'morning';
-        } else if (timeInMinutes >= 1140 || timeInMinutes < 360) {
-            return 'night';
         } else {
-            // Between shifts - default to morning
-            return 'morning';
+            return 'night';
         }
     }
 
     // Get shift time range
     function getShiftTimeRange(shift) {
         if (shift === 'morning') {
-            return { start: '07:15:00', end: '16:00:00' };
+            return { start: '07:15:00', end: '20:50:00' };
         } else if (shift === 'night') {
-            return { start: '19:00:00', end: '06:00:00' };
+            return { start: '21:00:00', end: '07:00:00' };
         }
         return null;
     }
@@ -296,10 +294,6 @@ const CastingPerformanceCore = (config) => {
 
             if (valueEl && value !== undefined) {
                 valueEl.textContent = value.toFixed(1);
-                valueEl.parentElement.classList.add('pulse');
-                setTimeout(() => {
-                    valueEl.parentElement.classList.remove('pulse');
-                }, 300);
             }
 
             if (statusEl && value !== undefined) {
@@ -461,8 +455,16 @@ const CastingPerformanceCore = (config) => {
             if (filterDate) {
                 params.date = filterDate;
             } else {
-                const today = new Date().toISOString().split('T')[0];
-                params.date = today;
+                const now = new Date();
+                const hours = now.getHours();
+                // Night shift: 00:00–06:59 belongs to the *previous* calendar day
+                if (filterShift === 'auto' && shift === 'night' && hours >= 0 && hours < 7) {
+                    const yesterday = new Date(now);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    params.date = yesterday.toISOString().split('T')[0];
+                } else {
+                    params.date = now.toISOString().split('T')[0];
+                }
             }
 
             // Fetch recent data for table
@@ -596,9 +598,10 @@ const CastingPerformanceCore = (config) => {
         // Temperature Trend Chart
         const trendCtx = document.getElementById('tempTrendChart');
         if (trendCtx) {
-            const datasets = CONFIG.METRICS.map(metric =>
-                createDataset(metric.label, CONFIG.CHART_COLORS[metric.key])
-            );
+            const _secIdx = (config.secondaryChart && config.secondaryChart.metricIndices) || [];
+            const datasets = CONFIG.METRICS
+                .filter((_, i) => !_secIdx.includes(i))
+                .map(metric => createDataset(metric.label, CONFIG.CHART_COLORS[metric.key]));
 
             charts.trend = new Chart(trendCtx.getContext('2d'), {
                 type: 'line',
@@ -611,7 +614,7 @@ const CastingPerformanceCore = (config) => {
                     maintainAspectRatio: false,
                     animation: false, // Disable animations for smooth real-time updates
                     interaction: {
-                        mode: 'index',
+                        mode: 'nearest',
                         intersect: false,
                     },
                     plugins: {
@@ -624,15 +627,55 @@ const CastingPerformanceCore = (config) => {
                             }
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(0,0,0,0.8)',
-                            padding: 12,
-                            bodySpacing: 5,
+                            backgroundColor: 'rgba(0,0,0,0.85)',
+                            padding: 14,
+                            bodySpacing: 6,
+                            titleFont: { size: 12, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            caretSize: 8,
+                            cornerRadius: 6,
                             callbacks: {
                                 label: function(context) {
-                                    return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '°C';
+                                    return '  ' + context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '°C';
                                 }
                             }
-                        }
+                        },
+                        ...(CONFIG.CHART_CONFIG.lowerLimit !== undefined && CONFIG.CHART_CONFIG.upperLimit !== undefined ? {
+                            annotation: {
+                                annotations: {
+                                    lowerLimit: {
+                                        type: 'line',
+                                        scaleID: 'y',
+                                        value: CONFIG.CHART_CONFIG.lowerLimit,
+                                        borderColor: 'rgba(52,152,219,0.9)',
+                                        borderWidth: 2,
+                                        label: {
+                                            content: `Min: ${CONFIG.CHART_CONFIG.lowerLimit}°C`,
+                                            display: true,
+                                            position: 'start',
+                                            backgroundColor: 'rgba(52,152,219,0.85)',
+                                            color: 'white',
+                                            font: { size: 10 }
+                                        }
+                                    },
+                                    upperLimit: {
+                                        type: 'line',
+                                        scaleID: 'y',
+                                        value: CONFIG.CHART_CONFIG.upperLimit,
+                                        borderColor: 'rgba(46,204,113,0.9)',
+                                        borderWidth: 2,
+                                        label: {
+                                            content: `Max: ${CONFIG.CHART_CONFIG.upperLimit}°C`,
+                                            display: true,
+                                            position: 'start',
+                                            backgroundColor: 'rgba(46,204,113,0.85)',
+                                            color: 'white',
+                                            font: { size: 10 }
+                                        }
+                                    }
+                                }
+                            }
+                        } : {})
                     },
                     scales: {
                         y: {
@@ -668,7 +711,7 @@ const CastingPerformanceCore = (config) => {
                         x: {
                             title: {
                                 display: true,
-                                text: 'Production Sequence',
+                                text: 'Time',
                                 font: { size: 12, weight: 'bold' }
                             },
                             grid: {
@@ -676,7 +719,8 @@ const CastingPerformanceCore = (config) => {
                                 color: 'rgba(0,0,0,0.05)'
                             },
                             ticks: {
-                                autoSkip: false,  // Show all labels
+                                autoSkip: true,
+                                maxTicksLimit: 20,
                                 maxRotation: 45,
                                 minRotation: 45,
                                 font: { size: 9 }
@@ -887,21 +931,178 @@ const CastingPerformanceCore = (config) => {
                 }
             });
         }
+
+        // Secondary chart (e.g. room temps for TR)
+        const secChartConfig = config.secondaryChart;
+        if (secChartConfig) {
+            const secCtx = document.getElementById(secChartConfig.canvasId);
+            if (secCtx) {
+                const secIndices = secChartConfig.metricIndices || [];
+                const secPr = secChartConfig.pointRadius !== undefined ? secChartConfig.pointRadius : 0;
+                const secDatasets = secIndices.map(i => ({
+                    label: CONFIG.METRICS[i].label,
+                    data: [],
+                    borderColor: CONFIG.CHART_COLORS[CONFIG.METRICS[i].key],
+                    backgroundColor: 'transparent',
+                    tension: 0.1,
+                    borderWidth: 2,
+                    pointRadius: secPr,
+                    pointHoverRadius: secPr > 0 ? secPr + 2 : 0,
+                    fill: false,
+                    spanGaps: false
+                }));
+                charts.room = new Chart(secCtx.getContext('2d'), {
+                    type: 'line',
+                    data: { labels: [], datasets: secDatasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: { usePointStyle: true, padding: 15, font: { size: 11 } }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                padding: 12,
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '°C';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                min: secChartConfig.yMin,
+                                max: secChartConfig.yMax,
+                                grace: 0,
+                                afterDataLimits: (scale) => {
+                                    scale.min = secChartConfig.yMin;
+                                    scale.max = secChartConfig.yMax;
+                                },
+                                ticks: {
+                                    count: secChartConfig.tickCount || 9,
+                                    autoSkip: false,
+                                    font: { size: 10 },
+                                    padding: 8,
+                                    callback: function(value) { return value + '°C'; }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Temperature (°C)',
+                                    font: { size: 12, weight: 'bold' }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                title: { display: true, text: 'Time', font: { size: 12, weight: 'bold' } },
+                                grid: { display: true, color: 'rgba(0,0,0,0.05)' },
+                                ticks: { autoSkip: true, maxTicksLimit: 20, maxRotation: 45, minRotation: 45, font: { size: 9 } }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Tertiary chart (e.g. holding room for TR)
+        const terChartConfig = config.tertiaryChart;
+        if (terChartConfig) {
+            const terCtx = document.getElementById(terChartConfig.canvasId);
+            if (terCtx) {
+                const terIndices = terChartConfig.metricIndices || [];
+                const terPr = terChartConfig.pointRadius !== undefined ? terChartConfig.pointRadius : 0;
+                const terDatasets = terIndices.map(i => ({
+                    label: CONFIG.METRICS[i].label,
+                    data: [],
+                    borderColor: CONFIG.CHART_COLORS[CONFIG.METRICS[i].key],
+                    backgroundColor: 'transparent',
+                    tension: 0.1,
+                    borderWidth: 2,
+                    pointRadius: terPr,
+                    pointHoverRadius: terPr > 0 ? terPr + 2 : 0,
+                    fill: false,
+                    spanGaps: false
+                }));
+                charts.room2 = new Chart(terCtx.getContext('2d'), {
+                    type: 'line',
+                    data: { labels: [], datasets: terDatasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: { usePointStyle: true, padding: 15, font: { size: 11 } }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                padding: 12,
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '°C';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                min: terChartConfig.yMin,
+                                max: terChartConfig.yMax,
+                                grace: 0,
+                                afterDataLimits: (scale) => {
+                                    scale.min = terChartConfig.yMin;
+                                    scale.max = terChartConfig.yMax;
+                                },
+                                ticks: {
+                                    count: terChartConfig.tickCount || 9,
+                                    autoSkip: false,
+                                    font: { size: 10 },
+                                    padding: 8,
+                                    callback: function(value) { return value + '°C'; }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Temperature (°C)',
+                                    font: { size: 12, weight: 'bold' }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                title: { display: true, text: 'Time', font: { size: 12, weight: 'bold' } },
+                                grid: { display: true, color: 'rgba(0,0,0,0.05)' },
+                                ticks: { autoSkip: true, maxTicksLimit: 20, maxRotation: 45, minRotation: 45, font: { size: 9 } }
+                            }
+                        }
+                    }
+                });
+            }
+        }
     }
 
     // PERFORMANCE OPTIMIZED: Create dataset with minimal configuration
     function createOptimizedDataset(label, color) {
+        const pr = CONFIG.CHART_CONFIG.pointRadius !== undefined ? CONFIG.CHART_CONFIG.pointRadius : 0;
         return {
             label: label,
-            data: [], // Will use TypedArray for better performance
+            data: [],
             borderColor: color,
-            backgroundColor: 'transparent', // PERFORMANCE: Remove fill for better performance
-            tension: 0.1,              // Reduced curve calculation
-            borderWidth: 2,            // Thinner lines for performance
-            pointRadius: 0,            // PERFORMANCE: Remove points for better performance
-            pointHoverRadius: 0,
-            fill: false,               // PERFORMANCE: No fill
-            cubicInterpolationMode: 'default' // Simpler interpolation
+            backgroundColor: 'transparent',
+            tension: 0.1,
+            borderWidth: 2,
+            pointRadius: pr,
+            pointHoverRadius: pr > 0 ? pr + 6 : 0,
+            pointHoverBorderWidth: 2,
+            fill: false,
+            spanGaps: false,
+            cubicInterpolationMode: 'default'
         };
     }
 
@@ -938,6 +1139,7 @@ const CastingPerformanceCore = (config) => {
     // Load all data
     async function loadAllData() {
         try {
+            clearAllDisplay();
             showLoading(true);
 
             const filterDate = document.getElementById('filter-date')?.value;
@@ -961,18 +1163,33 @@ const CastingPerformanceCore = (config) => {
             if (filterDate) {
                 trendParams.date = filterDate;
             } else {
-                const today = new Date().toISOString().split('T')[0];
-                trendParams.date = today;
+                const now = new Date();
+                const hours = now.getHours();
+                // Night shift: 00:00–06:59 belongs to the *previous* calendar day
+                if (filterShift === 'auto' && shift === 'night' && hours >= 0 && hours < 7) {
+                    const yesterday = new Date(now);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    trendParams.date = yesterday.toISOString().split('T')[0];
+                } else {
+                    trendParams.date = now.toISOString().split('T')[0];
+                }
             }
 
             console.log('📊 Loading data for shift:', shift, 'Time range:', startTime, '-', endTime);
             console.log('📅 Date filter:', filterDate || 'Using today');
             console.log('🔧 Trend params:', trendParams);
 
+            const recentParams = {
+                limit: 50,
+                start_time: startTime,
+                end_time: endTime,
+                date: trendParams.date
+            };
+
             const [latestData, trendData, recentData] = await Promise.all([
                 fetchData('latest'),
                 fetchData('trend', trendParams),
-                fetchData('recent', { limit: 50 })
+                fetchData('recent', recentParams)
             ]);
 
             // Process received trend data
@@ -998,12 +1215,10 @@ const CastingPerformanceCore = (config) => {
                     }
                 }
             } else {
-                showError(`No data found for ${filterDate || 'today'} ${shift} shift (${startTime}-${endTime}). Please select a different date or check if data exists in the database.`);
+                console.warn('No trend data for', filterDate || 'today', shift, startTime, '-', endTime);
             }
 
-            if (recentData && recentData.length > 0) {
-                updateTable(recentData);
-            }
+            updateTable(recentData && recentData.length > 0 ? recentData : []);
 
             updateLastUpdateTime();
             showLoading(false);
@@ -1150,6 +1365,42 @@ const CastingPerformanceCore = (config) => {
         }
     }
 
+    // Clear all displayed data (metrics, charts, table) — called before loading new data
+    function clearAllDisplay() {
+        // Clear metric cards
+        const allMetrics = [...(CONFIG.METRICS || []), ...(CONFIG.additionalMetrics || [])];
+        allMetrics.forEach(metric => {
+            const valueEl = document.getElementById(`metric-${metric.elementId}`);
+            const statusEl = document.getElementById(`status-${metric.elementId}`);
+            if (valueEl) valueEl.textContent = '—';
+            if (statusEl) {
+                statusEl.textContent = '—';
+                statusEl.className = 'status-badge';
+            }
+        });
+
+        // Clear charts
+        if (charts.trend) {
+            charts.trend.data.labels = [];
+            charts.trend.data.datasets.forEach(ds => { ds.data = []; });
+            charts.trend.update('none');
+        }
+        if (charts.room) {
+            charts.room.data.labels = [];
+            charts.room.data.datasets.forEach(ds => { ds.data = []; });
+            charts.room.update('none');
+        }
+        if (charts.room2) {
+            charts.room2.data.labels = [];
+            charts.room2.data.datasets.forEach(ds => { ds.data = []; });
+            charts.room2.update('none');
+        }
+
+        // Clear table
+        const tbody = document.getElementById('data-table-body');
+        if (tbody) tbody.innerHTML = '';
+    }
+
     // PERFORMANCE OPTIMIZED: Update metric cards with batched DOM updates
     function updateMetrics(data) {
         // PERFORMANCE: Batch all DOM updates to minimize reflows
@@ -1159,7 +1410,10 @@ const CastingPerformanceCore = (config) => {
             metrics.forEach(metric => {
                 const valueEl = document.getElementById(`metric-${metric.elementId}`);
                 const statusEl = document.getElementById(`status-${metric.elementId}`);
-                const value = data[metric.key];
+                const rawValue = data[metric.key];
+                const value = (rawValue !== undefined && metric.divisor)
+                    ? (metric.conditionalDivisor && rawValue >= 1000 ? rawValue : rawValue / metric.divisor)
+                    : rawValue;
 
                 if (valueEl && value !== undefined) {
                     updates.push({
@@ -1167,21 +1421,6 @@ const CastingPerformanceCore = (config) => {
                         property: 'textContent',
                         value: value.toFixed(1)
                     });
-
-                    // PERFORMANCE: Use CSS animations instead of setTimeout
-                    updates.push({
-                        selector: `#metric-${metric.elementId}`,
-                        action: 'addClass',
-                        className: 'pulse'
-                    });
-
-                    // Schedule pulse removal
-                    setTimeout(() => {
-                        const el = document.getElementById(`metric-${metric.elementId}`);
-                        if (el && el.parentElement) {
-                            el.parentElement.classList.remove('pulse');
-                        }
-                    }, 300);
                 }
 
                 if (statusEl && value !== undefined) {
@@ -1241,24 +1480,71 @@ const CastingPerformanceCore = (config) => {
             return dateA - dateB;
         });
 
-        const cycleFilteredData = filterByCycleInterval(sortedData, 312);
+        const cycleFilteredData = config.disableCycleFilter ? [] : filterByCycleInterval(sortedData, 312);
         const chartData = cycleFilteredData.length > 0 ? cycleFilteredData : sortedData;
 
-        const labels = chartData.map((record, index) => {
-            return record.id_part || `Record ${index + 1}`;
+        const labels = chartData.map((record) => {
+            const dt = record.datetime_stamp || record.datetime;
+            if (!dt) return '--';
+            const d = new Date(dt);
+            if (isNaN(d.getTime())) return String(dt).substring(11, 16) || dt;
+            return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
         });
+
+        // Determine secondary/tertiary metrics to exclude from primary chart
+        const secIndices = (config.secondaryChart && config.secondaryChart.metricIndices) || [];
+        const terIndices = (config.tertiaryChart && config.tertiaryChart.metricIndices) || [];
+        const allExcludedIndices = [...secIndices, ...terIndices];
 
         // PERFORMANCE: Batch chart updates
         const updates = [];
 
-        // Update trend chart
+        // Update primary trend chart (excluding secondary/tertiary metrics)
         if (charts.trend) {
             charts.trend.data.labels = labels;
-            CONFIG.METRICS.forEach((metric, index) => {
-                const values = chartData.map(d => d[metric.key]);
-                charts.trend.data.datasets[index].data = values;
+            let dsIdx = 0;
+            CONFIG.METRICS.forEach((metric, mIdx) => {
+                if (!allExcludedIndices.includes(mIdx)) {
+                    if (charts.trend.data.datasets[dsIdx]) {
+                        charts.trend.data.datasets[dsIdx].data = chartData.map(d => {
+                            const v = d[metric.key];
+                            return (v !== undefined && v !== null) ? v : null;
+                        });
+                    }
+                    dsIdx++;
+                }
             });
             updates.push(() => charts.trend.update('none'));
+        }
+
+        // Update secondary (room) chart
+        if (charts.room && config.secondaryChart) {
+            charts.room.data.labels = labels;
+            secIndices.forEach((mIdx, i) => {
+                const metric = CONFIG.METRICS[mIdx];
+                if (charts.room.data.datasets[i]) {
+                    charts.room.data.datasets[i].data = chartData.map(d => {
+                        const v = d[metric.key];
+                        return (v !== undefined && v !== null) ? v : null;
+                    });
+                }
+            });
+            updates.push(() => charts.room.update('none'));
+        }
+
+        // Update tertiary (holding room) chart
+        if (charts.room2 && config.tertiaryChart) {
+            charts.room2.data.labels = labels;
+            terIndices.forEach((mIdx, i) => {
+                const metric = CONFIG.METRICS[mIdx];
+                if (charts.room2.data.datasets[i]) {
+                    charts.room2.data.datasets[i].data = chartData.map(d => {
+                        const v = d[metric.key];
+                        return (v !== undefined && v !== null) ? v : null;
+                    });
+                }
+            });
+            updates.push(() => charts.room2.update('none'));
         }
 
         // Update comparison chart - average temperature
@@ -1376,7 +1662,8 @@ const CastingPerformanceCore = (config) => {
 
         if (data.length === 0) {
             const tr = document.createElement('tr');
-            const colspan = CONFIG.TABLE_COLUMNS.length + 1;
+            const extraCols = config.additionalMetrics ? config.additionalMetrics.length : 0;
+            const colspan = CONFIG.TABLE_COLUMNS.length + 1 + extraCols;
             tr.innerHTML = `<td colspan="${colspan}" style="text-align: center; padding: 15px; color: var(--text-light);">No data found</td>`;
             tbody.appendChild(tr);
             return;
@@ -1400,6 +1687,16 @@ const CastingPerformanceCore = (config) => {
                 const value = row[col.key];
                 cells += `<td style="padding: 6px; text-align: right; font-size: 11px; border-bottom: 1px solid var(--gray-border);">${value !== undefined ? value.toFixed(1) + '°C' : 'N/A'}</td>`;
             });
+
+            if (config.additionalMetrics) {
+                config.additionalMetrics.forEach(metric => {
+                    const raw = row[metric.key];
+                    const val = (raw !== undefined && raw !== null)
+                        ? (metric.divisor ? (metric.conditionalDivisor && raw >= 1000 ? raw : raw / metric.divisor) : raw)
+                        : undefined;
+                    cells += `<td style="padding: 6px; text-align: right; font-size: 11px; border-bottom: 1px solid var(--gray-border);">${val !== undefined ? val.toFixed(1) + ' L/min' : 'N/A'}</td>`;
+                });
+            }
 
             tr.innerHTML = cells;
             tbody.appendChild(tr);
@@ -1438,7 +1735,6 @@ const CastingPerformanceCore = (config) => {
     // Show error message
     function showError(message) {
         console.error('❌', message);
-        alert(message);
 
         const chartContainer = document.querySelector('.chart-wrapper');
         if (chartContainer) {
@@ -1473,6 +1769,7 @@ const CastingPerformanceCore = (config) => {
     }
 
     // Filter trend chart datasets
+    // Filter trend chart datasets (legacy - hides all except selected group)
     function filterTrendChart(filterType) {
         if (!charts.trend) return;
 
@@ -1485,7 +1782,35 @@ const CastingPerformanceCore = (config) => {
         });
 
         charts.trend.update();
-        console.log('📊 Trend chart filtered to:', filterType);
+    }
+
+    // Toggle a group of datasets in the trend chart without affecting others
+    function toggleTrendChartGroup(filterType, visible) {
+        if (!charts.trend) return;
+
+        const filterConfig = config.chartFilters || {};
+        const metricIndices = filterConfig[filterType] || [];
+        const secIndices = (config.secondaryChart && config.secondaryChart.metricIndices) || [];
+        const terIndices = (config.tertiaryChart && config.tertiaryChart.metricIndices) || [];
+        const allExcludedIndices = [...secIndices, ...terIndices];
+
+        // Build mapping from metric index to dataset index (primary chart only)
+        let dsIdx = 0;
+        const metricToDsMap = {};
+        CONFIG.METRICS.forEach((metric, mIdx) => {
+            if (!allExcludedIndices.includes(mIdx)) {
+                metricToDsMap[mIdx] = dsIdx++;
+            }
+        });
+
+        metricIndices.forEach(mIdx => {
+            const di = metricToDsMap[mIdx];
+            if (di !== undefined && charts.trend.data.datasets[di]) {
+                charts.trend.data.datasets[di].hidden = !visible;
+            }
+        });
+
+        charts.trend.update();
     }
 
     // Add a single data point to charts (for flowing animation)
@@ -1783,6 +2108,7 @@ const CastingPerformanceCore = (config) => {
         disableRealTime,
         filterTemperatureMetrics,
         filterTrendChart,
+        toggleTrendChartGroup,
         startSimulation,
         stopSimulation,
         setLpc
