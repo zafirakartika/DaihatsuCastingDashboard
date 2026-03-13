@@ -20,24 +20,38 @@ const CastingPerformanceTR = CastingPerformanceCore({
     },
 
     showIdPart: false,
-    trendDataLimit: 20,
+    trendDataLimit: 1000,
 
-    simulationMode: {
-        enabled: true,
-        intervalSeconds: 2
-    },
-
-    distributionConfig: {
-        useLastShotOnly: true,
-        lowerLimit: 200,
-        setPoint: 300,
-        upperLimit: 400
-    },
+    simulationMode: { enabled: false },
+    disableCycleFilter: true,
 
     chartConfig: {
-        yMin: 0,
-        yMax: 500,
-        tickCount: 11
+        yMin: 420,
+        yMax: 530,
+        tickCount: 12,
+        pointRadius: 3,
+        lowerLimit: 470,
+        upperLimit: 520
+    },
+
+    secondaryChart: {
+        metricIndices: [9],
+        canvasId: 'pressureRoomChart',
+        title: 'Pressure Room Temperature Trend',
+        yMin: 670,
+        yMax: 710,
+        tickCount: 9,
+        pointRadius: 3
+    },
+
+    tertiaryChart: {
+        metricIndices: [10],
+        canvasId: 'holdingRoomChart',
+        title: 'Holding Room Temperature Trend',
+        yMin: 670,
+        yMax: 710,
+        tickCount: 9,
+        pointRadius: 3
     },
 
     // 11 temperature metrics — shown in trend chart
@@ -57,14 +71,14 @@ const CastingPerformanceTR = CastingPerformanceCore({
 
     // 8 flow metrics — shown as cards only (not in temperature trend chart)
     additionalMetrics: [
-        { key: 'r_upper_sp_flow_1',          elementId: 'r-upper-sp-flow',   label: 'R Upper SP Flow'         },
-        { key: 'r_upper_flow_1',             elementId: 'r-upper-flow',      label: 'R Upper Flow'            },
-        { key: 'l_upper_sp_flow_1',          elementId: 'l-upper-sp-flow',   label: 'L Upper SP Flow'         },
-        { key: 'l_upper_flow_1',             elementId: 'l-upper-flow',      label: 'L Upper Flow'            },
-        { key: 'r_lower_cooling_air1_flow_1',elementId: 'r-cool-air1-flow',  label: 'R Lower Cool Air1 Flow'  },
-        { key: 'l_lower_cooling_air1_flow_1',elementId: 'l-cool-air1-flow',  label: 'L Lower Cool Air1 Flow'  },
-        { key: 'r_lower_cooling_air2_flow_1',elementId: 'r-cool-air2-flow',  label: 'R Lower Cool Air2 Flow'  },
-        { key: 'l_lower_cooling_air2_flow_1',elementId: 'l-cool-air2-flow',  label: 'L Lower Cool Air2 Flow'  }
+        { key: 'r_upper_sp_flow_1',          elementId: 'r-upper-sp-flow',   label: 'R Upper SP Flow',        divisor: 10 },
+        { key: 'r_upper_flow_1',             elementId: 'r-upper-flow',      label: 'R Upper Flow',           divisor: 10 },
+        { key: 'l_upper_sp_flow_1',          elementId: 'l-upper-sp-flow',   label: 'L Upper SP Flow',        divisor: 10 },
+        { key: 'l_upper_flow_1',             elementId: 'l-upper-flow',      label: 'L Upper Flow',           divisor: 10 },
+        { key: 'r_lower_cooling_air1_flow_1',elementId: 'r-cool-air1-flow',  label: 'R Lower Cool Air1 Flow', divisor: 10, conditionalDivisor: true },
+        { key: 'l_lower_cooling_air1_flow_1',elementId: 'l-cool-air1-flow',  label: 'L Lower Cool Air1 Flow', divisor: 10, conditionalDivisor: true },
+        { key: 'r_lower_cooling_air2_flow_1',elementId: 'r-cool-air2-flow',  label: 'R Lower Cool Air2 Flow', divisor: 10, conditionalDivisor: true },
+        { key: 'l_lower_cooling_air2_flow_1',elementId: 'l-cool-air2-flow',  label: 'L Lower Cool Air2 Flow', divisor: 10, conditionalDivisor: true }
     ],
 
     chartColors: {
@@ -78,7 +92,7 @@ const CastingPerformanceTR = CastingPerformanceCore({
         l_lower_main1_temp_1: '#2980B9',
         l_lower_main2_temp_1: '#85C1E2',
         pressure_room_temp_1: '#9B59B6',
-        hoolding_room_temp_1: '#8E44AD'
+        hoolding_room_temp_1: '#E67E22'
     },
 
     thresholds: {
