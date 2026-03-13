@@ -48,18 +48,36 @@ class CounterController extends Controller
             $query = DB::table($table)->where('id', '>', 1);
 
             if ($date) {
-                $query->whereDate('datetime', $date);
+                // Morning shift ends at ~20:55 on the selected date.
+                // Night shift ends at ~07:10 the NEXT day (21:00–07:00 spans midnight).
+                // So "night of date D" lives in the DB as DATE = D+1, hour = 7.
+                $nextDate = \Carbon\Carbon::parse($date)->addDay()->toDateString();
+
+                if ($shift === 'morning') {
+                    $query->whereDate('datetime', $date)->where('hour', 20);
+                } elseif ($shift === 'night') {
+                    $query->whereDate('datetime', $nextDate)->where('hour', 7);
+                } else {
+                    // All shifts: morning of $date  OR  night of $date (next-day record)
+                    $query->where(function ($q) use ($date, $nextDate) {
+                        $q->where(function ($q2) use ($date) {
+                            $q2->whereDate('datetime', $date)->where('hour', 20);
+                        })->orWhere(function ($q2) use ($nextDate) {
+                            $q2->whereDate('datetime', $nextDate)->where('hour', 7);
+                        });
+                    });
+                }
             } else {
                 if ($year)  $query->where('year', $year);
                 if ($month) $query->where('month', $month);
-            }
 
-            // Morning shift = records saved at 20:xx (end of morning shift)
-            // Night shift   = records saved at 07:xx (end of night shift)
-            if ($shift === 'morning') {
-                $query->where('hour', 20);
-            } elseif ($shift === 'night') {
-                $query->where('hour', 7);
+                // Morning shift = records saved at 20:xx (end of morning shift)
+                // Night shift   = records saved at 07:xx (end of night shift)
+                if ($shift === 'morning') {
+                    $query->where('hour', 20);
+                } elseif ($shift === 'night') {
+                    $query->where('hour', 7);
+                }
             }
 
             $records = $query->orderBy('datetime', 'desc')->limit(500)->get();

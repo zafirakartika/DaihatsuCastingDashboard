@@ -118,10 +118,6 @@
     <script src="{{ asset('js/casting-performance-core.js') }}"></script>
     <script src="{{ asset('js/casting-performance-kr-config.js') }}"></script>
     <script>
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            if(sidebar) sidebar.classList.toggle('active');
-        }
         function resetFilters() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('filter-date').value = today;

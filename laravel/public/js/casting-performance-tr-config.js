@@ -35,19 +35,9 @@ const CastingPerformanceTR = CastingPerformanceCore({
     },
 
     secondaryChart: {
-        metricIndices: [9],
+        metricIndices: [9, 10],
         canvasId: 'pressureRoomChart',
-        title: 'Pressure Room Temperature Trend',
-        yMin: 670,
-        yMax: 710,
-        tickCount: 9,
-        pointRadius: 3
-    },
-
-    tertiaryChart: {
-        metricIndices: [10],
-        canvasId: 'holdingRoomChart',
-        title: 'Holding Room Temperature Trend',
+        title: 'Pressure & Holding Room Temperature Trend',
         yMin: 670,
         yMax: 710,
         tickCount: 9,
@@ -75,10 +65,10 @@ const CastingPerformanceTR = CastingPerformanceCore({
         { key: 'r_upper_flow_1',             elementId: 'r-upper-flow',      label: 'R Upper Flow',           divisor: 10 },
         { key: 'l_upper_sp_flow_1',          elementId: 'l-upper-sp-flow',   label: 'L Upper SP Flow',        divisor: 10 },
         { key: 'l_upper_flow_1',             elementId: 'l-upper-flow',      label: 'L Upper Flow',           divisor: 10 },
-        { key: 'r_lower_cooling_air1_flow_1',elementId: 'r-cool-air1-flow',  label: 'R Lower Cool Air1 Flow', divisor: 10, conditionalDivisor: true },
-        { key: 'l_lower_cooling_air1_flow_1',elementId: 'l-cool-air1-flow',  label: 'L Lower Cool Air1 Flow', divisor: 10, conditionalDivisor: true },
-        { key: 'r_lower_cooling_air2_flow_1',elementId: 'r-cool-air2-flow',  label: 'R Lower Cool Air2 Flow', divisor: 10, conditionalDivisor: true },
-        { key: 'l_lower_cooling_air2_flow_1',elementId: 'l-cool-air2-flow',  label: 'L Lower Cool Air2 Flow', divisor: 10, conditionalDivisor: true }
+        { key: 'r_lower_cooling_air1_flow_1',elementId: 'r-cool-air1-flow',  label: 'R Lower Cool Air1 Flow' },
+        { key: 'l_lower_cooling_air1_flow_1',elementId: 'l-cool-air1-flow',  label: 'L Lower Cool Air1 Flow' },
+        { key: 'r_lower_cooling_air2_flow_1',elementId: 'r-cool-air2-flow',  label: 'R Lower Cool Air2 Flow' },
+        { key: 'l_lower_cooling_air2_flow_1',elementId: 'l-cool-air2-flow',  label: 'L Lower Cool Air2 Flow' }
     ],
 
     chartColors: {

@@ -112,7 +112,7 @@ class LPCHistory {
 
     // Column definitions per line
     static COLUMNS = {
-        tr:   [{ key: 'LPC1', label: 'LPC 1' }, { key: 'LPC2', label: 'LPC 2' }, { key: 'LPC3', label: 'LPC 3' }, { key: 'LPC4', label: 'LPC 4' }, { key: 'shellcore', label: 'Shellcore' }, { key: 'fin1', label: 'Fin1' }],
+        tr:   [{ key: 'LPC1', label: 'LPC 1' }, { key: 'LPC2', label: 'LPC 2' }, { key: 'LPC3', label: 'LPC 3' }, { key: 'LPC4', label: 'LPC 4' }, { key: 'LPC6', label: 'LPC 6' }, { key: 'shellcore', label: 'Shellcore' }, { key: 'fin1', label: 'Fin1' }],
         wa:   [{ key: 'LPC11', label: 'LPC 11' }, { key: 'shellcore', label: 'Shellcore' }, { key: 'fin1', label: 'Fin1' }],
         szkr: [{ key: 'LPC9', label: 'LPC 9' }, { key: 'shellcore', label: 'Shellcore' }, { key: 'fin1', label: 'Fin1' }],
         nr:   [{ key: 'LPC12', label: 'LPC 12' }, { key: 'LPC13', label: 'LPC 13' }, { key: 'LPC14', label: 'LPC 14' }, { key: 'shellcore', label: 'Shellcore' }, { key: 'fin1', label: 'Fin1' }],

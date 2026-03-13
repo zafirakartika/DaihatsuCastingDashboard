@@ -6,7 +6,9 @@
 /* Chart container sizing - prevent expansion and make compact */
 #tempTrendChart,
 #leftRightChart,
-#distributionChart {
+#distributionChart,
+#pressureRoomChart,
+#holdingRoomChart {
     max-width: 100% !important;
     max-height: 100% !important;
     display: block !important;
