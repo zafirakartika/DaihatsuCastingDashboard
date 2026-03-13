@@ -647,13 +647,13 @@ const CastingPerformanceCore = (config) => {
                                         type: 'line',
                                         scaleID: 'y',
                                         value: CONFIG.CHART_CONFIG.lowerLimit,
-                                        borderColor: 'rgba(52,152,219,0.9)',
+                                        borderColor: 'rgba(231,76,60,0.9)',
                                         borderWidth: 2,
                                         label: {
                                             content: `Min: ${CONFIG.CHART_CONFIG.lowerLimit}°C`,
                                             display: true,
-                                            position: 'start',
-                                            backgroundColor: 'rgba(52,152,219,0.85)',
+                                            position: 'end',
+                                            backgroundColor: 'rgba(231,76,60,0.85)',
                                             color: 'white',
                                             font: { size: 10 }
                                         }
@@ -662,13 +662,13 @@ const CastingPerformanceCore = (config) => {
                                         type: 'line',
                                         scaleID: 'y',
                                         value: CONFIG.CHART_CONFIG.upperLimit,
-                                        borderColor: 'rgba(46,204,113,0.9)',
+                                        borderColor: 'rgba(231,76,60,0.9)',
                                         borderWidth: 2,
                                         label: {
                                             content: `Max: ${CONFIG.CHART_CONFIG.upperLimit}°C`,
                                             display: true,
-                                            position: 'start',
-                                            backgroundColor: 'rgba(46,204,113,0.85)',
+                                            position: 'end',
+                                            backgroundColor: 'rgba(231,76,60,0.85)',
                                             color: 'white',
                                             font: { size: 10 }
                                         }
