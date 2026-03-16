@@ -27,7 +27,7 @@ const CastingPerformanceTR = CastingPerformanceCore({
 
     chartConfig: {
         yMin: 420,
-        yMax: 530,
+        yMax: 560,
         tickCount: 12,
         pointRadius: 3,
         lowerLimit: 470,
