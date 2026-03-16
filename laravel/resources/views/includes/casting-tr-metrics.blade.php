@@ -159,6 +159,30 @@
     </div>
 </div>
 
+{{-- Flow Charts (3 charts: SP Flow, Upper Flow, Air Flow) --}}
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+    <div class="chart-wrapper" style="padding: 12px;">
+        <div class="chart-title" style="margin-bottom: 10px; font-size: 15px;">Upper SP Flow Trend</div>
+        <div style="position: relative; height: 220px; width: 100%; overflow: hidden;">
+            <canvas id="spFlowChart"></canvas>
+        </div>
+    </div>
+    <div class="chart-wrapper" style="padding: 12px;">
+        <div class="chart-title" style="margin-bottom: 10px; font-size: 15px;">Upper Flow Trend</div>
+        <div style="position: relative; height: 220px; width: 100%; overflow: hidden;">
+            <canvas id="upperFlowChart"></canvas>
+        </div>
+    </div>
+</div>
+<div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px;">
+    <div class="chart-wrapper" style="padding: 12px;">
+        <div class="chart-title" style="margin-bottom: 10px; font-size: 15px;">Lower Cool Air Flow Trend</div>
+        <div style="position: relative; height: 220px; width: 100%; overflow: hidden;">
+            <canvas id="airFlowChart"></canvas>
+        </div>
+    </div>
+</div>
+
 {{-- Data Table --}}
 <div class="chart-wrapper" style="padding: 12px; margin-bottom: 8px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">

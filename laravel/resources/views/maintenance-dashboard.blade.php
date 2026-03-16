@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/daihatsu-logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/adm-logo.png') }}">
     <title>Maintenance Dashboard - SMART Factory</title>
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard-components.css') }}">
@@ -22,7 +22,7 @@
 <body>
     <div class="top-header">
         <div class="logo-section">
-            <img src="{{ asset('assets/images/daihatsu-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
+            <img src="{{ asset('assets/images/adm-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
         </div>
         <div class="header-center">
             <div class="monitoring-title">
@@ -33,7 +33,6 @@
         <div class="header-right">
             <div class="header-logos">
                 <img src="{{ asset('assets/images/icare.png') }}" alt="I CARE" class="company-logo">
-                <img src="{{ asset('assets/images/adm-unity.png') }}" alt="ADM Unity" class="company-logo">
             </div>
             <div class="datetime-display">
                 <div class="date-text" id="current-date"></div>

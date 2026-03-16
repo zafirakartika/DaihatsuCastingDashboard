@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/daihatsu-logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/adm-logo.png') }}">
     <title>Daihatsu Casting SMART Factory</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -336,7 +336,7 @@
     <!-- Top Header -->
     <div class="top-header">
         <div class="header-left">
-            <img src="{{ asset('assets/images/daihatsu-logo.png') }}" alt="Daihatsu" class="company-logo">
+            <img src="{{ asset('assets/images/adm-logo.png') }}" alt="Daihatsu" class="company-logo">
             <div class="header-title">
                 <h1>SMART FACTORY</h1>
                 <p>Casting Dashboard System</p>
@@ -344,8 +344,6 @@
         </div>
         <div class="header-right">
             <div class="header-logos">
-                <img src="{{ asset('assets/images/icare.png') }}" alt="I CARE">
-                <img src="{{ asset('assets/images/adm-unity.png') }}" alt="ADM Unity">
             </div>
             <div class="datetime-box">
                 <div class="time" id="live-time">00:00:00</div>

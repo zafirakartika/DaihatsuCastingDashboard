@@ -11,10 +11,7 @@ const CastingPerformance = CastingPerformanceCore({
     trendDataLimit: 20,
 
     // Real-time simulation mode (loops through existing data)
-    simulationMode: {
-        enabled: true,          // ✅ ENABLED - Data flows gradually with wave pattern!
-        intervalSeconds: 2      // New part (2 amplitude points) every 2 seconds
-    },
+    simulationMode: { enabled: false },
 
     // Distribution chart configuration for WA (Last Shot - single part)
     distributionConfig: {

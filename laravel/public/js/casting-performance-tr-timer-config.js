@@ -1,13 +1,11 @@
 /**
- * Casting Performance Configuration for TR Part
- * Updated to match actual tr_loger_lpcX table schema (LPC 1, 4, 6 confirmed)
+ * Casting Performance Configuration for TR Part — Time Data (tr_logger_lpc6_timer)
  */
 
-const CastingPerformanceTR = CastingPerformanceCore({
+const CastingPerformanceTRTimer = CastingPerformanceCore({
     partName: 'TR',
-    apiUrl: '/api/casting-data-tr',
+    apiUrl: '/api/casting-data-tr-timer',
 
-    // LPC selection for TR Line 1
     lpcOptions: {
         default: 6,
         options: [
@@ -44,7 +42,7 @@ const CastingPerformanceTR = CastingPerformanceCore({
         pointRadius: 3
     },
 
-    // 11 temperature metrics — shown in trend chart
+    // 11 temperature metrics
     metrics: [
         { key: 'r_lower_gate1_temp_1', elementId: 'r-gate1-temp',       label: 'R Lower Gate1 Temp' },
         { key: 'r_lower_gate2_temp_1', elementId: 'r-gate2-temp',       label: 'R Lower Gate2 Temp' },
@@ -59,7 +57,7 @@ const CastingPerformanceTR = CastingPerformanceCore({
         { key: 'hoolding_room_temp_1', elementId: 'holding-room-temp',  label: 'Holding Room Temp'  }
     ],
 
-    // 8 flow metrics — shown as cards only (not in temperature trend chart)
+    // 8 flow metrics
     additionalMetrics: [
         { key: 'r_upper_sp_flow_1',          elementId: 'r-upper-sp-flow',   label: 'R Upper SP Flow',        divisor: 10 },
         { key: 'r_upper_flow_1',             elementId: 'r-upper-flow',      label: 'R Upper Flow',           divisor: 10 },
@@ -100,31 +98,28 @@ const CastingPerformanceTR = CastingPerformanceCore({
     },
 
     tableColumns: [
-        { key: 'r_lower_gate1_temp_1', label: 'R Gate1 Temp'    },
-        { key: 'r_lower_gate2_temp_1', label: 'R Gate2 Temp'    },
-        { key: 'r_lower_main1_temp_1', label: 'R Main1 Temp'    },
-        { key: 'r_lower_main2_temp_1', label: 'R Main2 Temp'    },
-        { key: 'l_upper_main_temp_1',  label: 'L Upper Main'    },
-        { key: 'l_lower_gate1_temp_1', label: 'L Gate1 Temp'    },
-        { key: 'l_lower_gate2_temp_1', label: 'L Gate2 Temp'    },
-        { key: 'l_lower_main1_temp_1', label: 'L Main1 Temp'    },
-        { key: 'l_lower_main2_temp_1', label: 'L Main2 Temp'    },
-        { key: 'pressure_room_temp_1', label: 'Pres Room Temp'  },
-        { key: 'hoolding_room_temp_1', label: 'Hold Room Temp'  }
+        { key: 'r_lower_gate1_temp_1', label: 'R Gate1 Temp'   },
+        { key: 'r_lower_gate2_temp_1', label: 'R Gate2 Temp'   },
+        { key: 'r_lower_main1_temp_1', label: 'R Main1 Temp'   },
+        { key: 'r_lower_main2_temp_1', label: 'R Main2 Temp'   },
+        { key: 'l_upper_main_temp_1',  label: 'L Upper Main'   },
+        { key: 'l_lower_gate1_temp_1', label: 'L Gate1 Temp'   },
+        { key: 'l_lower_gate2_temp_1', label: 'L Gate2 Temp'   },
+        { key: 'l_lower_main1_temp_1', label: 'L Main1 Temp'   },
+        { key: 'l_lower_main2_temp_1', label: 'L Main2 Temp'   },
+        { key: 'pressure_room_temp_1', label: 'Pres Room Temp' },
+        { key: 'hoolding_room_temp_1', label: 'Hold Room Temp' }
     ],
 
-    // Dataset indices matching metrics array above (0–10)
     chartFilters: {
         all:   [0,1,2,3,4,5,6,7,8,9,10],
-        gate:  [0,1,5,6],          // r_gate1, r_gate2, l_gate1, l_gate2
-        main:  [2,3,4,7,8],        // r_main1, r_main2, l_upper_main, l_main1, l_main2
-        left:  [4,5,6,7,8],        // l_upper_main, l_gate1, l_gate2, l_main1, l_main2
-        right: [0,1,2,3],          // r_gate1, r_gate2, r_main1, r_main2
-        room:  [9,10]              // pressure_room, holding_room
+        gate:  [0,1,5,6],
+        main:  [2,3,4,7,8],
+        left:  [4,5,6,7,8],
+        right: [0,1,2,3],
+        room:  [9,10]
     },
 
-    // 3 flow charts — indices into additionalMetrics array (0-7)
-    // additionalMetrics: [0] r_upper_sp, [1] r_upper, [2] l_upper_sp, [3] l_upper, [4] r_cool_air1, [5] l_cool_air1, [6] r_cool_air2, [7] l_cool_air2
     additionalCharts: [
         {
             canvasId: 'spFlowChart',
@@ -152,7 +147,7 @@ const CastingPerformanceTR = CastingPerformanceCore({
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', CastingPerformanceTR.init);
+    document.addEventListener('DOMContentLoaded', CastingPerformanceTRTimer.init);
 } else {
-    CastingPerformanceTR.init();
+    CastingPerformanceTRTimer.init();
 }

@@ -24,6 +24,7 @@ Route::get('/lpc-counters', [PageController::class, 'lpcCounters'])->name('lpc-c
 // ============================================================
 Route::get('/general-alpc-tr', [PageController::class, 'generalAlpcTr'])->name('general-alpc-tr');
 Route::get('/casting-performance-tr', [PageController::class, 'castingPerformanceTr'])->name('casting-performance-tr');
+Route::get('/casting-performance-tr-timer', [PageController::class, 'castingPerformanceTrTimer'])->name('casting-performance-tr-timer');
 Route::get('/finishing-performance-tr', [PageController::class, 'finishingPerformanceTr'])->name('finishing-performance-tr');
 
 // ============================================================

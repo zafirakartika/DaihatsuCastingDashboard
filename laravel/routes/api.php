@@ -19,6 +19,9 @@ Route::get('/casting-data', [CastingDataController::class, 'handle']);
 // Casting data TR -- supports ?lpc=1..6&action=latest|trend|recent|statistics
 Route::get('/casting-data-tr', [CastingDataTrController::class, 'handle']);
 
+// Casting data TR Timer -- uses tr_logger_lpc6_timer table
+Route::get('/casting-data-tr-timer', [\App\Http\Controllers\Api\CastingDataTrTimerController::class, 'handle']);
+
 // General ALPC dashboard data -- supports ?line=wa|tr|3sz|kr|nr
 Route::get('/general-alpc', [GeneralAlpcController::class, 'handle']);
 

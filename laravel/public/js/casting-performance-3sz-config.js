@@ -14,10 +14,7 @@ const CastingPerformance = CastingPerformanceCore({
     trendDataLimit: 20,
 
     // Real-time simulation mode
-    simulationMode: {
-        enabled: true,
-        intervalSeconds: 2
-    },
+    simulationMode: { enabled: false },
 
     // Distribution chart configuration
     distributionConfig: {

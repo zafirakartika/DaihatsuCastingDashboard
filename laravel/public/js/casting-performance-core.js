@@ -83,7 +83,8 @@ const CastingPerformanceCore = (config) => {
             },
             cycleTimeSeconds: 312,
             shiftDurationHours: 8.75
-        }
+        },
+        additionalMetrics: config.additionalMetrics || []
     };
 
     // Chart instances
@@ -91,7 +92,8 @@ const CastingPerformanceCore = (config) => {
         trend: null,
         comparison: null,
         distribution: null,
-        room: null
+        room: null,
+        extra: []
     };
 
     // Store all table data for filtering
@@ -287,19 +289,24 @@ const CastingPerformanceCore = (config) => {
     function updateLatestCard(data) {
         if (!data) return;
 
-        CONFIG.METRICS.forEach(metric => {
+        const updateCard = (metric) => {
             const valueEl = document.getElementById(`metric-${metric.elementId}`);
             const statusEl = document.getElementById(`status-${metric.elementId}`);
-            const value = data[metric.key];
+            const rawValue = data[metric.key];
+            const value = (rawValue !== undefined && metric.divisor)
+                ? (metric.conditionalDivisor && rawValue >= 1000 ? rawValue : rawValue / metric.divisor)
+                : rawValue;
 
             if (valueEl && value !== undefined) {
                 valueEl.textContent = value.toFixed(1);
             }
-
             if (statusEl && value !== undefined) {
                 updateStatus(metric.elementId, value, statusEl);
             }
-        });
+        };
+
+        CONFIG.METRICS.forEach(updateCard);
+        CONFIG.additionalMetrics.forEach(updateCard);
     }
 
     // Helper function to update distribution chart
@@ -688,7 +695,7 @@ const CastingPerformanceCore = (config) => {
                                 scale.max = CONFIG.CHART_CONFIG.yMax;
                             },
                             ticks: {
-                                count: CONFIG.CHART_CONFIG.tickCount || 11,
+                                ...(CONFIG.CHART_CONFIG.stepSize ? { stepSize: CONFIG.CHART_CONFIG.stepSize } : { count: CONFIG.CHART_CONFIG.tickCount || 11 }),
                                 autoSkip: false,
                                 font: {
                                     size: 10
@@ -781,7 +788,7 @@ const CastingPerformanceCore = (config) => {
                                 display: false
                             },
                             ticks: {
-                                count: CONFIG.CHART_CONFIG.tickCount || 11,
+                                ...(CONFIG.CHART_CONFIG.stepSize ? { stepSize: CONFIG.CHART_CONFIG.stepSize } : { count: CONFIG.CHART_CONFIG.tickCount || 11 }),
                                 autoSkip: false,
                                 font: { size: 9 }
                             },
@@ -1085,6 +1092,74 @@ const CastingPerformanceCore = (config) => {
                 });
             }
         }
+
+        // Additional flow charts (additionalCharts config)
+        const additionalCharts = config.additionalCharts || [];
+        additionalCharts.forEach((chartCfg, i) => {
+            const ctx = document.getElementById(chartCfg.canvasId);
+            if (!ctx) return;
+            const pr = chartCfg.pointRadius !== undefined ? chartCfg.pointRadius : 2;
+            const datasets = chartCfg.metricIndices.map((mIdx, di) => {
+                const metric = CONFIG.additionalMetrics[mIdx];
+                return {
+                    label: metric.label,
+                    data: [],
+                    borderColor: chartCfg.colors ? chartCfg.colors[di] : '#27AE60',
+                    backgroundColor: 'transparent',
+                    tension: 0.1,
+                    borderWidth: 2,
+                    pointRadius: pr,
+                    pointHoverRadius: pr + 2,
+                    fill: false,
+                    spanGaps: false
+                };
+            });
+            charts.extra[i] = new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: { labels: [], datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { position: 'top', labels: { usePointStyle: true, padding: 15, font: { size: 11 } } },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + ' ' + (chartCfg.unit || 'L/min');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            min: chartCfg.yMin,
+                            max: chartCfg.yMax,
+                            grace: 0,
+                            afterDataLimits: (scale) => { scale.min = chartCfg.yMin; scale.max = chartCfg.yMax; },
+                            ticks: {
+                                ...(chartCfg.stepSize ? { stepSize: chartCfg.stepSize } : { count: chartCfg.tickCount || 7 }),
+                                autoSkip: false,
+                                font: { size: 10 },
+                                padding: 8,
+                                callback: function(v) { return v + ' ' + (chartCfg.unit || 'L/min'); }
+                            },
+                            title: { display: true, text: chartCfg.unit || 'L/min', font: { size: 12, weight: 'bold' } },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Time', font: { size: 12, weight: 'bold' } },
+                            grid: { display: true, color: 'rgba(0,0,0,0.05)' },
+                            ticks: { autoSkip: true, maxTicksLimit: 20, maxRotation: 45, minRotation: 45, font: { size: 9 } }
+                        }
+                    }
+                }
+            });
+        });
     }
 
     // PERFORMANCE OPTIMIZED: Create dataset with minimal configuration
@@ -1395,6 +1470,9 @@ const CastingPerformanceCore = (config) => {
             charts.room2.data.datasets.forEach(ds => { ds.data = []; });
             charts.room2.update('none');
         }
+        charts.extra.forEach(c => {
+            if (c) { c.data.labels = []; c.data.datasets.forEach(ds => { ds.data = []; }); c.update('none'); }
+        });
 
         // Clear table
         const tbody = document.getElementById('data-table-body');
@@ -1546,6 +1624,24 @@ const CastingPerformanceCore = (config) => {
             });
             updates.push(() => charts.room2.update('none'));
         }
+
+        // Update additional flow charts
+        (config.additionalCharts || []).forEach((chartCfg, i) => {
+            const chart = charts.extra[i];
+            if (!chart) return;
+            chart.data.labels = labels;
+            chartCfg.metricIndices.forEach((mIdx, di) => {
+                const metric = CONFIG.additionalMetrics[mIdx];
+                if (chart.data.datasets[di]) {
+                    chart.data.datasets[di].data = chartData.map(d => {
+                        const raw = d[metric.key];
+                        if (raw === undefined || raw === null) return null;
+                        return (metric.divisor) ? (metric.conditionalDivisor && raw >= 1000 ? raw : raw / metric.divisor) : raw;
+                    });
+                }
+            });
+            updates.push(() => chart.update('none'));
+        });
 
         // Update comparison chart - average temperature
         if (charts.comparison) {
@@ -2006,6 +2102,26 @@ const CastingPerformanceCore = (config) => {
                 }
             }
         }
+
+        // Update additional flow charts (real-time)
+        (config.additionalCharts || []).forEach((chartCfg, i) => {
+            const chart = charts.extra[i];
+            if (!chart) return;
+            chart.data.labels.push(baseLabel);
+            chartCfg.metricIndices.forEach((mIdx, di) => {
+                const metric = CONFIG.additionalMetrics[mIdx];
+                const raw = record[metric.key];
+                const value = (raw !== undefined && metric.divisor)
+                    ? (metric.conditionalDivisor && raw >= 1000 ? raw : raw / metric.divisor)
+                    : raw;
+                if (chart.data.datasets[di]) chart.data.datasets[di].data.push(value !== undefined ? value : null);
+            });
+            if (chart.data.labels.length > MAX_VISIBLE_POINTS) {
+                chart.data.labels.shift();
+                chart.data.datasets.forEach(ds => ds.data.shift());
+            }
+            chart.update('none');
+        });
 
         // Instant update for smooth real-time feel
         charts.trend.update('none');

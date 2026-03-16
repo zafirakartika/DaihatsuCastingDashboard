@@ -2,11 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ asset('assets/images/adm-logo.png') }}">
-    <title>Casting Performance - ALPC NR</title>
+    <title>Casting Performance (Time Data) - ALPC TR</title>
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/casting-performance.css') }}">
     <style>
@@ -41,18 +39,21 @@
         .c-hist-loading{text-align:center;padding:50px 20px;color:#3498db;font-size:13px}
     </style>
 </head>
+
 <body>
     <div class="top-header">
         <div class="logo-section">
             <div class="hamburger-menu" onclick="toggleSidebar()">
-                <div class="hamburger-line"></div><div class="hamburger-line"></div><div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
             </div>
             <img src="{{ asset('assets/images/adm-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
         </div>
         <div class="header-center">
             <div class="monitoring-title">
-                <span class="monitoring-text">Casting Performance</span>
-                <div class="monitoring-subtitle">ALPC NR - Real-Time Monitoring</div>
+                <span class="monitoring-text">Casting Performance (Time Data)</span>
+                <div class="monitoring-subtitle">ALPC TR - Real-Time Monitoring</div>
             </div>
         </div>
         <div class="header-right">
@@ -65,23 +66,28 @@
             </div>
         </div>
     </div>
+
     <div class="dashboard-container">
         @include('includes.sidebar')
+
         <div class="main-content">
             <div class="content-header" style="margin-bottom: 12px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                     <div class="page-title" style="font-size: 32px; font-weight: 700; color: var(--accent-navy); text-shadow: 2px 2px 4px rgba(13, 59, 102, 0.1); border-left: 5px solid var(--accent-blue); padding-left: 15px; margin-bottom: 0;">
-                        Casting Performance - ALPC NR
+                        Casting Performance (Time Data) - ALPC TR
                     </div>
                 </div>
                 <div class="filter-controls" style="display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap;">
                     <div style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 8px; border: 2px solid #e9ecef; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                         <span style="font-size: 12px; font-weight: 600; color: #555;">Current Shift:</span>
-                        <span id="current-shift-display" style="padding: 6px 14px; font-size: 12px; font-weight: 700; border-radius: 6px; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);">Morning</span>
+                        <span id="current-shift-display" style="padding: 6px 14px; font-size: 12px; font-weight: 700; border-radius: 6px; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);">
+                            Morning
+                        </span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 8px; border: 2px solid #e9ecef; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                         <span style="font-size: 12px; font-weight: 600; color: #555;">Real-Time Monitor:</span>
-                        <button id="toggle-realtime" onclick="toggleRealTimeMonitoring()" style="padding: 8px 16px; font-size: 12px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s; background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);">
+                        <button id="toggle-realtime" onclick="toggleRealTimeMonitoring()"
+                                style="padding: 8px 16px; font-size: 12px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition: all 0.3s; background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white; box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);">
                             <span id="toggle-status">ON</span>
                         </button>
                     </div>
@@ -91,107 +97,122 @@
                     </button>
                 </div>
             </div>
+
+            {{-- Filter Bar: LPC + Date + Shift --}}
             <div class="filter-section" style="margin-bottom: 8px; gap: 8px; display: flex; flex-wrap: wrap; align-items: center;">
-                {{-- NR LPC dropdown (LPCs 12, 13, 14) --}}
+                {{-- LPC group --}}
                 <span style="font-size: 12px; font-weight: 700; color: #2980b9;">LPC:</span>
                 <select id="lpc-select" style="padding: 6px 10px; font-size: 12px; font-weight: 600; border: 1px solid #bcd5e8; border-radius: 6px; background: #fff; color: #2c3e50; cursor: pointer;">
-                    <option value="12">LPC 12</option>
-                    <option value="13">LPC 13</option>
-                    <option value="14">LPC 14</option>
+                    <option value="1">LPC 1</option>
+                    <option value="2">LPC 2</option>
+                    <option value="3">LPC 3</option>
+                    <option value="4">LPC 4</option>
+                    <option value="6" selected>LPC 6</option>
                 </select>
                 <button onclick="applyLpc()" style="padding: 6px 12px; font-size: 12px; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; background: linear-gradient(135deg, #2980b9 0%, #1a6fa0 100%); color: #fff; box-shadow: 0 2px 6px rgba(41,128,185,0.3);">
                     Apply LPC
                 </button>
                 <span id="active-lpc-badge" style="padding: 4px 12px; font-size: 12px; font-weight: 700; border-radius: 20px; background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: #fff;">
-                    Active: LPC 12
+                    Active: LPC 6
                 </span>
                 <div style="width: 1px; height: 24px; background: #ddd; margin: 0 4px;"></div>
-                <div class="filter-label" style="font-size: 12px; font-weight: 600;">Date:</div>
+                <span class="filter-label" style="font-size: 12px; font-weight: 600;">Date:</span>
                 <input type="date" id="filter-date" class="filter-input" style="padding: 6px; font-size: 12px;">
-                <div class="filter-label" style="font-size: 12px; font-weight: 600;">Shift:</div>
+                <span class="filter-label" style="font-size: 12px; font-weight: 600;">Shift:</span>
                 <select id="filter-shift" class="filter-input" style="padding: 6px; font-size: 12px;">
                     <option value="auto">Auto (Current Shift)</option>
                     <option value="morning">Morning (07:15 - 16:00)</option>
                     <option value="night">Night (19:00 - 06:00)</option>
                 </select>
-                <button class="filter-btn active" onclick="CastingPerformance.loadAllData()" style="padding: 6px 14px; font-size: 12px;">Apply Filter</button>
+                <button class="filter-btn active" onclick="CastingPerformanceTRTimer.loadAllData()" style="padding: 6px 14px; font-size: 12px;">Apply Filter</button>
                 <button class="filter-btn" onclick="resetFilters()" style="padding: 6px 10px; font-size: 12px; background: var(--gray-light); color: var(--text-dark);">Reset</button>
             </div>
 
-            <div id="casting-metrics-container">
-                <div style="text-align: center; padding: 40px; color: #999;">Loading casting performance data...</div>
+            @include('includes.casting-tr-metrics')
+            <div class="refresh-info" style="font-size: 12px; padding: 5px 0; color: var(--text-light);">
+                Last updated: <span id="last-update">--:--:--</span> | Auto-refresh: <span id="refresh-status">60s</span>
             </div>
-            <div class="refresh-info" style="font-size: 12px; padding: 5px 0; color: var(--text-light);">Last updated: <span id="last-update">--:--:--</span> | Auto-refresh: <span id="refresh-status">60s</span></div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
-    <script src="{{ asset('js/casting-performance-core.js') }}"></script>
-    <script src="{{ asset('js/casting-performance-nr-config.js') }}"></script>
+
+    <script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/casting-performance-core.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/casting-performance-tr-timer-config.js') }}?v={{ time() }}"></script>
+
     <script>
         function applyLpc() {
             const lpcSelect = document.getElementById('lpc-select');
             const badge = document.getElementById('active-lpc-badge');
             if (!lpcSelect) return;
             const lpc = parseInt(lpcSelect.value, 10);
+            if (typeof CastingPerformanceTRTimer !== 'undefined') {
+                CastingPerformanceTRTimer.setLpc(lpc);
+                CastingPerformanceTRTimer.loadAllData();
+            }
             if (badge) badge.textContent = 'Active: LPC ' + lpc;
-            if (typeof CastingPerformance !== 'undefined') CastingPerformance.loadAllData();
         }
 
         function resetFilters() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('filter-date').value = today;
             document.getElementById('filter-shift').value = 'auto';
-            if (typeof CastingPerformance !== 'undefined') CastingPerformance.loadAllData();
+
+            const allRadio = document.querySelector('input[name="temp-trend-filter"][value="all"]');
+            if (allRadio) allRadio.checked = true;
+
+            if (typeof CastingPerformanceTRTimer !== 'undefined') {
+                CastingPerformanceTRTimer.filterTemperatureMetrics('all');
+                CastingPerformanceTRTimer.filterTrendChart('all');
+                CastingPerformanceTRTimer.loadAllData();
+            }
         }
+
         window.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
             const dateInput = document.getElementById('filter-date');
-            if(dateInput) dateInput.value = today;
+            if (dateInput) dateInput.value = today;
+
             const shiftInput = document.getElementById('filter-shift');
-            if(shiftInput) shiftInput.value = 'auto';
+            if (shiftInput) shiftInput.value = 'auto';
         });
+
         let isRealTimeEnabled = true;
+
         function toggleRealTimeMonitoring() {
             isRealTimeEnabled = !isRealTimeEnabled;
             const toggleBtn = document.getElementById('toggle-realtime');
             const statusText = document.getElementById('toggle-status');
             const refreshStatus = document.getElementById('refresh-status');
+
             if (isRealTimeEnabled) {
-                toggleBtn.style.background = 'linear-gradient(135deg, #27ae60 0%, #229954 100%)';
+                toggleBtn.style.background = '#27ae60';
                 statusText.textContent = 'ON';
-                if(refreshStatus) refreshStatus.textContent = '2s';
-                if (typeof CastingPerformance !== 'undefined') CastingPerformance.loadAllData();
+                if (refreshStatus) refreshStatus.textContent = '3s';
+                if (typeof CastingPerformanceTRTimer !== 'undefined') CastingPerformanceTRTimer.startSimulation(3);
             } else {
-                toggleBtn.style.background = 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';
+                toggleBtn.style.background = '#e74c3c';
                 statusText.textContent = 'OFF';
-                if(refreshStatus) refreshStatus.textContent = 'Paused';
-                if (typeof CastingPerformance !== 'undefined') CastingPerformance.stopSimulation();
+                if (refreshStatus) refreshStatus.textContent = 'Paused';
+                if (typeof CastingPerformanceTRTimer !== 'undefined') CastingPerformanceTRTimer.stopSimulation();
             }
         }
     </script>
 
-    <!-- Casting History Modal - NR -->
+    <!-- Casting History Modal - TR Timer -->
     <div class="c-hist-overlay" id="c-hist-overlay" onclick="if(event.target===this)castingHistory.close()">
         <div class="c-hist-modal">
             <div class="c-hist-header">
                 <div>
-                    <h2>📋 Casting Temperature History — ALPC NR</h2>
-                    <p>Temperature records from database | Select LPC and date to view data</p>
+                    <h2>Casting Temperature History — ALPC TR (Time Data)</h2>
+                    <p>Temperature records from tr_logger_lpc6_timer | Select date to view data</p>
                 </div>
                 <button class="c-hist-close" onclick="castingHistory.close()">✕</button>
             </div>
             <div class="c-hist-filters">
-                <div class="c-hist-fg">
-                    <label>LPC</label>
-                    <select id="hist-lpc">
-                        <option value="12">LPC 12</option>
-                        <option value="13">LPC 13</option>
-                        <option value="14">LPC 14</option>
-                    </select>
-                </div>
                 <div class="c-hist-fg">
                     <label>Date</label>
                     <input type="date" id="hist-date">
@@ -220,19 +241,18 @@
 
     <script>
     const castingHistory = {
-        apiUrl: '/api/casting-data',
-        dateField: 'datetime_stamp',
+        apiUrl: '/api/casting-data-tr-timer',
+        dateField: 'datetime',
         currentData: [],
         columns: [
-            {key:'r_lower_gate1',label:'R Lower Gate 1'},{key:'r_lower_main1',label:'R Lower Main 1'},
-            {key:'l_lower_gate1',label:'L Lower Gate 1'},{key:'l_lower_main1',label:'L Lower Main 1'},
-            {key:'cooling_water',label:'Cooling Water'}
+            {key:'r_lower_gate1_temp_1',label:'R Gate1 Temp'},{key:'r_lower_gate2_temp_1',label:'R Gate2 Temp'},
+            {key:'r_lower_main1_temp_1',label:'R Main1 Temp'},{key:'r_lower_main2_temp_1',label:'R Main2 Temp'},
+            {key:'l_upper_main_temp_1', label:'L Up Main Temp'},
+            {key:'l_lower_gate1_temp_1',label:'L Gate1 Temp'},{key:'l_lower_gate2_temp_1',label:'L Gate2 Temp'},
+            {key:'l_lower_main1_temp_1',label:'L Main1 Temp'},{key:'l_lower_main2_temp_1',label:'L Main2 Temp'},
+            {key:'pressure_room_temp_1',label:'Pres Room Temp'},{key:'hoolding_room_temp_1',label:'Hold Room Temp'}
         ],
         open() {
-            const badge = document.getElementById('active-lpc-badge');
-            const lpcText = badge ? badge.textContent.replace('Active: LPC','').trim() : '12';
-            const histLpc = document.getElementById('hist-lpc');
-            if (histLpc) histLpc.value = lpcText;
             const activeDate = document.getElementById('filter-date')?.value;
             const histDate = document.getElementById('hist-date');
             if (activeDate && histDate) histDate.value = activeDate;
@@ -243,19 +263,18 @@
             const area = document.getElementById('hist-table-area');
             const meta = document.getElementById('hist-meta');
             area.innerHTML = '<div class="c-hist-loading">Loading...</div>';
-            const lpc = document.getElementById('hist-lpc')?.value || 12;
             const date = document.getElementById('hist-date')?.value || new Date().toISOString().split('T')[0];
             const shift = document.getElementById('hist-shift')?.value || 'all';
             let st = '00:00:00', et = '23:59:59';
             if (shift === 'morning') { st = '07:15:00'; et = '16:00:00'; }
             else if (shift === 'night') { st = '19:00:00'; et = '06:00:00'; }
             try {
-                const params = new URLSearchParams({action:'trend',lpc,date,start_time:st,end_time:et,limit:500});
+                const params = new URLSearchParams({action:'trend', date, start_time:st, end_time:et, limit:500});
                 const res = await fetch(`${this.apiUrl}?${params}`);
                 const json = await res.json();
                 if (json.status === 'success' && json.data?.length) {
                     this.currentData = json.data;
-                    meta.textContent = `${json.data.length} records — LPC ${lpc} | ${date} | ${shift === 'all' ? 'All Shifts' : shift}`;
+                    meta.textContent = `${json.data.length} records — ${date} | ${shift === 'all' ? 'All Shifts' : shift}`;
                     area.innerHTML = this._renderTable(json.data);
                     document.getElementById('hist-csv-btn').disabled = false;
                 } else {
@@ -288,7 +307,6 @@
         },
         download() {
             if (!this.currentData.length) return;
-            const lpc = document.getElementById('hist-lpc')?.value || '';
             const date = document.getElementById('hist-date')?.value || '';
             const headers = ['Datetime',...this.columns.map(c=>c.label)];
             const rows = this.currentData.map(r => {
@@ -298,7 +316,7 @@
             const csv = [headers,...rows].map(r=>r.join(',')).join('\n');
             const a = document.createElement('a');
             a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-            a.download = `casting-nr-lpc${lpc}-${date}.csv`;
+            a.download = `casting-tr-timer-${date}.csv`;
             a.click();
         }
     };

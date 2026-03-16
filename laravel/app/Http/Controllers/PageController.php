@@ -41,6 +41,11 @@ class PageController extends Controller
         return view('casting-performance-tr', ['current_page' => 'casting-performance-tr']);
     }
 
+    public function castingPerformanceTrTimer()
+    {
+        return view('casting-performance-tr-timer', ['current_page' => 'casting-performance-tr-timer']);
+    }
+
     public function finishingPerformanceTr()
     {
         return view('finishing-performance-tr', ['current_page' => 'finishing-performance-tr']);

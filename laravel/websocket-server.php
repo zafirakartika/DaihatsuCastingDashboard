@@ -71,7 +71,7 @@ class PusherServer implements MessageComponentInterface {
         $this->subscriptions[$channel]->attach($conn);
 
         echo "📢 Client {$conn->resourceId} subscribed to: {$channel}\n";
-
+  
         // Send subscription succeeded
         $conn->send(json_encode([
             'event' => 'pusher_internal:subscription_succeeded',

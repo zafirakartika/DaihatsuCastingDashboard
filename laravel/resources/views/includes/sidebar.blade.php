@@ -29,18 +29,18 @@
         @php
             $alpcActive = request()->routeIs(
                 'alpc-overview','lpc-counters',
-                'general-alpc-tr','casting-performance-tr','finishing-performance-tr',
+                'general-alpc-tr','casting-performance-tr','casting-performance-tr-timer','finishing-performance-tr',
                 'general-alpc-3sz','casting-performance-3sz','finishing-performance-3sz',
                 'general-alpc-kr','casting-performance-kr','finishing-performance-kr',
                 'general-alpc-nr','casting-performance-nr','finishing-performance-nr',
                 'general-alpc-wa','casting-performance-wa','finishing-performance-wa'
             );
             $line1Active = request()->routeIs(
-                'general-alpc-tr','casting-performance-tr','finishing-performance-tr',
+                'general-alpc-tr','casting-performance-tr','casting-performance-tr-timer','finishing-performance-tr',
                 'general-alpc-3sz','casting-performance-3sz','finishing-performance-3sz',
                 'general-alpc-kr','casting-performance-kr','finishing-performance-kr'
             );
-            $trActive    = request()->routeIs('general-alpc-tr','casting-performance-tr','finishing-performance-tr');
+            $trActive    = request()->routeIs('general-alpc-tr','casting-performance-tr','casting-performance-tr-timer','finishing-performance-tr');
             $szActive    = request()->routeIs('general-alpc-3sz','casting-performance-3sz','finishing-performance-3sz');
             $krActive    = request()->routeIs('general-alpc-kr','casting-performance-kr','finishing-performance-kr');
             $line2Active = request()->routeIs(
@@ -84,8 +84,19 @@
                 <div class="nested-submenu {{ $trActive ? 'expanded' : '' }}" id="submenu-alpc-tr">
                     <div class="nested-submenu-child {{ request()->routeIs('general-alpc-tr') ? 'active' : '' }}"
                          onclick="location.href='{{ route('general-alpc-tr') }}'">General ALPC TR</div>
-                    <div class="nested-submenu-child {{ request()->routeIs('casting-performance-tr') ? 'active' : '' }}"
-                         onclick="location.href='{{ route('casting-performance-tr') }}'">Casting Performance</div>
+                    {{-- Casting Performance sub-dropdown --}}
+                    @php $castingTrActive = request()->routeIs('casting-performance-tr','casting-performance-tr-timer'); @endphp
+                    <div class="nested-submenu-child clickable {{ $castingTrActive ? 'active' : '' }}"
+                         onclick="event.stopPropagation(); toggleSubmenu('casting-tr')">
+                        <span>Casting Performance</span>
+                        <span class="expand-icon {{ $castingTrActive ? 'expanded' : '' }}" id="expand-casting-tr">▼</span>
+                    </div>
+                    <div class="nested-submenu {{ $castingTrActive ? 'expanded' : '' }}" id="submenu-casting-tr">
+                        <div class="nested-submenu-child {{ request()->routeIs('casting-performance-tr') ? 'active' : '' }}"
+                             onclick="location.href='{{ route('casting-performance-tr') }}'">Shot Data</div>
+                        <div class="nested-submenu-child {{ request()->routeIs('casting-performance-tr-timer') ? 'active' : '' }}"
+                             onclick="location.href='{{ route('casting-performance-tr-timer') }}'">Time Data</div>
+                    </div>
                     <div class="nested-submenu-child {{ request()->routeIs('finishing-performance-tr') ? 'active' : '' }}"
                          onclick="location.href='{{ route('finishing-performance-tr') }}'">Finishing Performance</div>
                 </div>
