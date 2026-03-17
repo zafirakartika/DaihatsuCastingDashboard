@@ -18,7 +18,7 @@ const CastingPerformanceTRTimer = CastingPerformanceCore({
     },
 
     showIdPart: false,
-    trendDataLimit: 1000,
+    trendDataLimit: 5000,
 
     simulationMode: { enabled: false },
     disableCycleFilter: true,

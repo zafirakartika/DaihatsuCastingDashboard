@@ -121,7 +121,7 @@
                 <span class="filter-label" style="font-size: 12px; font-weight: 600;">Shift:</span>
                 <select id="filter-shift" class="filter-input" style="padding: 6px; font-size: 12px;">
                     <option value="auto">Auto (Current Shift)</option>
-                    <option value="morning">Morning (07:15 - 16:00)</option>
+                    <option value="morning">Morning (07:15 - 19:00)</option>
                     <option value="night">Night (19:00 - 06:00)</option>
                 </select>
                 <button class="filter-btn active" onclick="CastingPerformanceTRTimer.loadAllData()" style="padding: 6px 14px; font-size: 12px;">Apply Filter</button>

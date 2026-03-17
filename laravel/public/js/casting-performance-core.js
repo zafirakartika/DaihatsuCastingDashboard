@@ -128,9 +128,9 @@ const CastingPerformanceCore = (config) => {
         const minutes = now.getMinutes();
         const timeInMinutes = hours * 60 + minutes;
 
-        // Morning shift: 07:15 - 20:50 (435 - 1250 minutes)
-        // Night shift: 21:00 - 07:00 (1260 minutes onwards, or 0 - 420 minutes)
-        if (timeInMinutes >= 435 && timeInMinutes < 1260) {
+        // Morning shift: 07:15 - 19:00 (435 - 1140 minutes)
+        // Night shift: 19:00 - 06:00 (1140 minutes onwards, or 0 - 435 minutes)
+        if (timeInMinutes >= 435 && timeInMinutes < 1140) {
             return 'morning';
         } else {
             return 'night';
@@ -140,9 +140,9 @@ const CastingPerformanceCore = (config) => {
     // Get shift time range
     function getShiftTimeRange(shift) {
         if (shift === 'morning') {
-            return { start: '07:15:00', end: '20:50:00' };
+            return { start: '07:15:00', end: '19:00:00' };
         } else if (shift === 'night') {
-            return { start: '21:00:00', end: '07:00:00' };
+            return { start: '19:00:00', end: '06:00:00' };
         }
         return null;
     }
