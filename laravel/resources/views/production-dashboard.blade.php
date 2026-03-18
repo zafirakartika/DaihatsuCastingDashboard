@@ -277,7 +277,7 @@
                 <div class="hamburger-line"></div>
                 <div class="hamburger-line"></div>
             </div>
-            <img src="{{ asset('assets/images/adm-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
+            <img src="{{ asset('assets/images/daihatsu-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
         </div>
         <div class="header-center">
             <div class="monitoring-title">
@@ -287,6 +287,7 @@
         </div>
         <div class="header-right">
             <div class="header-logos">
+                <img src="{{ asset('assets/images/adm-logo.png') }}" alt="ADM" class="company-logo">
                 <img src="{{ asset('assets/images/icare.png') }}" alt="I CARE" class="company-logo">
             </div>
             <div class="datetime-display">
@@ -317,7 +318,7 @@
                             <span>Overall OEE</span>
                         </div>
                     </div>
-                    <div class="card-value good">89.4%</div>
+                    <div class="card-value good">-</div>
                     <div class="card-label">Overall Equipment Effectiveness</div>
                 </div>
 
@@ -328,7 +329,7 @@
                             <span>Performance</span>
                         </div>
                     </div>
-                    <div class="card-value good">94.1%</div>
+                    <div class="card-value good">-</div>
                     <div class="card-label">Production Performance Rate</div>
                 </div>
 
@@ -339,7 +340,7 @@
                             <span>Quality</span>
                         </div>
                     </div>
-                    <div class="card-value good">96.3%</div>
+                    <div class="card-value good">-</div>
                     <div class="card-label">Quality Rate</div>
                 </div>
 
@@ -350,7 +351,7 @@
                             <span>Availability</span>
                         </div>
                     </div>
-                    <div class="card-value warning">90.8%</div>
+                    <div class="card-value warning">-</div>
                     <div class="card-label">Machine Availability</div>
                 </div>
 
@@ -361,7 +362,7 @@
                             <span>Active LPCs</span>
                         </div>
                     </div>
-                    <div class="card-value">11</div>
+                    <div class="card-value">-</div>
                     <div class="card-label">Total Production Lines</div>
                 </div>
 
@@ -372,7 +373,7 @@
                             <span>Parts Today</span>
                         </div>
                     </div>
-                    <div class="card-value">15,847</div>
+                    <div class="card-value">-</div>
                     <div class="card-label">Total Parts Produced</div>
                 </div>
             </div>

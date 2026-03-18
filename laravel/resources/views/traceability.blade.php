@@ -218,7 +218,7 @@
                 <div class="hamburger-line"></div>
                 <div class="hamburger-line"></div>
             </div>
-            <img src="{{ asset('assets/images/adm-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
+            <img src="{{ asset('assets/images/daihatsu-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
         </div>
         <div class="header-center">
             <div class="monitoring-title">

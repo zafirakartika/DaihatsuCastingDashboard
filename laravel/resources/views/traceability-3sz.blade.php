@@ -13,7 +13,7 @@
     <div class="top-header">
         <div class="logo-section">
             <div class="hamburger-menu" onclick="toggleSidebar()"><div class="hamburger-line"></div><div class="hamburger-line"></div><div class="hamburger-line"></div></div>
-            <img src="{{ asset('assets/images/adm-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
+            <img src="{{ asset('assets/images/daihatsu-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
         </div>
         <div class="header-center">
             <div class="monitoring-title">
@@ -23,6 +23,7 @@
         </div>
         <div class="header-right">
             <div class="header-logos">
+                <img src="{{ asset('assets/images/adm-logo.png') }}" alt="ADM" class="company-logo">
                 <img src="{{ asset('assets/images/icare.png') }}" alt="I CARE" class="company-logo">
             </div>
             <div class="datetime-display">

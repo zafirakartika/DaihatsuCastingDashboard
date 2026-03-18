@@ -640,7 +640,7 @@
                 <div class="hamburger-line"></div>
                 <div class="hamburger-line"></div>
             </div>
-            <img src="{{ asset('assets/images/adm-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
+            <img src="{{ asset('assets/images/daihatsu-logo.png') }}" alt="Daihatsu Logo" class="company-logo">
         </div>
         <div class="header-center">
             <div class="monitoring-title">
@@ -650,6 +650,7 @@
         </div>
         <div class="header-right">
             <div class="header-logos">
+                <img src="{{ asset('assets/images/adm-logo.png') }}" alt="ADM" class="company-logo">
                 <img src="{{ asset('assets/images/icare.png') }}" alt="I CARE" class="company-logo">
             </div>
             <div class="datetime-display">
@@ -671,19 +672,19 @@
 
             <div class="quick-stats">
                 <div class="stat-box">
-                    <div class="stat-box-value">5</div>
+                    <div class="stat-box-value">-</div>
                     <div class="stat-box-label">Part Types</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-box-value">11</div>
+                    <div class="stat-box-value">-</div>
                     <div class="stat-box-label">Total LPCs</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-box-value">2</div>
+                    <div class="stat-box-value">-</div>
                     <div class="stat-box-label">Lines</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-box-value">89.4%</div>
+                    <div class="stat-box-value">-</div>
                     <div class="stat-box-label">Overall OEE</div>
                 </div>
             </div>
@@ -703,19 +704,19 @@
                     <div class="part-metrics">
                         <div class="metric-item">
                             <div class="metric-label">Performance</div>
-                            <div class="metric-value good">88.1%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">OEE</div>
-                            <div class="metric-value good">87.2%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">Quality</div>
-                            <div class="metric-value good">96.5%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">Availability</div>
-                            <div class="metric-value warning">88.0%</div>
+                            <div class="metric-value warning">-</div>
                         </div>
                     </div>
                     <div class="info-badge">
@@ -738,19 +739,19 @@
                     <div class="part-metrics">
                         <div class="metric-item">
                             <div class="metric-label">Performance</div>
-                            <div class="metric-value good">97.0%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">OEE</div>
-                            <div class="metric-value good">90.5%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">Quality</div>
-                            <div class="metric-value good">95.8%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">Availability</div>
-                            <div class="metric-value good">92.8%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                     </div>
                     <div class="info-badge">
@@ -773,19 +774,19 @@
                     <div class="part-metrics">
                         <div class="metric-item">
                             <div class="metric-label">Performance</div>
-                            <div class="metric-value good">94.1%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">OEE</div>
-                            <div class="metric-value good">89.8%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">Quality</div>
-                            <div class="metric-value good">97.1%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">Availability</div>
-                            <div class="metric-value good">91.2%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                     </div>
                     <div class="info-badge">
@@ -808,19 +809,19 @@
                     <div class="part-metrics">
                         <div class="metric-item">
                             <div class="metric-label">Performance</div>
-                            <div class="metric-value good">91.1%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">OEE</div>
-                            <div class="metric-value warning">85.3%</div>
+                            <div class="metric-value warning">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">Quality</div>
-                            <div class="metric-value good">94.2%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">Availability</div>
-                            <div class="metric-value warning">89.5%</div>
+                            <div class="metric-value warning">-</div>
                         </div>
                     </div>
                     <div class="info-badge">
@@ -843,19 +844,19 @@
                     <div class="part-metrics">
                         <div class="metric-item">
                             <div class="metric-label">Performance</div>
-                            <div class="metric-value good">100%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">OEE</div>
-                            <div class="metric-value good">92.1%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">Quality</div>
-                            <div class="metric-value good">98.2%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                         <div class="metric-item">
                             <div class="metric-label">Availability</div>
-                            <div class="metric-value good">94.5%</div>
+                            <div class="metric-value good">-</div>
                         </div>
                     </div>
                     <div class="info-badge">
@@ -886,10 +887,10 @@
                             <div class="lpc-modal-status normal">Normal</div>
                         </div>
                         <div class="lpc-modal-metrics">
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">88.5%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">97.2%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">89.8%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">90.0%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">-</div></div>
                         </div>
                         <div class="info-badge"><span>Click to view details</span></div>
                     </div>
@@ -900,10 +901,10 @@
                             <div class="lpc-modal-status normal">Normal</div>
                         </div>
                         <div class="lpc-modal-metrics">
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">90.1%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">96.8%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">91.2%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">95.0%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">-</div></div>
                         </div>
                         <div class="info-badge"><span>Click to view details</span></div>
                     </div>
@@ -914,10 +915,10 @@
                             <div class="lpc-modal-status warning">Warning</div>
                         </div>
                         <div class="lpc-modal-metrics">
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value warning">82.3%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">95.1%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value warning">85.5%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value warning">80.0%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value warning">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value warning">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value warning">-</div></div>
                         </div>
                         <div class="info-badge"><span>Needs attention</span></div>
                     </div>
@@ -928,10 +929,10 @@
                             <div class="lpc-modal-status normal">Normal</div>
                         </div>
                         <div class="lpc-modal-metrics">
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">87.9%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">96.5%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">89.2%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">90.0%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">-</div></div>
                         </div>
                         <div class="info-badge"><span>Click to view details</span></div>
                     </div>
@@ -942,10 +943,10 @@
                             <div class="lpc-modal-status normal">Normal</div>
                         </div>
                         <div class="lpc-modal-metrics">
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">86.8%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">96.9%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">88.3%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value warning">85.7%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value warning">-</div></div>
                         </div>
                         <div class="info-badge"><span>Click to view details</span></div>
                     </div>
@@ -973,10 +974,10 @@
                             <div class="lpc-modal-status normal">Normal</div>
                         </div>
                         <div class="lpc-modal-metrics">
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">92.1%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">98.2%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">94.5%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">100%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">-</div></div>
                         </div>
                         <div class="info-badge"><span>Click to view details</span></div>
                     </div>
@@ -1004,10 +1005,10 @@
                             <div class="lpc-modal-status normal">Normal</div>
                         </div>
                         <div class="lpc-modal-metrics">
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">89.8%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">97.1%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">91.2%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">94.1%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">-</div></div>
                         </div>
                         <div class="info-badge"><span>Click to view details</span></div>
                     </div>
@@ -1035,10 +1036,10 @@
                             <div class="lpc-modal-status normal">Normal</div>
                         </div>
                         <div class="lpc-modal-metrics">
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">90.5%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">95.8%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">92.8%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">97.0%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">-</div></div>
                         </div>
                         <div class="info-badge"><span>Click to view details</span></div>
                     </div>
@@ -1066,10 +1067,10 @@
                             <div class="lpc-modal-status normal">Normal</div>
                         </div>
                         <div class="lpc-modal-metrics">
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">87.2%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">95.8%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">90.1%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">91.2%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">-</div></div>
                         </div>
                         <div class="info-badge"><span>Click to view details</span></div>
                     </div>
@@ -1080,10 +1081,10 @@
                             <div class="lpc-modal-status warning">Warning</div>
                         </div>
                         <div class="lpc-modal-metrics">
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value warning">81.8%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">92.5%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value warning">87.2%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value warning">85.3%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value warning">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value warning">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value warning">-</div></div>
                         </div>
                         <div class="info-badge"><span>Needs attention</span></div>
                     </div>
@@ -1094,10 +1095,10 @@
                             <div class="lpc-modal-status normal">Normal</div>
                         </div>
                         <div class="lpc-modal-metrics">
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">86.9%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">94.5%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">91.2%</div></div>
-                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">90.0%</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">OEE</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Quality</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Availability</div><div class="lpc-modal-metric-value good">-</div></div>
+                            <div class="lpc-modal-metric"><div class="lpc-modal-metric-label">Performance</div><div class="lpc-modal-metric-value good">-</div></div>
                         </div>
                         <div class="info-badge"><span>Click to view details</span></div>
                     </div>
