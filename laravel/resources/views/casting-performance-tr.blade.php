@@ -123,7 +123,7 @@
                 <span class="filter-label" style="font-size: 12px; font-weight: 600;">Shift:</span>
                 <select id="filter-shift" class="filter-input" style="padding: 6px; font-size: 12px;">
                     <option value="auto">Auto (Current Shift)</option>
-                    <option value="morning">Morning (07:15 - 16:00)</option>
+                    <option value="morning">Morning (07:15 - 19:00)</option>
                     <option value="night">Night (19:00 - 06:00)</option>
                 </select>
                 <button class="filter-btn active" onclick="CastingPerformanceTR.loadAllData()" style="padding: 6px 14px; font-size: 12px;">Apply Filter</button>
@@ -236,7 +236,7 @@
                     <label>Shift</label>
                     <select id="hist-shift">
                         <option value="all">All Shifts</option>
-                        <option value="morning">Morning (07:15–16:00)</option>
+                        <option value="morning">Morning (07:15–19:00)</option>
                         <option value="night">Night (19:00–06:00)</option>
                     </select>
                 </div>
@@ -285,7 +285,7 @@
             const date = document.getElementById('hist-date')?.value || new Date().toISOString().split('T')[0];
             const shift = document.getElementById('hist-shift')?.value || 'all';
             let st = '00:00:00', et = '23:59:59';
-            if (shift === 'morning') { st = '07:15:00'; et = '16:00:00'; }
+            if (shift === 'morning') { st = '07:15:00'; et = '19:00:00'; }
             else if (shift === 'night') { st = '19:00:00'; et = '06:00:00'; }
             try {
                 const params = new URLSearchParams({action:'trend',lpc,date,start_time:st,end_time:et,limit:500});

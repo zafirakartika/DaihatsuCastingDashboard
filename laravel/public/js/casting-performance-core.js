@@ -1592,6 +1592,15 @@ const CastingPerformanceCore = (config) => {
                     dsIdx++;
                 }
             });
+            // Always restore fixed y-axis limits (config range applies to all LPCs)
+            if (charts.trend.options.scales && charts.trend.options.scales.y && CONFIG.CHART_CONFIG.yMin !== undefined) {
+                charts.trend.options.scales.y.min = CONFIG.CHART_CONFIG.yMin;
+                charts.trend.options.scales.y.max = CONFIG.CHART_CONFIG.yMax;
+                charts.trend.options.scales.y.afterDataLimits = (scale) => {
+                    scale.min = CONFIG.CHART_CONFIG.yMin;
+                    scale.max = CONFIG.CHART_CONFIG.yMax;
+                };
+            }
             updates.push(() => charts.trend.update('none'));
         }
 

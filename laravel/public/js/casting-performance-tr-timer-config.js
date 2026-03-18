@@ -7,7 +7,7 @@ const CastingPerformanceTRTimer = CastingPerformanceCore({
     apiUrl: '/api/casting-data-tr-timer',
 
     lpcOptions: {
-        default: 6,
+        default: 1,
         options: [
             { value: 1, label: 'LPC 1' },
             { value: 2, label: 'LPC 2' },

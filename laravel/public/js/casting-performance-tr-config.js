@@ -9,7 +9,7 @@ const CastingPerformanceTR = CastingPerformanceCore({
 
     // LPC selection for TR Line 1
     lpcOptions: {
-        default: 6,
+        default: 1,
         options: [
             { value: 1, label: 'LPC 1' },
             { value: 2, label: 'LPC 2' },
@@ -20,7 +20,7 @@ const CastingPerformanceTR = CastingPerformanceCore({
     },
 
     showIdPart: false,
-    trendDataLimit: 1000,
+    trendDataLimit: 5000,
 
     simulationMode: { enabled: false },
     disableCycleFilter: true,
